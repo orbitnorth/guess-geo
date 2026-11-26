@@ -105,30 +105,6 @@ export function IntroScreen({
             Five mystery photographs from across the continents. Inspect architecture, road markings, light, and natural wonders, rotate the interactive 3D WebGL globe, and plant your flag to score up to 25,000 points.
           </p>
 
-          <div className="hero-features-strip">
-            <div className="feature-item">
-              <span className="feature-icon icon-blue">📷</span>
-              <div className="feature-text">
-                <strong>Real Photos</strong>
-                <span>High-res Wikimedia scenes</span>
-              </div>
-            </div>
-            <div className="feature-item">
-              <span className="feature-icon icon-green">🌐</span>
-              <div className="feature-text">
-                <strong>3D Earth</strong>
-                <span>Rotate, zoom & drop pins</span>
-              </div>
-            </div>
-            <div className="feature-item">
-              <span className="feature-icon icon-yellow">⚡</span>
-              <div className="feature-text">
-                <strong>Instant Scoring</strong>
-                <span>Haversine distance rewards</span>
-              </div>
-            </div>
-          </div>
-
           <div className="hero-cta-group">
             <button
               type="button"
@@ -147,28 +123,6 @@ export function IntroScreen({
               <Icon name="trophy" size={17} />
               <span>View Leaderboard</span>
             </button>
-          </div>
-
-          <div className="hero-stats-row">
-            <div className="hero-stat">
-              <strong>91</strong>
-              <span>World Sites</span>
-            </div>
-            <span className="stat-separator" />
-            <div className="hero-stat">
-              <strong>58</strong>
-              <span>Countries</span>
-            </div>
-            <span className="stat-separator" />
-            <div className="hero-stat">
-              <strong>5</strong>
-              <span>Rounds / Run</span>
-            </div>
-            <span className="stat-separator" />
-            <div className="hero-stat">
-              <strong>25,000</strong>
-              <span>Max Score</span>
-            </div>
           </div>
         </div>
 
