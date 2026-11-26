@@ -1,0 +1,821 @@
+[
+  {
+    "id": "eiffel",
+    "name": "Eiffel Tower, Paris",
+    "country": "France",
+    "region": "Europe",
+    "lat": 48.8584,
+    "lon": 2.2945,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Tour_Eiffel_Wikimedia_Commons.jpg?width=900"
+  },
+  {
+    "id": "liberty",
+    "name": "Statue of Liberty, New York",
+    "country": "United States",
+    "region": "North America",
+    "lat": 40.6892,
+    "lon": -74.0445,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Statue_of_Liberty_7.jpg?width=900"
+  },
+  {
+    "id": "sydney",
+    "name": "Sydney Opera House",
+    "country": "Australia",
+    "region": "Oceania",
+    "lat": -33.8568,
+    "lon": 151.2153,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Sydney_Opera_House_-_Dec_2008.jpg?width=900"
+  },
+  {
+    "id": "taj",
+    "name": "Taj Mahal, Agra",
+    "country": "India",
+    "region": "Asia",
+    "lat": 27.1751,
+    "lon": 78.0421,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Taj_Mahal_%28Edited%29.jpeg?width=900"
+  },
+  {
+    "id": "giza",
+    "name": "Great Pyramid of Giza",
+    "country": "Egypt",
+    "region": "Africa",
+    "lat": 29.9792,
+    "lon": 31.1342,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Kheops-Pyramid.jpg?width=900"
+  },
+  {
+    "id": "colosseum",
+    "name": "Colosseum, Rome",
+    "country": "Italy",
+    "region": "Europe",
+    "lat": 41.8902,
+    "lon": 12.4922,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Colosseo_2020.jpg?width=900"
+  },
+  {
+    "id": "redeemer",
+    "name": "Christ the Redeemer, Rio de Janeiro",
+    "country": "Brazil",
+    "region": "South America",
+    "lat": -22.9519,
+    "lon": -43.2105,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Christ_the_Redeemer_-_Cristo_Redentor.jpg?width=900"
+  },
+  {
+    "id": "machu",
+    "name": "Machu Picchu",
+    "country": "Peru",
+    "region": "South America",
+    "lat": -13.1631,
+    "lon": -72.545,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/80_-_Machu_Picchu_-_Juin_2009_-_edit.jpg?width=900"
+  },
+  {
+    "id": "bigben",
+    "name": "Big Ben, London",
+    "country": "United Kingdom",
+    "region": "Europe",
+    "lat": 51.5007,
+    "lon": -0.1246,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Big_Ben_Elizabeth_Tower_London_2023_01.jpg?width=900"
+  },
+  {
+    "id": "santorini",
+    "name": "Santorini, Oia",
+    "country": "Greece",
+    "region": "Europe",
+    "lat": 36.4618,
+    "lon": 25.3753,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Oia_Santorini_Greece.jpg?width=900"
+  },
+  {
+    "id": "acropolis",
+    "name": "Acropolis of Athens",
+    "country": "Greece",
+    "region": "Europe",
+    "lat": 37.9717,
+    "lon": 23.7261,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/1029_Acropolis_of_Athens_in_Greece_at_night_Photo_by_Giles_Laurent.jpg?width=900"
+  },
+  {
+    "id": "sagrada-familia",
+    "name": "Sagrada Família, Barcelona",
+    "country": "Spain",
+    "region": "Europe",
+    "lat": 41.4037,
+    "lon": 2.1743,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/SF_maig_2_cropped.jpg?width=900"
+  },
+  {
+    "id": "alhambra",
+    "name": "Alhambra, Granada",
+    "country": "Spain",
+    "region": "Europe",
+    "lat": 37.1775,
+    "lon": -3.59,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Dawn_Charles_V_Palace_Alhambra_Granada_Andalusia_Spain.jpg?width=900"
+  },
+  {
+    "id": "neuschwanstein",
+    "name": "Neuschwanstein Castle, Bavaria",
+    "country": "Germany",
+    "region": "Europe",
+    "lat": 47.5575,
+    "lon": 10.7494,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Schloss_Neuschwanstein_%2845_mm%29.jpg?width=900"
+  },
+  {
+    "id": "brandenburg-gate",
+    "name": "Brandenburg Gate, Berlin",
+    "country": "Germany",
+    "region": "Europe",
+    "lat": 52.5163,
+    "lon": 13.3777,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Brandenburger_Tor_abends.jpg?width=900"
+  },
+  {
+    "id": "charles-bridge",
+    "name": "Charles Bridge, Prague",
+    "country": "Czech Republic",
+    "region": "Europe",
+    "lat": 50.0864,
+    "lon": 14.4119,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Prague_07-2016_view_from_Lesser_Town_Tower_of_Charles_Bridge_img3.jpg?width=900"
+  },
+  {
+    "id": "stonehenge",
+    "name": "Stonehenge, Wiltshire",
+    "country": "United Kingdom",
+    "region": "Europe",
+    "lat": 51.1789,
+    "lon": -1.8261,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Stonehenge2007_07_30.jpg?width=900"
+  },
+  {
+    "id": "mont-saint-michel",
+    "name": "Mont-Saint-Michel, Normandy",
+    "country": "France",
+    "region": "Europe",
+    "lat": 48.636,
+    "lon": -1.511,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Mont-Saint-Michel_vu_du_ciel.jpg?width=900"
+  },
+  {
+    "id": "st-basils",
+    "name": "St. Basil's Cathedral, Moscow",
+    "country": "Russia",
+    "region": "Europe",
+    "lat": 55.7525,
+    "lon": 37.6231,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Saint_Basil%27s_Cathedral_in_Moscow.jpg?width=900"
+  },
+  {
+    "id": "hagia-sophia",
+    "name": "Hagia Sophia, Istanbul",
+    "country": "Turkey",
+    "region": "Europe",
+    "lat": 41.0083,
+    "lon": 28.98,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Hagia_Sophia_%28228968325%29.jpeg?width=900"
+  },
+  {
+    "id": "hallstatt",
+    "name": "Hallstatt, Upper Austria",
+    "country": "Austria",
+    "region": "Europe",
+    "lat": 47.562,
+    "lon": 13.649,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Hallstatt_-_Zentrum_.JPG?width=900"
+  },
+  {
+    "id": "matterhorn",
+    "name": "Matterhorn, Zermatt",
+    "country": "Switzerland",
+    "region": "Europe",
+    "lat": 45.9764,
+    "lon": 7.6586,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Matterhorn_from_Domh%C3%BCtte_-_2.jpg?width=900"
+  },
+  {
+    "id": "cliffs-of-moher",
+    "name": "Cliffs of Moher, Clare",
+    "country": "Ireland",
+    "region": "Europe",
+    "lat": 52.9718,
+    "lon": -9.4263,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Cliffs-Of-Moher-OBriens-From-South.JPG?width=900"
+  },
+  {
+    "id": "nyhavn",
+    "name": "Nyhavn, Copenhagen",
+    "country": "Denmark",
+    "region": "Europe",
+    "lat": 55.6797,
+    "lon": 12.5906,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/The_Nyhavn_Canal_3.jpg?width=900"
+  },
+  {
+    "id": "edinburgh-castle",
+    "name": "Edinburgh Castle",
+    "country": "United Kingdom",
+    "region": "Europe",
+    "lat": 55.9486,
+    "lon": -3.2008,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Edinburgh_Castle_from_Esplanade_20211019.jpg?width=900"
+  },
+  {
+    "id": "leaning-tower-pisa",
+    "name": "Leaning Tower of Pisa",
+    "country": "Italy",
+    "region": "Europe",
+    "lat": 43.7231,
+    "lon": 10.3964,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Italy_-_Pisa_-_Leaning_Tower.jpg?width=900"
+  },
+  {
+    "id": "st-marks-venice",
+    "name": "St. Mark's Basilica, Venice",
+    "country": "Italy",
+    "region": "Europe",
+    "lat": 45.4344,
+    "lon": 12.3397,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Venezia_Basilica_di_San_Marco_Fassade_2.jpg?width=900"
+  },
+  {
+    "id": "hallgrimskirkja",
+    "name": "Hallgrímskirkja, Reykjavik",
+    "country": "Iceland",
+    "region": "Europe",
+    "lat": 64.1417,
+    "lon": -21.9266,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Hallgrimskirkja_mai_2026.jpg?width=900"
+  },
+  {
+    "id": "geirangerfjord",
+    "name": "Geirangerfjord, Møre og Romsdal",
+    "country": "Norway",
+    "region": "Europe",
+    "lat": 62.121,
+    "lon": 7.129,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Geirangerfjord_.jpg?width=900"
+  },
+  {
+    "id": "belem-tower",
+    "name": "Belém Tower, Lisbon",
+    "country": "Portugal",
+    "region": "Europe",
+    "lat": 38.6917,
+    "lon": -9.2161,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Torre_Bel%C3%A9m_April_2009-4a.jpg?width=900"
+  },
+  {
+    "id": "angkor-wat",
+    "name": "Angkor Wat, Siem Reap",
+    "country": "Cambodia",
+    "region": "Asia",
+    "lat": 13.4125,
+    "lon": 103.8667,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Angkor_Wat.jpg?width=900"
+  },
+  {
+    "id": "great-wall",
+    "name": "Great Wall of China (Mutianyu)",
+    "country": "China",
+    "region": "Asia",
+    "lat": 40.438,
+    "lon": 116.5619,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Great_Wall_of_China_July_2006.JPG?width=900"
+  },
+  {
+    "id": "forbidden-city",
+    "name": "Forbidden City, Beijing",
+    "country": "China",
+    "region": "Asia",
+    "lat": 39.9158,
+    "lon": 116.3908,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/The_Forbidden_City_-_View_from_Coal_Hill.jpg?width=900"
+  },
+  {
+    "id": "mount-fuji",
+    "name": "Mount Fuji",
+    "country": "Japan",
+    "region": "Asia",
+    "lat": 35.3608,
+    "lon": 138.7275,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/View_of_Mount_Fuji_from_%C5%8Cwakudani_20211202.jpg?width=900"
+  },
+  {
+    "id": "fushimi-inari",
+    "name": "Fushimi Inari Shrine, Kyoto",
+    "country": "Japan",
+    "region": "Asia",
+    "lat": 34.9672,
+    "lon": 135.7728,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Torii_path_with_lantern_at_Fushimi_Inari_Taisha_Shrine%2C_Kyoto%2C_Japan.jpg?width=900"
+  },
+  {
+    "id": "burj-khalifa",
+    "name": "Burj Khalifa, Dubai",
+    "country": "United Arab Emirates",
+    "region": "Asia",
+    "lat": 25.1972,
+    "lon": 55.2742,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Burj_Khalifa_%28worlds_tallest_building%29_and_the_Dubai_skyline_%2825781049892%29.jpg?width=900"
+  },
+  {
+    "id": "marina-bay-sands",
+    "name": "Marina Bay Sands, Singapore",
+    "country": "Singapore",
+    "region": "Asia",
+    "lat": 1.2825,
+    "lon": 103.86,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Marina_Bay_Sands_%28I%29.jpg?width=900"
+  },
+  {
+    "id": "borobudur",
+    "name": "Borobudur, Central Java",
+    "country": "Indonesia",
+    "region": "Asia",
+    "lat": -7.608,
+    "lon": 110.204,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Pradaksina.jpg?width=900"
+  },
+  {
+    "id": "ha-long-bay",
+    "name": "Ha Long Bay, Quang Ninh",
+    "country": "Vietnam",
+    "region": "Asia",
+    "lat": 20.9,
+    "lon": 107.2,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Ha_Long_Bay_in_2019.jpg?width=900"
+  },
+  {
+    "id": "gyeongbokgung",
+    "name": "Gyeongbokgung Palace, Seoul",
+    "country": "South Korea",
+    "region": "Asia",
+    "lat": 37.5799,
+    "lon": 126.9768,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/%EA%B4%91%ED%99%94%EB%AC%B8_%EC%9B%94%EB%8C%80.jpg?width=900"
+  },
+  {
+    "id": "shwedagon-pagoda",
+    "name": "Shwedagon Pagoda, Yangon",
+    "country": "Myanmar",
+    "region": "Asia",
+    "lat": 16.7984,
+    "lon": 96.1497,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Shwedagon_Pagoda_2017.jpg?width=900"
+  },
+  {
+    "id": "potala-palace",
+    "name": "Potala Palace, Lhasa",
+    "country": "China",
+    "region": "Asia",
+    "lat": 29.6578,
+    "lon": 91.1169,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Potala_Palace_HQ.jpg?width=900"
+  },
+  {
+    "id": "registan",
+    "name": "Registan, Samarkand",
+    "country": "Uzbekistan",
+    "region": "Asia",
+    "lat": 39.6547,
+    "lon": 66.9756,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/RegistanSquare_Samarkand.jpg?width=900"
+  },
+  {
+    "id": "wadi-rum",
+    "name": "Wadi Rum, Aqaba",
+    "country": "Jordan",
+    "region": "Asia",
+    "lat": 29.5931,
+    "lon": 35.42,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Mountain_in_Wadi_Rum%2C_Jordan.jpg?width=900"
+  },
+  {
+    "id": "sigiriya",
+    "name": "Sigiriya, Matale",
+    "country": "Sri Lanka",
+    "region": "Asia",
+    "lat": 7.9569,
+    "lon": 80.7597,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Sigiriya_%28141688197%29.jpeg?width=900"
+  },
+  {
+    "id": "amber-fort",
+    "name": "Amber Fort, Jaipur",
+    "country": "India",
+    "region": "Asia",
+    "lat": 26.9859,
+    "lon": 75.8507,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/20191219_Fort_Amber%2C_Amer%2C_Jaipur_0955_9481.jpg?width=900"
+  },
+  {
+    "id": "persepolis",
+    "name": "Persepolis, Fars",
+    "country": "Iran",
+    "region": "Asia",
+    "lat": 29.935,
+    "lon": 52.89,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/2018-09-21_Iran%2C_Persepolis%2C_Tachara_%28from_the_southeast%29.jpg?width=900"
+  },
+  {
+    "id": "cappadocia",
+    "name": "Göreme, Cappadocia",
+    "country": "Turkey",
+    "region": "Asia",
+    "lat": 38.6431,
+    "lon": 34.8289,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/G%C3%B6reme_town_and_valley_2015.JPG?width=900"
+  },
+  {
+    "id": "bagan",
+    "name": "Bagan Temples, Mandalay",
+    "country": "Myanmar",
+    "region": "Asia",
+    "lat": 21.1725,
+    "lon": 94.86,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Bagan%2C_Burma.jpg?width=900"
+  },
+  {
+    "id": "karnak",
+    "name": "Karnak Temple, Luxor",
+    "country": "Egypt",
+    "region": "Africa",
+    "lat": 25.7183,
+    "lon": 32.6583,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Temple_de_Louxor_68.jpg?width=900"
+  },
+  {
+    "id": "victoria-falls",
+    "name": "Victoria Falls",
+    "country": "Zambia / Zimbabwe",
+    "region": "Africa",
+    "lat": -17.9244,
+    "lon": 25.8567,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Cataratas_Victoria%2C_Zambia-Zimbabue%2C_2018-07-27%2C_DD_04.jpg?width=900"
+  },
+  {
+    "id": "table-mountain",
+    "name": "Table Mountain, Cape Town",
+    "country": "South Africa",
+    "region": "Africa",
+    "lat": -33.9622,
+    "lon": 18.4099,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Table_Mountain_DanieVDM.jpg?width=900"
+  },
+  {
+    "id": "koutoubia",
+    "name": "Koutoubia Mosque, Marrakech",
+    "country": "Morocco",
+    "region": "Africa",
+    "lat": 31.6241,
+    "lon": -7.9935,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Marokko0112_%28retouched%29.jpg?width=900"
+  },
+  {
+    "id": "chefchaouen",
+    "name": "Chefchaouen, Rif Mountains",
+    "country": "Morocco",
+    "region": "Africa",
+    "lat": 35.1714,
+    "lon": -5.2697,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Chefchaouen-the-blue-city-of-morocco-with-palm-trees-and-the-mountain-view-in-the-backrgound.jpg?width=900"
+  },
+  {
+    "id": "lalibela",
+    "name": "Church of Saint George, Lalibela",
+    "country": "Ethiopia",
+    "region": "Africa",
+    "lat": 12.0317,
+    "lon": 39.0411,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Lalibela%2C_san_giorgio%2C_esterno_24.jpg?width=900"
+  },
+  {
+    "id": "deadvlei",
+    "name": "Deadvlei, Namib-Naukluft",
+    "country": "Namibia",
+    "region": "Africa",
+    "lat": -24.7597,
+    "lon": 15.2919,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Dead_Vlei_4.jpg?width=900"
+  },
+  {
+    "id": "baobabs",
+    "name": "Avenue of the Baobabs",
+    "country": "Madagascar",
+    "region": "Africa",
+    "lat": -20.25,
+    "lon": 44.4194,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Adansonia_grandidieri_Pat_Hooper.jpg?width=900"
+  },
+  {
+    "id": "djenne",
+    "name": "Great Mosque of Djenné",
+    "country": "Mali",
+    "region": "Africa",
+    "lat": 13.9053,
+    "lon": -4.5556,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Djenne_great_mud_mosque.jpg?width=900"
+  },
+  {
+    "id": "el-jem",
+    "name": "Amphitheatre of El Jem",
+    "country": "Tunisia",
+    "region": "Africa",
+    "lat": 35.2964,
+    "lon": 10.7069,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/The_Amphitheatre_of_El_Jem%2C_built_around_AD_238_in_Thysdrus_in_Africa_Proconsularis%2C_the_estimated_capacity_is_35%2C000%2C_Tunisia_-_52717762494.jpg?width=900"
+  },
+  {
+    "id": "golden-gate",
+    "name": "Golden Gate Bridge, San Francisco",
+    "country": "United States",
+    "region": "North America",
+    "lat": 37.8197,
+    "lon": -122.4786,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Golden_Gate_Bridge_as_seen_from_Battery_East.jpg?width=900"
+  },
+  {
+    "id": "grand-canyon",
+    "name": "Grand Canyon, Arizona",
+    "country": "United States",
+    "region": "North America",
+    "lat": 36.3,
+    "lon": -112.75,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Canyon_River_Tree_%28165872763%29.jpeg?width=900"
+  },
+  {
+    "id": "mount-rushmore",
+    "name": "Mount Rushmore, South Dakota",
+    "country": "United States",
+    "region": "North America",
+    "lat": 43.8789,
+    "lon": -103.4592,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Mount_Rushmore_detail_view_%28100MP%29.jpg?width=900"
+  },
+  {
+    "id": "space-needle",
+    "name": "Space Needle, Seattle",
+    "country": "United States",
+    "region": "North America",
+    "lat": 47.6204,
+    "lon": -122.3491,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Space_Needle_2011-07-04.jpg?width=900"
+  },
+  {
+    "id": "niagara-falls",
+    "name": "Niagara Falls",
+    "country": "Canada / United States",
+    "region": "North America",
+    "lat": 43.0799,
+    "lon": -79.0747,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/3Falls_Niagara.jpg?width=900"
+  },
+  {
+    "id": "lake-louise",
+    "name": "Lake Louise, Banff",
+    "country": "Canada",
+    "region": "North America",
+    "lat": 51.4117,
+    "lon": -116.2281,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/1_lake_louise_pano_2019.jpg?width=900"
+  },
+  {
+    "id": "chichen-itza",
+    "name": "Chichén Itzá, Yucatán",
+    "country": "Mexico",
+    "region": "North America",
+    "lat": 20.6831,
+    "lon": -88.5686,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Chichen_Itza_3.jpg?width=900"
+  },
+  {
+    "id": "teotihuacan",
+    "name": "Teotihuacan, State of Mexico",
+    "country": "Mexico",
+    "region": "North America",
+    "lat": 19.6925,
+    "lon": -98.8439,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/ZA77_Teotihuac%C3%A1n_edo_de_mex_Herberto_de_la_rosa.jpg?width=900"
+  },
+  {
+    "id": "tulum",
+    "name": "Tulum Ruins, Quintana Roo",
+    "country": "Mexico",
+    "region": "North America",
+    "lat": 20.2147,
+    "lon": -87.4289,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Tulum_2.jpg?width=900"
+  },
+  {
+    "id": "tikal",
+    "name": "Tikal, Petén",
+    "country": "Guatemala",
+    "region": "North America",
+    "lat": 17.2219,
+    "lon": -89.6236,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Tikal_3.jpg?width=900"
+  },
+  {
+    "id": "monument-valley",
+    "name": "Monument Valley, Utah / Arizona",
+    "country": "United States",
+    "region": "North America",
+    "lat": 36.9833,
+    "lon": -110.1,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Monument_Valley%2C_Utah%2C_USA_%2823611451292%29.jpg?width=900"
+  },
+  {
+    "id": "yellowstone-prismatic",
+    "name": "Grand Prismatic Spring, Yellowstone",
+    "country": "United States",
+    "region": "North America",
+    "lat": 44.525,
+    "lon": -110.8381,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Aerial_image_of_Grand_Prismatic_Spring_%28view_from_the_south%29.jpg?width=900"
+  },
+  {
+    "id": "old-havana",
+    "name": "El Capitolio, Havana",
+    "country": "Cuba",
+    "region": "North America",
+    "lat": 23.1353,
+    "lon": -82.3594,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/El_Capitolio_Havana_Cuba.jpg?width=900"
+  },
+  {
+    "id": "iguazu-falls",
+    "name": "Iguazu Falls",
+    "country": "Argentina / Brazil",
+    "region": "South America",
+    "lat": -25.6867,
+    "lon": -54.4447,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Aerial_Foz_de_Igua%C3%A7u_26_Nov_2005.jpg?width=900"
+  },
+  {
+    "id": "salar-de-uyuni",
+    "name": "Salar de Uyuni, Potosí",
+    "country": "Bolivia",
+    "region": "South America",
+    "lat": -20.1338,
+    "lon": -67.4891,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Salar_Uyuni_au01.jpg?width=900"
+  },
+  {
+    "id": "torres-del-paine",
+    "name": "Torres del Paine, Patagonia",
+    "country": "Chile",
+    "region": "South America",
+    "lat": -51.0,
+    "lon": -73.0,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Torres_del_Paine_y_cuernos_del_Paine%2C_montaje.jpg?width=900"
+  },
+  {
+    "id": "moai-rapa-nui",
+    "name": "Rano Raraku, Easter Island",
+    "country": "Chile",
+    "region": "South America",
+    "lat": -27.1239,
+    "lon": -109.2861,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Rano-Raraku-Panorama-2013.jpg?width=900"
+  },
+  {
+    "id": "perito-moreno",
+    "name": "Perito Moreno Glacier, Santa Cruz",
+    "country": "Argentina",
+    "region": "South America",
+    "lat": -50.5,
+    "lon": -73.1333,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Perito_Moreno_Glacier_2023.jpg?width=900"
+  },
+  {
+    "id": "obelisco-ba",
+    "name": "Obelisco de Buenos Aires",
+    "country": "Argentina",
+    "region": "South America",
+    "lat": -34.6036,
+    "lon": -58.3817,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Panorama_Obelisco_de_Buenos_Aires_2019.jpg?width=900"
+  },
+  {
+    "id": "cartagena-walls",
+    "name": "Castillo San Felipe de Barajas, Cartagena",
+    "country": "Colombia",
+    "region": "South America",
+    "lat": 10.4225,
+    "lon": -75.5392,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/62_-_Carthag%C3%A8ne_-_D%C3%A9cembre_2008.jpg?width=900"
+  },
+  {
+    "id": "uluru",
+    "name": "Uluru, Northern Territory",
+    "country": "Australia",
+    "region": "Oceania",
+    "lat": -25.345,
+    "lon": 131.0361,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/ULURU.jpg?width=900"
+  },
+  {
+    "id": "milford-sound",
+    "name": "Milford Sound, Fiordland",
+    "country": "New Zealand",
+    "region": "Oceania",
+    "lat": -44.6481,
+    "lon": 167.9056,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Milford_Sound_%28New_Zealand%29.JPG?width=900"
+  },
+  {
+    "id": "mount-cook",
+    "name": "Aoraki / Mount Cook",
+    "country": "New Zealand",
+    "region": "Oceania",
+    "lat": -43.595,
+    "lon": 170.1419,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Aoraki_Mount_Cook.JPG?width=900"
+  },
+  {
+    "id": "bora-bora",
+    "name": "Bora Bora, Society Islands",
+    "country": "French Polynesia",
+    "region": "Oceania",
+    "lat": -16.5,
+    "lon": -151.73,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Borabora-2.jpg?width=900"
+  },
+  {
+    "id": "petronas-towers",
+    "name": "Petronas Towers, Kuala Lumpur",
+    "country": "Malaysia",
+    "region": "Asia",
+    "lat": 3.1578,
+    "lon": 101.7117,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/2016_Kuala_Lumpur%2C_Park_KLCC_i_Suria_KLCC_%28cropped%29.jpg?width=900"
+  },
+  {
+    "id": "cn-tower",
+    "name": "CN Tower, Toronto",
+    "country": "Canada",
+    "region": "North America",
+    "lat": 43.6426,
+    "lon": -79.3871,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/CN_Tower%2C_Toronto%2C_Ontario_%2829969151776%29.jpg?width=900"
+  },
+  {
+    "id": "petra",
+    "name": "Petra, Ma'an",
+    "country": "Jordan",
+    "region": "Asia",
+    "lat": 30.3221,
+    "lon": 35.4515,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Al_Khazneh_02.jpg?width=900"
+  },
+  {
+    "id": "kilimanjaro",
+    "name": "Mount Kilimanjaro",
+    "country": "Tanzania",
+    "region": "Africa",
+    "lat": -3.0674,
+    "lon": 37.3556,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Mlima_Kilimanjaro.jpg?width=900"
+  },
+  {
+    "id": "twelve-apostles",
+    "name": "Twelve Apostles, Victoria",
+    "country": "Australia",
+    "region": "Oceania",
+    "lat": -38.6658,
+    "lon": 143.1053,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/The_twelve_apostles_Victoria_Australia_2010.jpg?width=900"
+  },
+  {
+    "id": "lake-titicaca",
+    "name": "Isla del Sol, Lake Titicaca",
+    "country": "Bolivia",
+    "region": "South America",
+    "lat": -16.0206,
+    "lon": -69.1764,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Isla_de_Sol%2C_Lago_Titicaca_3.jpg?width=900"
+  },
+  {
+    "id": "dubrovnik",
+    "name": "Dubrovnik Old Town",
+    "country": "Croatia",
+    "region": "Europe",
+    "lat": 42.6403,
+    "lon": 18.1083,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Dubrovnik_s_24.jpg?width=900"
+  },
+  {
+    "id": "queenstown",
+    "name": "Queenstown, Otago",
+    "country": "New Zealand",
+    "region": "Oceania",
+    "lat": -45.0312,
+    "lon": 168.6626,
+    "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Queenstown_from_Bob%27s_Peak.jpg?width=900"
+  }
+]
