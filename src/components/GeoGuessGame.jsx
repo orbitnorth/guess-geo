@@ -22,6 +22,7 @@ import { RegisterModal } from './RegisterModal'
 import { LoginModal } from './LoginModal'
 import { LeaderboardModal } from './LeaderboardModal'
 import { ProfileModal } from './ProfileModal'
+import { getAvatarById } from '@/lib/data/avatars'
 
 export default function GeoGuessGame() {
   const [deck, setDeck] = useState(() => buildDeck())
@@ -41,7 +42,6 @@ export default function GeoGuessGame() {
   const [token, setToken] = useState(null)
   const [activeModal, setActiveModal] = useState(null)
   const [scoreSaved, setScoreSaved] = useState(false)
-  const [avatars, setAvatars] = useState([])
 
   const stageRef = useRef(null)
   const confirmRef = useRef(null)
@@ -56,16 +56,6 @@ export default function GeoGuessGame() {
   // Detect touch on mount
   useEffect(() => {
     setIsTouch(window.matchMedia?.('(pointer: coarse)').matches ?? false)
-  }, [])
-
-  // Fetch preset avatars
-  useEffect(() => {
-    fetch('/api/avatars')
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.avatars) setAvatars(data.avatars)
-      })
-      .catch(() => {})
   }, [])
 
   // Restore authenticated session from localStorage
@@ -262,8 +252,8 @@ export default function GeoGuessGame() {
       if (tag === 'INPUT' || tag === 'TEXTAREA') return
 
       if (event.key === 'Escape') {
-        if (authModalOpen) {
-          setAuthModalOpen(false)
+        if (activeModal) {
+          setActiveModal(null)
           return
         }
         setLightboxOpen(false)
@@ -283,7 +273,7 @@ export default function GeoGuessGame() {
 
     window.addEventListener('keydown', onKeyDown)
     return () => window.removeEventListener('keydown', onKeyDown)
-  }, [phase, guess, handleConfirm, toggleMute, authModalOpen])
+  }, [phase, guess, handleConfirm, toggleMute, activeModal])
 
   // Small pulse when total score updates
   useEffect(() => {
@@ -319,7 +309,7 @@ export default function GeoGuessGame() {
             ? 'Drag to rotate. Pinch to zoom. Tap the globe to drop your pin.'
             : 'Drag to rotate. Scroll to zoom. Click the globe to drop your pin.'
 
-  const userAvatarObj = avatars.find((a) => a.id === user?.avatar)
+  const userAvatar = user ? getAvatarById(user.avatar) : null
 
   return (
     <div className="app">
@@ -366,22 +356,23 @@ export default function GeoGuessGame() {
               <button
                 type="button"
                 className="user-pill-btn"
-                onClick={() => setAuthModalOpen(true)}
+                onClick={() => setActiveModal('profile')}
                 title="View your explorer profile & stats"
               >
-                <span
-                  className="user-pill-avatar"
-                  style={{ backgroundColor: userAvatarObj?.bg || '#ddf4ff' }}
-                >
-                  {userAvatarObj?.emoji || '🧭'}
-                </span>
+                <img
+                  src={userAvatar?.src || '/avatars/felix.svg'}
+                  alt={user.name}
+                  width={22}
+                  height={22}
+                  style={{ borderRadius: '50%', display: 'block' }}
+                />
                 <span className="user-pill-name">{user.name}</span>
               </button>
             ) : (
               <button
                 type="button"
                 className="btn btn-sm btn-ghost user-join-btn"
-                onClick={() => setAuthModalOpen(true)}
+                onClick={() => setActiveModal('register')}
               >
                 <Icon name="user" size={16} />
                 <span>Join / Sign In</span>
