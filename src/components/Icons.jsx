@@ -1,5 +1,4 @@
-// Small, dependency-free SVG icon set. All icons are drawn on a 24x24 grid
-// with a consistent 1.7px stroke so they match the interface typography.
+import React from 'react'
 
 const paths = {
   globe: (
@@ -88,6 +87,22 @@ const paths = {
     <>
       <path d="M12 21s6.5-6 6.5-11a6.5 6.5 0 1 0-13 0c0 5 6.5 11 6.5 11Z" />
       <circle cx="12" cy="10" r="2.4" />
+    </>
+  ),
+  user: (
+    <>
+      <circle cx="12" cy="8" r="4" />
+      <path d="M6 20v-2a6 6 0 0 1 12 0v2" />
+    </>
+  ),
+  edit: (
+    <path d="M12 20h9M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z" />
+  ),
+  logout: (
+    <>
+      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+      <polyline points="16 17 21 12 16 7" />
+      <line x1="21" y1="12" x2="9" y2="12" />
     </>
   ),
 }

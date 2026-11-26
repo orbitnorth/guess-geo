@@ -1,5 +1,5 @@
-import { formatKm } from '../game/geo'
-import { MAX_POINTS, TIER_LABEL } from '../data/locations'
+import { formatKm } from '@/game/geo'
+import { MAX_POINTS, TIER_LABEL } from '@/data/locations'
 import { Icon } from './Icons'
 
 export function ResultCard({ result, isLast, onNext }) {

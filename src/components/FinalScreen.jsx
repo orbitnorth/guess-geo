@@ -19,7 +19,7 @@ function ratingFor(ratio) {
   return 'Trail starter'
 }
 
-export function FinalScreen({ results, totalScore, maxTotal, onRestart }) {
+export function FinalScreen({ results, totalScore, maxTotal, onRestart, scoreSaved, user }) {
   const ratio = maxTotal > 0 ? totalScore / maxTotal : 0
   const stars = ratio >= 0.78 ? 3 : ratio >= 0.45 ? 2 : 1
 
@@ -68,6 +68,13 @@ export function FinalScreen({ results, totalScore, maxTotal, onRestart }) {
           </span>
           <span className="final-max">/ {maxTotal.toLocaleString()}</span>
         </div>
+
+        {user && scoreSaved && (
+          <div className="score-saved-badge">
+            <Icon name="check" size={14} strokeWidth={3} />
+            <span>Score recorded to {user.name}&apos;s profile</span>
+          </div>
+        )}
 
         <div className="final-summary">
           {results.map((result, index) => (

@@ -16,17 +16,40 @@ const STEPS = [
   },
 ]
 
-export function IntroScreen({ onStart, muted, onToggleMute }) {
+export function IntroScreen({ onStart, muted, onToggleMute, user, onOpenAuth }) {
   return (
     <div className="overlay intro-overlay" role="dialog" aria-modal="true" aria-label="How to play">
       <div className="intro-card">
         <div className="intro-main">
-          <div className="intro-brand">
-            <span className="brand-mark">
-              <Icon name="globe" size={22} strokeWidth={2} />
-            </span>
-            <strong>GeoGuess</strong>
-            <span className="meta">Globe edition</span>
+          <div className="intro-top-row">
+            <div className="intro-brand">
+              <span className="brand-mark">
+                <Icon name="globe" size={22} strokeWidth={2} />
+              </span>
+              <strong>GeoGuess</strong>
+              <span className="meta">Globe edition</span>
+            </div>
+
+            {user ? (
+              <button
+                type="button"
+                className="intro-user-pill"
+                onClick={onOpenAuth}
+                title="View your profile & leaderboard"
+              >
+                <Icon name="user" size={15} />
+                <span>{user.name}</span>
+              </button>
+            ) : (
+              <button
+                type="button"
+                className="intro-join-btn"
+                onClick={onOpenAuth}
+              >
+                <Icon name="user" size={15} />
+                <span>Sign in / Join</span>
+              </button>
+            )}
           </div>
 
           <h1 className="intro-title">
@@ -63,7 +86,7 @@ export function IntroScreen({ onStart, muted, onToggleMute }) {
             </button>
           </div>
 
-          <p className="intro-foot">Five rounds / 5,000 points each / Photos from Wikimedia Commons</p>
+          <p className="intro-foot">Five rounds / 5,000 points each / 91 verified world locations</p>
         </div>
 
         <div className="intro-art">

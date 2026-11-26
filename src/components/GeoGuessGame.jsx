@@ -1,23 +1,26 @@
+'use client'
+
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { GlobeEngine } from './game/GlobeEngine'
-import { distanceKm } from './game/geo'
+import { GlobeEngine } from '@/game/GlobeEngine'
+import { distanceKm } from '@/game/geo'
 import {
   buildDeck,
   MAX_POINTS,
   MAX_TOTAL,
   scoreForDistance,
   tierForPoints,
-} from './data/locations'
-import { sound } from './audio/SoundEngine'
-import { AnimatedNumber } from './components/AnimatedNumber'
-import { FinalScreen } from './components/FinalScreen'
-import { Icon } from './components/Icons'
-import { IntroScreen } from './components/IntroScreen'
-import { Lightbox } from './components/Lightbox'
-import { PhotoPanel } from './components/PhotoPanel'
-import { ResultCard } from './components/ResultCard'
+} from '@/data/locations'
+import { sound } from '@/audio/SoundEngine'
+import { AnimatedNumber } from './AnimatedNumber'
+import { FinalScreen } from './FinalScreen'
+import { Icon } from './Icons'
+import { IntroScreen } from './IntroScreen'
+import { Lightbox } from './Lightbox'
+import { PhotoPanel } from './PhotoPanel'
+import { ResultCard } from './ResultCard'
+import { AccountModal } from './AccountModal'
 
-export default function App() {
+export default function GeoGuessGame() {
   const [deck, setDeck] = useState(() => buildDeck())
   const [roundIndex, setRoundIndex] = useState(0)
   const [phase, setPhase] = useState('intro') // intro | guessing | revealing | result | final
@@ -28,7 +31,14 @@ export default function App() {
   const [photoState, setPhotoState] = useState('loading')
   const [lightboxOpen, setLightboxOpen] = useState(false)
   const [muted, setMuted] = useState(() => sound.isMuted)
-  const [isTouch] = useState(() => window.matchMedia?.('(pointer: coarse)').matches ?? false)
+  const [isTouch, setIsTouch] = useState(false)
+
+  // Auth & Account state
+  const [user, setUser] = useState(null)
+  const [token, setToken] = useState(null)
+  const [authModalOpen, setAuthModalOpen] = useState(false)
+  const [scoreSaved, setScoreSaved] = useState(false)
+  const [avatars, setAvatars] = useState([])
 
   const stageRef = useRef(null)
   const confirmRef = useRef(null)
@@ -39,6 +49,55 @@ export default function App() {
 
   const location = deck[roundIndex]
   const isLastRound = roundIndex >= deck.length - 1
+
+  // Detect touch on mount
+  useEffect(() => {
+    setIsTouch(window.matchMedia?.('(pointer: coarse)').matches ?? false)
+  }, [])
+
+  // Fetch preset avatars
+  useEffect(() => {
+    fetch('/api/avatars')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.avatars) setAvatars(data.avatars)
+      })
+      .catch(() => {})
+  }, [])
+
+  // Restore authenticated session from localStorage
+  useEffect(() => {
+    const savedToken = localStorage.getItem('guess_geo_token')
+    if (savedToken) {
+      setToken(savedToken)
+      fetch('/api/auth/me', {
+        headers: { Authorization: `Bearer ${savedToken}` },
+      })
+        .then((res) => (res.ok ? res.json() : null))
+        .then((data) => {
+          if (data?.user) {
+            setUser(data.user)
+          } else {
+            localStorage.removeItem('guess_geo_token')
+            setToken(null)
+          }
+        })
+        .catch(() => {})
+    }
+  }, [])
+
+  const handleAuthSuccess = (newUser, newToken) => {
+    setUser(newUser)
+    setToken(newToken)
+    localStorage.setItem('guess_geo_token', newToken)
+    sound.fanfare?.()
+  }
+
+  const handleLogout = () => {
+    setUser(null)
+    setToken(null)
+    localStorage.removeItem('guess_geo_token')
+  }
 
   // ------------------------------------------------------------------
   //  THREE.JS LIFECYCLE
@@ -129,6 +188,26 @@ export default function App() {
     if (roundIndex >= deck.length - 1) {
       setPhase('final')
       sound.fanfare()
+
+      // Automatically post final score to backend API
+      fetch('/api/scores', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        body: JSON.stringify({
+          totalScore,
+          maxScore: MAX_TOTAL,
+          roundsPlayed: deck.length,
+          details: results,
+        }),
+      })
+        .then((res) => {
+          if (res.ok) setScoreSaved(true)
+        })
+        .catch(() => {})
+
       return
     }
 
@@ -140,7 +219,7 @@ export default function App() {
     setPhase('guessing')
     engineRef.current?.startRound()
     sound.roundStart()
-  }, [roundIndex, deck.length])
+  }, [roundIndex, deck.length, token, totalScore, results])
 
   const handleRestart = useCallback(() => {
     const nextDeck = buildDeck(deck.map((item) => item.id))
@@ -154,6 +233,7 @@ export default function App() {
     setPhotoState('loading')
     setLightboxOpen(false)
     setPhase('guessing')
+    setScoreSaved(false)
     pendingTierRef.current = null
 
     engineRef.current?.startRound()
@@ -167,21 +247,22 @@ export default function App() {
     if (!next) sound.click()
   }, [])
 
-  // ------------------------------------------------------------------
-  //  INTERFACE SIDE EFFECTS
-  // ------------------------------------------------------------------
-  // Reset the loading skeleton whenever a new photograph is shown.
+  // Reset photo skeleton when round changes
   useEffect(() => {
     setPhotoState('loading')
   }, [roundIndex, deck])
 
-  // Keyboard shortcuts: Enter confirms, M toggles sound, Escape closes the photo.
+  // Keyboard shortcuts
   useEffect(() => {
     const onKeyDown = (event) => {
       const tag = event.target?.tagName
       if (tag === 'INPUT' || tag === 'TEXTAREA') return
 
       if (event.key === 'Escape') {
+        if (authModalOpen) {
+          setAuthModalOpen(false)
+          return
+        }
         setLightboxOpen(false)
         return
       }
@@ -199,9 +280,9 @@ export default function App() {
 
     window.addEventListener('keydown', onKeyDown)
     return () => window.removeEventListener('keydown', onKeyDown)
-  }, [phase, guess, handleConfirm, toggleMute])
+  }, [phase, guess, handleConfirm, toggleMute, authModalOpen])
 
-  // A small pulse whenever the running score increases.
+  // Small pulse when total score updates
   useEffect(() => {
     const node = scoreRef.current
     if (!node || totalScore === 0) return
@@ -234,6 +315,8 @@ export default function App() {
           : isTouch
             ? 'Drag to rotate. Pinch to zoom. Tap the globe to drop your pin.'
             : 'Drag to rotate. Scroll to zoom. Click the globe to drop your pin.'
+
+  const userAvatarObj = avatars.find((a) => a.id === user?.avatar)
 
   return (
     <div className="app">
@@ -275,6 +358,33 @@ export default function App() {
           </div>
 
           <div className="topbar-right">
+            {/* User Account / Profile Button */}
+            {user ? (
+              <button
+                type="button"
+                className="user-pill-btn"
+                onClick={() => setAuthModalOpen(true)}
+                title="View your explorer profile & stats"
+              >
+                <span
+                  className="user-pill-avatar"
+                  style={{ backgroundColor: userAvatarObj?.bg || '#ddf4ff' }}
+                >
+                  {userAvatarObj?.emoji || '🧭'}
+                </span>
+                <span className="user-pill-name">{user.name}</span>
+              </button>
+            ) : (
+              <button
+                type="button"
+                className="btn btn-sm btn-ghost user-join-btn"
+                onClick={() => setAuthModalOpen(true)}
+              >
+                <Icon name="user" size={16} />
+                <span>Join / Sign In</span>
+              </button>
+            )}
+
             <div className="score-block" aria-label="Current score">
               <span className="score-star">
                 <Icon name="star" size={17} />
@@ -364,11 +474,19 @@ export default function App() {
           totalScore={totalScore}
           maxTotal={MAX_TOTAL}
           onRestart={handleRestart}
+          scoreSaved={scoreSaved}
+          user={user}
         />
       )}
 
       {phase === 'intro' && (
-        <IntroScreen onStart={handleStart} muted={muted} onToggleMute={toggleMute} />
+        <IntroScreen
+          onStart={handleStart}
+          muted={muted}
+          onToggleMute={toggleMute}
+          user={user}
+          onOpenAuth={() => setAuthModalOpen(true)}
+        />
       )}
 
       {lightboxOpen && location && (
@@ -378,6 +496,16 @@ export default function App() {
           onClose={() => setLightboxOpen(false)}
         />
       )}
+
+      {/* Account Modal for Registration, Login, Profile & Leaderboard */}
+      <AccountModal
+        isOpen={authModalOpen}
+        onClose={() => setAuthModalOpen(false)}
+        user={user}
+        token={token}
+        onAuthSuccess={handleAuthSuccess}
+        onLogout={handleLogout}
+      />
     </div>
   )
 }

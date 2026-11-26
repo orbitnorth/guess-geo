@@ -1,3 +1,7 @@
+# Next.js
+.next/
+out/
+
 # Dependencies
 node_modules/
 .pnp
@@ -21,6 +25,13 @@ lerna-debug.log*
 .env
 .env.*
 !.env.example
+
+# SQLite Database
+*.db
+*.db-journal
+*.db-shm
+*.db-wal
+/data/
 
 # Editor & OS files
 .vscode/*
