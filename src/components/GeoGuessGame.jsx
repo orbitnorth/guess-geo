@@ -18,7 +18,10 @@ import { IntroScreen } from './IntroScreen'
 import { Lightbox } from './Lightbox'
 import { PhotoPanel } from './PhotoPanel'
 import { ResultCard } from './ResultCard'
-import { AccountModal } from './AccountModal'
+import { RegisterModal } from './RegisterModal'
+import { LoginModal } from './LoginModal'
+import { LeaderboardModal } from './LeaderboardModal'
+import { ProfileModal } from './ProfileModal'
 
 export default function GeoGuessGame() {
   const [deck, setDeck] = useState(() => buildDeck())
@@ -33,10 +36,10 @@ export default function GeoGuessGame() {
   const [muted, setMuted] = useState(() => sound.isMuted)
   const [isTouch, setIsTouch] = useState(false)
 
-  // Auth & Account state
+  // Auth & Modal state: null | 'register' | 'login' | 'leaderboard' | 'profile'
   const [user, setUser] = useState(null)
   const [token, setToken] = useState(null)
-  const [authModalOpen, setAuthModalOpen] = useState(false)
+  const [activeModal, setActiveModal] = useState(null)
   const [scoreSaved, setScoreSaved] = useState(false)
   const [avatars, setAvatars] = useState([])
 
@@ -476,6 +479,7 @@ export default function GeoGuessGame() {
           onRestart={handleRestart}
           scoreSaved={scoreSaved}
           user={user}
+          onOpenLeaderboard={() => setActiveModal('leaderboard')}
         />
       )}
 
@@ -485,7 +489,10 @@ export default function GeoGuessGame() {
           muted={muted}
           onToggleMute={toggleMute}
           user={user}
-          onOpenAuth={() => setAuthModalOpen(true)}
+          onOpenRegister={() => setActiveModal('register')}
+          onOpenLogin={() => setActiveModal('login')}
+          onOpenLeaderboard={() => setActiveModal('leaderboard')}
+          onOpenProfile={() => setActiveModal('profile')}
         />
       )}
 
@@ -497,10 +504,29 @@ export default function GeoGuessGame() {
         />
       )}
 
-      {/* Account Modal for Registration, Login, Profile & Leaderboard */}
-      <AccountModal
-        isOpen={authModalOpen}
-        onClose={() => setAuthModalOpen(false)}
+      {/* Distinct, Unmerged Modals */}
+      <RegisterModal
+        isOpen={activeModal === 'register'}
+        onClose={() => setActiveModal(null)}
+        onAuthSuccess={handleAuthSuccess}
+        onSwitchToLogin={() => setActiveModal('login')}
+      />
+
+      <LoginModal
+        isOpen={activeModal === 'login'}
+        onClose={() => setActiveModal(null)}
+        onAuthSuccess={handleAuthSuccess}
+        onSwitchToRegister={() => setActiveModal('register')}
+      />
+
+      <LeaderboardModal
+        isOpen={activeModal === 'leaderboard'}
+        onClose={() => setActiveModal(null)}
+      />
+
+      <ProfileModal
+        isOpen={activeModal === 'profile'}
+        onClose={() => setActiveModal(null)}
         user={user}
         token={token}
         onAuthSuccess={handleAuthSuccess}

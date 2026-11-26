@@ -19,7 +19,7 @@ function ratingFor(ratio) {
   return 'Trail starter'
 }
 
-export function FinalScreen({ results, totalScore, maxTotal, onRestart, scoreSaved, user }) {
+export function FinalScreen({ results, totalScore, maxTotal, onRestart, scoreSaved, user, onOpenLeaderboard }) {
   const ratio = maxTotal > 0 ? totalScore / maxTotal : 0
   const stars = ratio >= 0.78 ? 3 : ratio >= 0.45 ? 2 : 1
 
@@ -88,10 +88,23 @@ export function FinalScreen({ results, totalScore, maxTotal, onRestart, scoreSav
           ))}
         </div>
 
-        <button type="button" className="btn btn-green btn-xl" onClick={onRestart}>
-          Play again
-          <Icon name="reset" size={18} strokeWidth={2.2} />
-        </button>
+        <div className="final-actions-row">
+          <button type="button" className="btn btn-green btn-xl" onClick={onRestart}>
+            Play again
+            <Icon name="reset" size={18} strokeWidth={2.2} />
+          </button>
+
+          {onOpenLeaderboard && (
+            <button
+              type="button"
+              className="btn btn-ghost btn-final-leaderboard"
+              onClick={onOpenLeaderboard}
+            >
+              <Icon name="trophy" size={16} />
+              <span>Leaderboard</span>
+            </button>
+          )}
+        </div>
       </div>
     </div>
   )

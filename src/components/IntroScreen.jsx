@@ -1,7 +1,17 @@
 import { Icon } from './Icons'
 import { Mascot } from './Mascot'
+import { getAvatarSrc } from '@/lib/data/avatars'
 
-export function IntroScreen({ onStart, muted, onToggleMute, user, onOpenAuth }) {
+export function IntroScreen({
+  onStart,
+  muted,
+  onToggleMute,
+  user,
+  onOpenRegister,
+  onOpenLogin,
+  onOpenLeaderboard,
+  onOpenProfile,
+}) {
   return (
     <div className="landing-hero" role="region" aria-label="GeoGuess Globe Expedition">
       {/* Top Navbar */}
@@ -20,7 +30,7 @@ export function IntroScreen({ onStart, muted, onToggleMute, user, onOpenAuth }) 
           <button
             type="button"
             className="hero-nav-btn"
-            onClick={onOpenAuth}
+            onClick={onOpenLeaderboard}
             title="Global Leaderboard"
           >
             <Icon name="trophy" size={16} />
@@ -42,21 +52,36 @@ export function IntroScreen({ onStart, muted, onToggleMute, user, onOpenAuth }) 
             <button
               type="button"
               className="hero-user-pill"
-              onClick={onOpenAuth}
+              onClick={onOpenProfile}
               title="View your explorer profile"
             >
-              <span className="hero-user-avatar">🧭</span>
+              <img
+                src={getAvatarSrc(user.avatar)}
+                alt={user.name}
+                width={26}
+                height={26}
+                className="hero-user-avatar-thumb"
+              />
               <span className="hero-user-name">{user.name}</span>
             </button>
           ) : (
-            <button
-              type="button"
-              className="hero-join-btn"
-              onClick={onOpenAuth}
-            >
-              <Icon name="user" size={15} />
-              <span>Sign In / Join</span>
-            </button>
+            <div className="hero-auth-actions">
+              <button
+                type="button"
+                className="hero-nav-btn hero-login-btn"
+                onClick={onOpenLogin}
+              >
+                <Icon name="user" size={15} />
+                <span>Sign In</span>
+              </button>
+              <button
+                type="button"
+                className="hero-join-btn"
+                onClick={onOpenRegister}
+              >
+                <span>Create Account</span>
+              </button>
+            </div>
           )}
         </div>
       </header>
@@ -117,7 +142,7 @@ export function IntroScreen({ onStart, muted, onToggleMute, user, onOpenAuth }) 
             <button
               type="button"
               className="btn btn-ghost btn-hero-secondary"
-              onClick={onOpenAuth}
+              onClick={onOpenLeaderboard}
             >
               <Icon name="trophy" size={17} />
               <span>View Leaderboard</span>
