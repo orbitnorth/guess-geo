@@ -1,106 +1,194 @@
 import { Icon } from './Icons'
 import { Mascot } from './Mascot'
 
-const STEPS = [
-  {
-    title: 'Study the photo',
-    copy: 'Architecture, plants, road markings, light. Every detail is a clue.',
-  },
-  {
-    title: 'Spin and drop a pin',
-    copy: 'Drag the globe, zoom in, then tap the spot that feels right.',
-  },
-  {
-    title: 'Confirm and score',
-    copy: 'The closer your pin, the bigger the reward. Up to 5,000 points.',
-  },
-]
-
 export function IntroScreen({ onStart, muted, onToggleMute, user, onOpenAuth }) {
   return (
-    <div className="overlay intro-overlay" role="dialog" aria-modal="true" aria-label="How to play">
-      <div className="intro-card">
-        <div className="intro-main">
-          <div className="intro-top-row">
-            <div className="intro-brand">
-              <span className="brand-mark">
-                <Icon name="globe" size={22} strokeWidth={2} />
-              </span>
-              <strong>GeoGuess</strong>
-              <span className="meta">Globe edition</span>
-            </div>
+    <div className="landing-hero" role="region" aria-label="GeoGuess Globe Expedition">
+      {/* Top Navbar */}
+      <header className="hero-nav">
+        <div className="hero-brand">
+          <span className="brand-mark">
+            <Icon name="globe" size={24} strokeWidth={2} />
+          </span>
+          <div className="brand-text">
+            <strong>GeoGuess</strong>
+            <span className="hero-edition-badge">Globe Edition</span>
+          </div>
+        </div>
 
-            {user ? (
-              <button
-                type="button"
-                className="intro-user-pill"
-                onClick={onOpenAuth}
-                title="View your profile & leaderboard"
-              >
-                <Icon name="user" size={15} />
-                <span>{user.name}</span>
-              </button>
-            ) : (
-              <button
-                type="button"
-                className="intro-join-btn"
-                onClick={onOpenAuth}
-              >
-                <Icon name="user" size={15} />
-                <span>Sign in / Join</span>
-              </button>
-            )}
+        <div className="hero-nav-actions">
+          <button
+            type="button"
+            className="hero-nav-btn"
+            onClick={onOpenAuth}
+            title="Global Leaderboard"
+          >
+            <Icon name="trophy" size={16} />
+            <span>Leaderboard</span>
+          </button>
+
+          <button
+            type="button"
+            className="hero-nav-btn sound-toggle-btn"
+            onClick={onToggleMute}
+            aria-label={muted ? 'Turn sound on' : 'Mute sound'}
+            title={muted ? 'Sound muted (M)' : 'Sound on (M)'}
+          >
+            <Icon name={muted ? 'volumeOff' : 'volume'} size={17} strokeWidth={2.2} />
+            <span className="sound-label">{muted ? 'Off' : 'On'}</span>
+          </button>
+
+          {user ? (
+            <button
+              type="button"
+              className="hero-user-pill"
+              onClick={onOpenAuth}
+              title="View your explorer profile"
+            >
+              <span className="hero-user-avatar">🧭</span>
+              <span className="hero-user-name">{user.name}</span>
+            </button>
+          ) : (
+            <button
+              type="button"
+              className="hero-join-btn"
+              onClick={onOpenAuth}
+            >
+              <Icon name="user" size={15} />
+              <span>Sign In / Join</span>
+            </button>
+          )}
+        </div>
+      </header>
+
+      {/* Hero Content */}
+      <main className="hero-body">
+        {/* Left Column: Copy & Actions */}
+        <div className="hero-content">
+          <div className="hero-eyebrow">
+            <span className="eyebrow-pill">3D Geography Challenge</span>
+            <span className="eyebrow-text">91 Landmarks across 58 Countries</span>
           </div>
 
-          <h1 className="intro-title">
+          <h1 className="hero-title">
             Spin the globe.
             <br />
-            <span>Find the place.</span>
+            <span className="hero-title-highlight">Find the place.</span>
           </h1>
 
-          <p className="intro-copy">
-            Five photographs from around the world. Study each scene, spin the globe and place
-            your pin as close to the real location as you can.
+          <p className="hero-desc">
+            Five mystery photographs from across the continents. Inspect architecture, road markings, light, and natural wonders, rotate the interactive 3D WebGL globe, and plant your flag to score up to 25,000 points.
           </p>
 
-          <ol className="intro-steps">
-            {STEPS.map((step, index) => (
-              <li className="intro-step" key={step.title}>
-                <span className="step-num">{index + 1}</span>
-                <div className="step-body">
-                  <strong>{step.title}</strong>
-                  <p>{step.copy}</p>
-                </div>
-              </li>
-            ))}
-          </ol>
+          <div className="hero-features-strip">
+            <div className="feature-item">
+              <span className="feature-icon icon-blue">📷</span>
+              <div className="feature-text">
+                <strong>Real Photos</strong>
+                <span>High-res Wikimedia scenes</span>
+              </div>
+            </div>
+            <div className="feature-item">
+              <span className="feature-icon icon-green">🌐</span>
+              <div className="feature-text">
+                <strong>3D Earth</strong>
+                <span>Rotate, zoom & drop pins</span>
+              </div>
+            </div>
+            <div className="feature-item">
+              <span className="feature-icon icon-yellow">⚡</span>
+              <div className="feature-text">
+                <strong>Instant Scoring</strong>
+                <span>Haversine distance rewards</span>
+              </div>
+            </div>
+          </div>
 
-          <div className="intro-actions">
-            <button type="button" className="btn btn-green btn-xl" onClick={onStart}>
-              Start exploring
-              <Icon name="arrowRight" size={18} strokeWidth={2.2} />
+          <div className="hero-cta-group">
+            <button
+              type="button"
+              className="btn btn-green btn-hero-start"
+              onClick={onStart}
+            >
+              <span>Start Exploring</span>
+              <Icon name="arrowRight" size={19} strokeWidth={2.4} />
             </button>
-            <button type="button" className="btn btn-ghost" onClick={onToggleMute}>
-              <Icon name={muted ? 'volumeOff' : 'volume'} size={17} />
-              Sound {muted ? 'off' : 'on'}
+
+            <button
+              type="button"
+              className="btn btn-ghost btn-hero-secondary"
+              onClick={onOpenAuth}
+            >
+              <Icon name="trophy" size={17} />
+              <span>View Leaderboard</span>
             </button>
           </div>
 
-          <p className="intro-foot">Five rounds / 5,000 points each / 91 verified world locations</p>
-        </div>
-
-        <div className="intro-art">
-          <span className="intro-bubble">Ready for takeoff?</span>
-          <Mascot className="intro-mascot" />
-          <div className="intro-art-dots" aria-hidden="true">
-            <span />
-            <span />
-            <span />
-            <span />
-            <span />
+          <div className="hero-stats-row">
+            <div className="hero-stat">
+              <strong>91</strong>
+              <span>World Sites</span>
+            </div>
+            <span className="stat-separator" />
+            <div className="hero-stat">
+              <strong>58</strong>
+              <span>Countries</span>
+            </div>
+            <span className="stat-separator" />
+            <div className="hero-stat">
+              <strong>5</strong>
+              <span>Rounds / Run</span>
+            </div>
+            <span className="stat-separator" />
+            <div className="hero-stat">
+              <strong>25,000</strong>
+              <span>Max Score</span>
+            </div>
           </div>
         </div>
-      </div>
+
+        {/* Right Column: Visual Stage */}
+        <div className="hero-stage-col">
+          <div className="hero-stage-backdrop">
+            <div className="orbital-ring ring-1" />
+            <div className="orbital-ring ring-2" />
+
+            {/* Floating Game Badges */}
+            <div className="floating-badge badge-top-left">
+              <span className="badge-pin">📍</span>
+              <div className="badge-copy">
+                <strong>Eiffel Tower</strong>
+                <span>Paris, France</span>
+              </div>
+            </div>
+
+            <div className="floating-badge badge-bottom-right">
+              <span className="badge-star">⭐</span>
+              <div className="badge-copy">
+                <strong className="score-text">+4,985 pts</strong>
+                <span>Pinpoint accuracy</span>
+              </div>
+            </div>
+
+            {/* Mascot Centerpiece */}
+            <div className="hero-mascot-container">
+              <div className="hero-speech-bubble">
+                Ready for takeoff? 🚀
+              </div>
+              <Mascot className="hero-mascot-visual" size={290} />
+            </div>
+
+            {/* Ambient twinkling sparkles */}
+            <div className="hero-stars-layer" aria-hidden="true">
+              <span className="star-dot dot-1" />
+              <span className="star-dot dot-2" />
+              <span className="star-dot dot-3" />
+              <span className="star-dot dot-4" />
+              <span className="star-dot dot-5" />
+            </div>
+          </div>
+        </div>
+      </main>
     </div>
   )
 }
