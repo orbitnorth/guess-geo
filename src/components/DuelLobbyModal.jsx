@@ -93,7 +93,16 @@ export function DuelLobbyModal({
 
   const handleJoinStart = (e) => {
     e?.preventDefault?.()
-    const code = inputCode.trim()
+    let code = inputCode.trim()
+    if (code.includes('/invite/')) {
+      const match = code.match(/\/invite\/([a-zA-Z0-9_-]+)/)
+      if (match && match[1]) code = match[1]
+    } else if (code.includes('duel=')) {
+      const match = code.match(/duel=([a-zA-Z0-9_-]+)/)
+      if (match && match[1]) code = match[1]
+    }
+    code = code.replace(/[^a-zA-Z0-9_-]/g, '').slice(0, 48)
+
     if (!code || code.length < 2) {
       setInputError('Please enter or paste a valid room code or link.')
       return

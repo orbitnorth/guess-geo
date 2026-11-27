@@ -265,26 +265,11 @@ export default function GeoGuessGame({ initialDuelRoom = '', autoStartDuel = fal
     let freshDeck = buildDeck()
 
     if (opponentType === 'friend' && roomCode) {
-      freshDeck = buildDeckFromSeed(roomCode, 7)
-      const shortCode = roomCode.length > 8 ? roomCode.slice(0, 8) : roomCode
+      const cleanCode = String(roomCode).trim()
+      freshDeck = buildDeckFromSeed(cleanCode, 7)
+      const shortCode = cleanCode.length > 8 ? cleanCode.slice(0, 8) : cleanCode
       chosenBot = {
-        id: `friend_${roomCode}`,
-        name: isHost ? `Friend (${shortCode})` : `Host (${shortCode})`,
-        avatar: 'wanderer',
-        tagline: `1v1 Room ${shortCode}`,
-        difficulty: 'Medium',
-        badgeVariant: 'yellow',
-        minSec: 3,
-        maxSec: 10,
-        baseErrorKm: 450,
-        varianceKm: 280,
-      }
-    }
-
-    if (opponentType === 'friend' && roomCode) {
-      freshDeck = buildDeckFromSeed(roomCode, 7)
-      chosenBot = {
-        id: `friend_${roomCode}`,
+        id: `friend_${cleanCode}`,
         name: isHost ? `Friend (${shortCode})` : `Host (${shortCode})`,
         avatar: 'wanderer',
         tagline: `1v1 Room ${shortCode}`,
