@@ -3,8 +3,6 @@
 import { useState, useEffect } from 'react'
 import { Icon } from './Icons'
 import { Modal } from './Modal'
-import { DUEL_BOTS } from '@/game/duelBots'
-import { getAvatarById } from '@/lib/data/avatars'
 
 function generateRoomUuid() {
   if (typeof crypto !== 'undefined' && crypto.randomUUID) {
@@ -24,9 +22,6 @@ export function DuelLobbyModal({
   user,
   initialRoomCode = '',
 }) {
-  const [selectedBotId, setSelectedBotId] = useState('aneka')
-  const [tab, setTab] = useState(() => (initialRoomCode ? 'friend' : 'bot')) // 'bot' | 'friend'
-  const [friendSubTab, setFriendSubTab] = useState(() => (initialRoomCode ? 'join' : 'host')) // 'join' | 'host'
   const [copied, setCopied] = useState(false)
   const [inputCode, setInputCode] = useState(initialRoomCode)
   const [inputError, setInputError] = useState('')
@@ -34,13 +29,9 @@ export function DuelLobbyModal({
 
   useEffect(() => {
     if (initialRoomCode) {
-      setTab('friend')
-      setFriendSubTab('join')
       setInputCode(initialRoomCode.trim())
     }
   }, [initialRoomCode])
-
-  const selectedBot = DUEL_BOTS.find((b) => b.id === selectedBotId) || DUEL_BOTS[1]
 
   const getInviteUrl = () => {
     if (typeof window !== 'undefined') {
@@ -90,36 +81,26 @@ export function DuelLobbyModal({
     setInputCode(cleaned)
   }
 
-  const handleStart = () => {
-    if (tab === 'bot') {
-      onStartDuel({
-        opponentType: 'bot',
-        bot: selectedBot,
-        roomCode: null,
-      })
+  const handleHostStart = () => {
+    onStartDuel({
+      opponentType: 'friend',
+      roomCode: hostRoomCode,
+      isHost: true,
+    })
+  }
+
+  const handleJoinStart = (e) => {
+    e?.preventDefault?.()
+    const code = inputCode.trim()
+    if (!code || code.length < 2) {
+      setInputError('Please enter or paste a valid room code or link.')
       return
     }
-
-    if (friendSubTab === 'join') {
-      const code = inputCode.trim().toUpperCase()
-      if (!code || code.length < 2) {
-        setInputError('Please enter a valid room code (e.g. 3CJ4)')
-        return
-      }
-      onStartDuel({
-        opponentType: 'friend',
-        bot: selectedBot,
-        roomCode: code,
-        isHost: false,
-      })
-    } else {
-      onStartDuel({
-        opponentType: 'friend',
-        bot: selectedBot,
-        roomCode: hostRoomCode,
-        isHost: true,
-      })
-    }
+    onStartDuel({
+      opponentType: 'friend',
+      roomCode: code,
+      isHost: false,
+    })
   }
 
   return (
@@ -134,191 +115,99 @@ export function DuelLobbyModal({
       }
       badgeVariant="blue"
       title="1v1 Globe Duel"
-      subtitle="Face off in a 5,000 HP clash. Closer pin deals distance damage each round!"
-      maxWidth={540}
+      subtitle="Face off in a 5,000 HP clash. Both players receive the exact same mystery photos!"
+      maxWidth={620}
       className="duel-lobby-modal"
-      footer={
-        <button
-          type="button"
-          className="btn btn-green btn-xl btn-full-action btn-duel-start-action"
-          onClick={handleStart}
-        >
-          <Icon name="lightning" size={20} strokeWidth={2.6} />
-          <span>
-            {tab === 'bot'
-              ? 'Start 1v1 Bot Duel'
-              : friendSubTab === 'join'
-                ? `Join Duel with Code (${inputCode || '...'})`
-                : `Start Match as Host (${hostRoomCode})`}
-          </span>
-        </button>
-      }
     >
-      {/* Primary Mode Tabs */}
-      <div className="duel-lobby-tabs" role="tablist">
-        <button
-          type="button"
-          role="tab"
-          aria-selected={tab === 'bot'}
-          className={`duel-tab-btn ${tab === 'bot' ? 'is-active' : ''}`}
-          onClick={() => setTab('bot')}
-        >
-          <Icon name="compass" size={16} />
-          <span>Instant Match (Bot)</span>
-        </button>
+      <div className="duel-lobby-split-grid">
+        {/* Left Card: Create / Invite Friend */}
+        <div className="duel-action-card card-host">
+          <div className="action-card-header">
+            <span className="card-badge badge-green">Host</span>
+            <h3 className="card-title">Invite a Friend</h3>
+            <p className="card-subtitle">
+              Share your room invite link. Both of you will explore identical locations.
+            </p>
+          </div>
 
-        <button
-          type="button"
-          role="tab"
-          aria-selected={tab === 'friend'}
-          className={`duel-tab-btn ${tab === 'friend' ? 'is-active' : ''}`}
-          onClick={() => setTab('friend')}
-        >
-          <Icon name="user" size={16} />
-          <span>Play Friend</span>
-        </button>
+          <div className="card-input-row">
+            <input
+              type="text"
+              readOnly
+              value={getInviteUrl()}
+              className="friend-share-input"
+              aria-label="Your invite link"
+            />
+            <button
+              type="button"
+              className="btn-copy-code"
+              onClick={handleCopy}
+              title="Copy share link"
+            >
+              <Icon name={copied ? 'check' : 'expand'} size={14} />
+              <span>{copied ? 'Copied!' : 'Copy'}</span>
+            </button>
+          </div>
+
+          <button
+            type="button"
+            className="btn btn-green btn-full-action card-action-btn"
+            onClick={handleHostStart}
+          >
+            <Icon name="lightning" size={17} strokeWidth={2.5} />
+            <span>Start Match as Host</span>
+          </button>
+        </div>
+
+        {/* Right Card: Join with Code */}
+        <div className="duel-action-card card-join">
+          <div className="action-card-header">
+            <span className="card-badge badge-blue">Join</span>
+            <h3 className="card-title">Join with Code</h3>
+            <p className="card-subtitle">
+              Enter or paste a room UUID or invite link received from your friend.
+            </p>
+          </div>
+
+          <form onSubmit={handleJoinStart} className="card-form">
+            <div className="card-input-row">
+              <input
+                type="text"
+                className="friend-code-input"
+                placeholder="Paste code or link..."
+                value={inputCode}
+                onChange={(e) => cleanAndSetCode(e.target.value)}
+                maxLength={80}
+                aria-label="Friend room code or link"
+              />
+              <button
+                type="button"
+                className="btn-paste-code"
+                onClick={handlePasteCode}
+                title="Paste from clipboard"
+              >
+                <Icon name="edit" size={14} />
+                <span>Paste</span>
+              </button>
+            </div>
+
+            {inputError && (
+              <div className="friend-code-error" role="alert">
+                <Icon name="x" size={13} />
+                <span>{inputError}</span>
+              </div>
+            )}
+
+            <button
+              type="submit"
+              className="btn btn-blue btn-full-action card-action-btn"
+            >
+              <Icon name="arrowRight" size={17} strokeWidth={2.5} />
+              <span>Join Duel Match</span>
+            </button>
+          </form>
+        </div>
       </div>
-
-      {tab === 'bot' ? (
-        <div className="duel-bot-selection">
-          <span className="lobby-section-label">Select Your Opponent</span>
-          <div className="duel-bot-list">
-            {DUEL_BOTS.map((bot) => {
-              const avatar = getAvatarById(bot.avatar)
-              const isSelected = selectedBot.id === bot.id
-
-              return (
-                <button
-                  key={bot.id}
-                  type="button"
-                  className={`duel-bot-card ${isSelected ? 'is-selected' : ''}`}
-                  onClick={() => setSelectedBotId(bot.id)}
-                >
-                  <div className="bot-card-avatar">
-                    <img src={avatar.src} alt={bot.name} width={46} height={46} />
-                  </div>
-
-                  <div className="bot-card-info">
-                    <div className="bot-card-title-row">
-                      <strong className="bot-name">{bot.name}</strong>
-                      <span className={`bot-diff-badge badge-${bot.badgeVariant || 'green'}`}>
-                        {bot.difficulty}
-                      </span>
-                    </div>
-                    <span className="bot-title">{bot.title}</span>
-                    <p className="bot-desc">{bot.desc}</p>
-                  </div>
-
-                  {isSelected && (
-                    <span className="bot-check-badge">
-                      <Icon name="check" size={12} strokeWidth={3} />
-                    </span>
-                  )}
-                </button>
-              )
-            })}
-          </div>
-        </div>
-      ) : (
-        <div className="duel-friend-section">
-          {/* Sub-selector: Join vs Host */}
-          <div className="friend-action-selector">
-            <button
-              type="button"
-              className={`friend-pill-choice ${friendSubTab === 'join' ? 'is-active' : ''}`}
-              onClick={() => {
-                setFriendSubTab('join')
-                setInputError('')
-              }}
-            >
-              <Icon name="arrowRight" size={14} strokeWidth={2.4} />
-              <span>Join with Code</span>
-            </button>
-
-            <button
-              type="button"
-              className={`friend-pill-choice ${friendSubTab === 'host' ? 'is-active' : ''}`}
-              onClick={() => {
-                setFriendSubTab('host')
-                setInputError('')
-              }}
-            >
-              <Icon name="plus" size={14} strokeWidth={2.4} />
-              <span>Create / Host Room</span>
-            </button>
-          </div>
-
-          {/* JOIN SUB-VIEW */}
-          {friendSubTab === 'join' && (
-            <div className="friend-join-box">
-              <span className="lobby-section-label">Paste or Enter Friend's Code</span>
-              <p className="friend-info-desc">
-                Got a 4-letter room code or link from a friend? Enter it below to join their exact mystery duel:
-              </p>
-
-              <div className="friend-input-wrapper">
-                <input
-                  type="text"
-                  className="friend-code-input"
-                  placeholder="Paste room UUID or invite link..."
-                  value={inputCode}
-                  onChange={(e) => cleanAndSetCode(e.target.value)}
-                  maxLength={120}
-                  autoFocus
-                />
-                <button
-                  type="button"
-                  className="btn-paste-code"
-                  onClick={handlePasteCode}
-                  title="Paste from clipboard"
-                >
-                  <Icon name="edit" size={15} />
-                  <span>Paste</span>
-                </button>
-              </div>
-
-              {inputError && (
-                <div className="friend-code-error" role="alert">
-                  <Icon name="x" size={14} />
-                  <span>{inputError}</span>
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* HOST SUB-VIEW */}
-          {friendSubTab === 'host' && (
-            <div className="friend-host-box">
-              <span className="lobby-section-label">Your Room Code & Link</span>
-              <p className="friend-info-desc">
-                Share this code or link with a friend so they can join you. Both players will receive the exact same mystery photos!
-              </p>
-
-              <div className="friend-code-box">
-                <span className="code-label">Room ID:</span>
-                <strong className="code-value">{hostRoomCode}</strong>
-              </div>
-
-              <div className="friend-share-row">
-                <input
-                  type="text"
-                  readOnly
-                  value={getInviteUrl()}
-                  className="friend-share-input"
-                />
-                <button
-                  type="button"
-                  className="btn-copy-code"
-                  onClick={handleCopy}
-                >
-                  <Icon name={copied ? 'check' : 'expand'} size={15} />
-                  <span>{copied ? 'Copied!' : 'Copy Link'}</span>
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
-      )}
     </Modal>
   )
 }

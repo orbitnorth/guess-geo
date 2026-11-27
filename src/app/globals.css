@@ -4599,275 +4599,137 @@ kbd {
   color: var(--ink-soft);
 }
 
-/* Duel Lobby Modal */
-.duel-lobby-tabs {
+/* Duel Lobby Split Grid (Host & Join side by side in equal height) */
+.duel-lobby-split-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 8px;
-  background: #f0f7fa;
-  padding: 4px;
-  border-radius: 16px;
-  margin-bottom: 18px;
+  gap: 16px;
+  align-items: stretch;
 }
 
-.duel-tab-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 10px;
-  border-radius: 12px;
-  font-family: var(--font-display);
-  font-size: 13.5px;
-  font-weight: 700;
-  color: var(--ink-soft);
-  transition: all 0.15s ease;
-}
-
-.duel-tab-btn.is-active {
-  background: #ffffff;
-  color: var(--blue-dark);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-}
-
-.lobby-section-label {
-  display: block;
-  font-family: var(--font-display);
-  font-size: 13.5px;
-  font-weight: 700;
-  color: var(--ink);
-  margin-bottom: 10px;
-}
-
-.duel-bot-list {
+.duel-action-card {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-}
-
-.duel-bot-card {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 14px;
+  justify-content: space-between;
+  background: #f8fcfe;
   border: 2px solid var(--line);
-  border-radius: 18px;
-  background: #ffffff;
-  cursor: pointer;
-  text-align: left;
+  border-radius: 20px;
+  padding: 20px 18px;
+  box-shadow: 0 4px 0 var(--line);
+  box-sizing: border-box;
   transition: all 0.16s ease;
-  position: relative;
-  box-shadow: 0 3px 0 var(--line);
 }
 
-.duel-bot-card:hover {
+.duel-action-card:hover {
   border-color: var(--blue);
-  transform: translateY(-2px);
-  box-shadow: 0 5px 0 var(--line-strong);
+  transform: translateY(-1px);
 }
 
-.duel-bot-card.is-selected {
-  border-color: var(--blue);
-  background: var(--blue-soft);
-  box-shadow: 0 4px 0 var(--blue-dark);
+.duel-action-card.card-host {
+  border-color: rgba(88, 204, 2, 0.4);
 }
 
-.bot-card-avatar img {
-  border-radius: 50%;
-  display: block;
+.duel-action-card.card-join {
+  border-color: rgba(28, 176, 246, 0.4);
 }
 
-.bot-card-info {
-  flex: 1;
-  min-width: 0;
-}
-
-.bot-card-title-row {
+.action-card-header {
   display: flex;
-  align-items: center;
-  gap: 8px;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 16px;
 }
 
-.bot-name {
-  font-family: var(--font-display);
-  font-size: 14.5px;
-  font-weight: 700;
-  color: var(--ink);
-}
-
-.bot-diff-badge {
+.action-card-header .card-badge {
   font-size: 10px;
   font-weight: 800;
-  padding: 1px 7px;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  padding: 3px 9px;
   border-radius: 999px;
-  text-transform: uppercase;
+  margin-bottom: 8px;
 }
 
-.badge-green {
-  background: var(--green-soft);
-  color: var(--green-dark);
-}
-
-.badge-yellow {
-  background: var(--yellow-soft);
-  color: var(--yellow-dark);
-}
-
-.badge-purple {
-  background: var(--purple-soft);
-  color: var(--purple-dark);
-}
-
-.bot-title {
-  font-size: 11px;
-  color: var(--muted);
-  display: block;
-}
-
-.bot-desc {
-  font-size: 11px;
-  color: var(--ink-soft);
-  margin: 3px 0 0;
-}
-
-.bot-check-badge {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  background: var(--green);
-  color: #ffffff;
-  box-shadow: 0 2px 0 var(--green-dark);
-}
-
-.duel-friend-section {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-
-.friend-action-selector {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-  background: #f0f7fa;
-  padding: 4px;
-  border-radius: 14px;
-}
-
-.friend-pill-choice {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 7px;
-  padding: 9px 12px;
-  border-radius: 10px;
+.action-card-header .card-title {
   font-family: var(--font-display);
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--ink-soft);
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  transition: all 0.15s ease;
-}
-
-.friend-pill-choice.is-active {
-  background: #ffffff;
-  color: var(--blue-dark);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-}
-
-.friend-join-box,
-.friend-host-box {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.friend-input-wrapper {
-  display: flex;
-  gap: 8px;
-  position: relative;
-}
-
-.friend-code-input {
-  flex: 1;
-  border: 2px solid var(--line);
-  border-radius: 14px;
-  padding: 12px 16px;
-  font-family: var(--font-display);
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 800;
-  letter-spacing: 2.5px;
-  color: var(--blue-dark);
-  background: #fafcfe;
-  text-transform: uppercase;
-  transition: all 0.16s ease;
-}
-
-.friend-code-input:focus {
-  border-color: var(--blue);
-  background: #ffffff;
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(28, 176, 246, 0.2);
-}
-
-.btn-paste-code {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: #ffffff;
-  border: 2px solid var(--line);
-  border-radius: 14px;
-  padding: 0 16px;
-  font-family: var(--font-display);
-  font-size: 13px;
-  font-weight: 700;
   color: var(--ink);
-  cursor: pointer;
-  box-shadow: 0 3px 0 var(--line);
-  transition: all 0.15s ease;
+  margin: 0 0 4px;
 }
 
-.btn-paste-code:hover {
-  border-color: var(--blue);
-  color: var(--blue-dark);
-  transform: translateY(-1px);
+.action-card-header .card-subtitle {
+  font-size: 12px;
+  color: var(--ink-soft);
+  line-height: 1.4;
+  margin: 0;
+}
+
+.card-form {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  justify-content: space-between;
+}
+
+.card-input-row {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 14px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.card-input-row .friend-share-input,
+.card-input-row .friend-code-input {
+  flex: 1;
+  min-width: 0;
+  font-size: 12px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 2px solid var(--line);
+  background: #ffffff;
+  color: var(--ink);
+}
+
+.card-input-row .friend-code-input {
+  letter-spacing: 0.5px;
+}
+
+.card-input-row .btn-copy-code,
+.card-input-row .btn-paste-code {
+  padding: 0 14px;
+  border-radius: 12px;
+  font-size: 12px;
+  height: auto;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.card-action-btn {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 14.5px;
+  font-weight: 800;
+  border-radius: 14px;
+  margin-top: auto;
 }
 
 .friend-code-error {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 12.5px;
+  font-size: 12px;
   font-weight: 700;
   color: var(--red);
-  margin-top: -4px;
+  margin-bottom: 8px;
 }
 
-.friend-info-desc {
-  font-size: 12.5px;
-  color: var(--ink-soft);
-  margin: 0;
-}
-
-.friend-code-box {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: #f7fbfe;
-  border: 1.5px dashed var(--blue);
-  border-radius: 14px;
-  padding: 12px;
-}
-
-.code-label {
-  font-size: 13px;
-  color: var(--muted);
-  font-weight: 700;
+@media (max-width: 600px) {
+  .duel-lobby-split-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
 }
 
 .code-value {
@@ -4944,57 +4806,24 @@ kbd {
   border-color: var(--line);
 }
 
-[data-theme="dark"] .duel-bot-card {
-  background: #162636;
+[data-theme="dark"] .duel-action-card {
+  background: #12202e;
   border-color: var(--line);
-  box-shadow: 0 3px 0 #0d1720;
+  box-shadow: 0 4px 0 #0b151f;
 }
 
-[data-theme="dark"] .duel-bot-card.is-selected {
-  background: var(--blue-soft);
-  border-color: var(--blue);
-  box-shadow: 0 4px 0 var(--blue-dark);
-}
-
-[data-theme="dark"] .duel-lobby-tabs {
-  background: #0f1a24;
-}
-
-[data-theme="dark"] .duel-tab-btn.is-active {
-  background: #1a2c3d;
-  color: #60a5fa;
-}
-
-[data-theme="dark"] .friend-action-selector {
-  background: #0f1a24;
-}
-
-[data-theme="dark"] .friend-pill-choice.is-active {
-  background: #1a2c3d;
-  color: #60a5fa;
-}
-
-[data-theme="dark"] .friend-code-input {
-  background: #0f1a24;
+[data-theme="dark"] .card-input-row .friend-share-input,
+[data-theme="dark"] .card-input-row .friend-code-input {
+  background: #0b151f;
   border-color: var(--line);
-  color: #60a5fa;
+  color: var(--ink);
 }
 
-[data-theme="dark"] .btn-paste-code {
+[data-theme="dark"] .card-input-row .btn-paste-code {
   background: #162636;
   border-color: var(--line);
   color: var(--ink);
-  box-shadow: 0 3px 0 #0d1720;
-}
-
-[data-theme="dark"] .friend-code-box {
-  background: #0f1a24;
-}
-
-[data-theme="dark"] .friend-share-input {
-  background: #0f1a24;
-  border-color: var(--line);
-  color: var(--ink);
+  box-shadow: 0 2px 0 #0d1720;
 }
 
 @media (max-width: 768px) {

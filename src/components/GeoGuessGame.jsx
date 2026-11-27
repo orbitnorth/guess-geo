@@ -122,7 +122,7 @@ export default function GeoGuessGame({ initialDuelRoom = '', autoStartDuel = fal
             setToken(null)
           }
         })
-        .catch(() => {})
+        .catch(() => { })
     }
   }, [])
 
@@ -257,6 +257,22 @@ export default function GeoGuessGame({ initialDuelRoom = '', autoStartDuel = fal
     if (opponentType === 'friend' && roomCode) {
       freshDeck = buildDeckFromSeed(roomCode, 7)
       const shortCode = roomCode.length > 8 ? roomCode.slice(0, 8) : roomCode
+      chosenBot = {
+        id: `friend_${roomCode}`,
+        name: isHost ? `Friend (${shortCode})` : `Host (${shortCode})`,
+        avatar: 'wanderer',
+        tagline: `1v1 Room ${shortCode}`,
+        difficulty: 'Medium',
+        badgeVariant: 'yellow',
+        minSec: 6,
+        maxSec: 16,
+        baseErrorKm: 450,
+        varianceKm: 280,
+      }
+    }
+
+    if (opponentType === 'friend' && roomCode) {
+      freshDeck = buildDeckFromSeed(roomCode, 7)
       chosenBot = {
         id: `friend_${roomCode}`,
         name: isHost ? `Friend (${shortCode})` : `Host (${shortCode})`,
@@ -486,7 +502,7 @@ export default function GeoGuessGame({ initialDuelRoom = '', autoStartDuel = fal
         .then((res) => {
           if (res.ok) setScoreSaved(true)
         })
-        .catch(() => {})
+        .catch(() => { })
 
       return
     }
