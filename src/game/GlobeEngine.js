@@ -261,7 +261,7 @@ export class GlobeEngine {
 
     this.pointer = new THREE.Vector2()
     this.raycaster = new THREE.Raycaster()
-    this.clock = new THREE.Clock()
+    this.clock = new THREE.Timer()
 
     this._flagBase = new THREE.Vector3()
     this._flagTop = new THREE.Vector3()
@@ -489,16 +489,42 @@ export class GlobeEngine {
     this.resultAnimating = true
     this.revealNotified = false
 
-    // Face the midpoint between the pin and the answer, keeping the current
-    // zoom level so the reveal never feels like a jump cut.
+    // Vectors to both pins on the unit sphere
     const a = latLonToVector3(this.guess.lat, this.guess.lon, 1)
     const b = latLonToVector3(location.lat, location.lon, 1)
+
+    // Angular distance between pins in radians [0..PI]
+    const angle = a.angleTo(b)
+
+    // Calculate midpoint on unit sphere so camera faces the exact center between pins
     let mid = a.clone().add(b)
-    if (mid.lengthSq() < 0.0001) mid = a.clone().cross(Y_AXIS)
+    if (mid.lengthSq() < 0.0001) {
+      mid = a.clone().cross(Y_AXIS)
+    }
     mid.normalize()
 
-    const distance = THREE.MathUtils.clamp(this.camera.position.length(), 17.5, 24)
-    this.flyTo(mid.multiplyScalar(distance), 1.5)
+    // Prevent pole gimbal lock if pins are at exact north/south pole
+    if (Math.abs(mid.y) > 0.985) {
+      mid.x += mid.x >= 0 ? 0.04 : -0.04
+      mid.normalize()
+    }
+
+    // Dynamic zoom distance tuned to frame the distance between pins clearly:
+    // - Close guesses (e.g. < 500 km, angle < 0.08): camera zooms in close (~10.5)
+    //   so both pins, the gap, and the connecting arc are large and crystal clear!
+    // - Medium distance (~2,000 km, angle ~ 0.3): camera is at ~13.5
+    // - Continental (~5,000 km, angle ~ 0.8): camera is at ~17.5
+    // - Global span (> 10,000 km): camera zooms out to ~22 - 24 to comfortably fit both
+    const spanFactor = Math.sin(angle * 0.5)
+    const arcHeight = Math.min(0.18 + angle * 0.85, 2.1)
+    const targetDistance = THREE.MathUtils.clamp(
+      10.2 + spanFactor * 12.0 + (angle / Math.PI) * 2.5 + arcHeight * 0.8,
+      10.2,
+      24.5,
+    )
+
+    // Fly to face the midpoint directly with the optimal zoom
+    this.flyTo(mid.multiplyScalar(targetDistance), 1.6)
   }
 
   clearMarkers() {
@@ -533,11 +559,26 @@ export class GlobeEngine {
     this.flyTo(this.getHomePosition(), 1.1)
   }
 
-  flyTo(target, duration = 1.2) {
+  flyTo(target, duration = 1.4) {
     this.controls.autoRotate = false
+
+    const from = this.camera.position.clone()
+    const fromLen = from.length()
+    const fromDir = from.clone().normalize()
+
+    const to = target.clone()
+    const toLen = to.length()
+    const toDir = to.clone().normalize()
+
+    // Spherical orientation quaternions from Z_AXIS (0,0,1) to directions
+    const qFrom = new THREE.Quaternion().setFromUnitVectors(Z_AXIS, fromDir)
+    const qTo = new THREE.Quaternion().setFromUnitVectors(Z_AXIS, toDir)
+
     this.flight = {
-      from: this.camera.position.clone(),
-      to: target.clone(),
+      qFrom,
+      qTo,
+      fromLen,
+      toLen,
       t: 0,
       duration,
     }
@@ -625,8 +666,7 @@ export class GlobeEngine {
   tick() {
     this.raf = requestAnimationFrame(this.tick)
 
-    // Clamp long pauses (tab switches) but keep the scene running at real
-    // speed even on low frame rates.
+    this.clock.update(performance.now())
     const delta = Math.min(this.clock.getDelta(), 0.25)
     this.elapsed += delta
 
@@ -644,10 +684,27 @@ export class GlobeEngine {
     if (!this.flight) return
 
     this.flight.t = Math.min(this.flight.t + delta / this.flight.duration, 1)
-    const eased = easeInOutCubic(this.flight.t)
-    this.camera.position.lerpVectors(this.flight.from, this.flight.to, eased)
+    const t = easeInOutCubic(this.flight.t)
 
-    if (this.flight.t >= 1) this.flight = null
+    // Spherical great-circle rotation (slerp) to look directly at the midpoint
+    const currentQ = new THREE.Quaternion().slerpQuaternions(
+      this.flight.qFrom,
+      this.flight.qTo,
+      t,
+    )
+    const currentDir = Z_AXIS.clone().applyQuaternion(currentQ).normalize()
+
+    // Smoothly interpolate distance with a gentle outward lift during flight
+    const lift = Math.sin(t * Math.PI) * Math.min(this.flight.fromLen, this.flight.toLen) * 0.08
+    const currentDist = THREE.MathUtils.lerp(this.flight.fromLen, this.flight.toLen, t) + lift
+
+    this.camera.position.copy(currentDir).multiplyScalar(currentDist)
+    this.camera.lookAt(0, 0, 0)
+    this.controls.target.set(0, 0, 0)
+
+    if (this.flight.t >= 1) {
+      this.flight = null
+    }
   }
 
   updateFlags() {
