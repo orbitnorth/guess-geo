@@ -62,6 +62,7 @@ export async function POST(request) {
       .values({
         username: cleanUsername,
         password: hashedPassword,
+        email: `${cleanUsername}@explorer.local`,
         name: cleanName,
         avatar: cleanAvatar,
         createdAt: now,

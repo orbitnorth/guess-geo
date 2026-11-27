@@ -53,14 +53,38 @@ export function initDb() {
   `)
 
   // Check for column migrations if users table was created previously without username/password
-  const tableInfo = sqlite.pragma('table_info(users)')
-  const columnNames = tableInfo.map((col) => col.name)
+  let tableInfo = sqlite.pragma('table_info(users)')
+  let columnNames = tableInfo.map((col) => col.name)
 
   if (!columnNames.includes('username')) {
     sqlite.exec(`ALTER TABLE users ADD COLUMN username TEXT;`)
   }
   if (!columnNames.includes('password')) {
     sqlite.exec(`ALTER TABLE users ADD COLUMN password TEXT;`)
+  }
+
+  // If email was previously created with NOT NULL constraint, migrate users table to make it nullable
+  tableInfo = sqlite.pragma('table_info(users)')
+  const emailCol = tableInfo.find((col) => col.name === 'email')
+  if (emailCol && emailCol.notnull === 1) {
+    sqlite.pragma('foreign_keys = OFF')
+    sqlite.exec(`
+      CREATE TABLE IF NOT EXISTS users_migration (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        username TEXT UNIQUE,
+        password TEXT,
+        email TEXT,
+        name TEXT NOT NULL,
+        avatar TEXT NOT NULL,
+        created_at TEXT NOT NULL,
+        updated_at TEXT NOT NULL
+      );
+      INSERT INTO users_migration (id, username, password, email, name, avatar, created_at, updated_at)
+      SELECT id, username, password, email, name, avatar, created_at, updated_at FROM users;
+      DROP TABLE users;
+      ALTER TABLE users_migration RENAME TO users;
+    `)
+    sqlite.pragma('foreign_keys = ON')
   }
 
   // Create unique index on username after column is guaranteed to exist
