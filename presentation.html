@@ -354,13 +354,6 @@
       flex-shrink: 0;
     }
 
-    /* Composite Lower Section */
-    .body-fill-lower {
-      display: flex;
-      flex-direction: column;
-      box-sizing: border-box;
-    }
-
     /* Lists inside cards */
     .feature-list {
       list-style: none;
@@ -950,23 +943,35 @@
           </div>
         </div>
 
-        <div class="layout-triple body-fill-lower">
+        <div class="layout-triple">
           <div class="card">
             <span class="pill">Preset 1</span>
             <h3 style="margin-top: 10px;">Day Satellite</h3>
             <p>Natural daylight photography with crisp continent vegetation and ocean depth contrasts.</p>
+            <ul class="feature-list" style="margin-top: 10px;">
+              <li><span class="bullet-check">✔</span> High dynamic range landmasses.</li>
+              <li><span class="bullet-check">✔</span> Crisp border visibility for gameplay.</li>
+            </ul>
           </div>
 
           <div class="card">
             <span class="pill green">Preset 2</span>
             <h3 style="margin-top: 10px;">NASA Blue Marble</h3>
             <p>Vibrant azure oceans, lush emerald continents, and high-contrast coastlines.</p>
+            <ul class="feature-list" style="margin-top: 10px;">
+              <li><span class="bullet-check">✔</span> True orbital photographic palette.</li>
+              <li><span class="bullet-check">✔</span> Ocean depth and bathymetry relief.</li>
+            </ul>
           </div>
 
           <div class="card">
             <span class="pill yellow">Preset 3</span>
             <h3 style="margin-top: 10px;">Cartographic Atlas</h3>
             <p>Geographical terrain elevation relief with clean graticule latitude/longitude coordinates.</p>
+            <ul class="feature-list" style="margin-top: 10px;">
+              <li><span class="bullet-check">✔</span> Illustrated topographical elevation.</li>
+              <li><span class="bullet-check">✔</span> Graticule lines for navigation clues.</li>
+            </ul>
           </div>
         </div>
       </div>
@@ -1050,7 +1055,7 @@
           </div>
         </div>
 
-        <div class="card body-fill-lower" style="background: #fafcfe;">
+        <div class="card" style="background: #fafcfe;">
           <h3>🎯 Visual Goal</h3>
           <p>
             In real astrophysics, one hemisphere of Earth is always plunged into darkness. In an educational game, players must rotate freely to inspect geography without continents disappearing into black silhouettes.
@@ -1207,7 +1212,7 @@ distance = 2 &times; R &times; arcsin(√a)</div>
           </div>
         </div>
 
-        <div class="card body-fill-lower">
+        <div class="card">
           <div class="code-box">
 <span class="kw">function</span> <span class="fn">waveFlag</span>(flag, time) {
   <span class="kw">const</span> pos = flag.userData.cloth.geometry.attributes.position
