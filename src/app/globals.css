@@ -2469,13 +2469,13 @@ kbd {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: #f0f6f8;
+  background: #edf5f8;
+  border: 1.5px solid var(--line);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--ink-soft);
+  color: var(--ink);
   transition: all 0.15s ease;
-  border: 0;
   cursor: pointer;
   flex-shrink: 0;
 }
@@ -2483,7 +2483,8 @@ kbd {
 .modal-close-btn:hover {
   background: #e2edf1;
   color: var(--ink);
-  transform: scale(1.06);
+  border-color: var(--blue);
+  transform: scale(1.08);
 }
 
 /* Auth Alerts */
