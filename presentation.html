@@ -148,14 +148,12 @@
       box-sizing: border-box;
     }
 
-    /* Absolute Standardized Slide Box (Exact 544px Height) */
+    /* Standardized Slide Box (Consistent Header & Viewport Anchoring) */
     .slide {
       display: none;
       width: 100%;
       max-width: 1140px;
-      height: 544px;
-      min-height: 544px;
-      max-height: 544px;
+      min-height: 520px;
       margin: 0 auto;
       box-sizing: border-box;
       animation: slideFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
@@ -224,12 +222,9 @@
       text-overflow: ellipsis;
     }
 
-    /* Fixed Slide Body (Locked at y = 196px, Height = 440px) */
+    /* Slide Body (Starts at y = 196px with Natural Content Heights) */
     .slide-body {
       width: 100%;
-      height: 440px;
-      min-height: 440px;
-      max-height: 440px;
       display: flex;
       flex-direction: column;
       box-sizing: border-box;
@@ -273,7 +268,6 @@
       grid-template-columns: 1.15fr 0.85fr;
       gap: 20px;
       align-items: stretch;
-      height: 100%;
       box-sizing: border-box;
     }
 
@@ -283,68 +277,27 @@
       grid-template-columns: repeat(3, 1fr);
       gap: 18px;
       align-items: stretch;
-      height: 100%;
       box-sizing: border-box;
     }
 
-    /* 3. Horizontal Process / Flow */
-    .layout-flow {
+    /* 3. 2x2 Quad Grid Layout */
+    .layout-quad {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
-      align-items: stretch;
-      height: 100%;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
       box-sizing: border-box;
     }
 
-    .flow-step {
-      background: var(--card-bg);
-      border: 2px solid var(--card-border);
-      border-radius: 20px;
-      padding: 20px;
-      box-shadow: var(--shadow-card);
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      box-sizing: border-box;
+    .layout-quad .card {
+      padding: 20px 22px;
     }
 
-    .flow-number {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      background: var(--blue-soft);
-      color: var(--blue-dark);
-      border: 2px solid var(--blue);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: var(--font-display);
-      font-size: 15px;
-      font-weight: 800;
-    }
-
-    .flow-number.green {
-      background: var(--green-soft);
-      color: var(--green-dark);
-      border-color: var(--green);
-    }
-
-    .flow-number.yellow {
-      background: var(--yellow-soft);
-      color: #8f6500;
-      border-color: var(--yellow-dark);
-    }
-
-    /* 4. Top Stat Row in Composite Slides (Height: 100px) */
+    /* 4. Top Stat Row in Composite Slides */
     .stat-row {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 16px;
-      height: 100px;
-      min-height: 100px;
-      max-height: 100px;
-      margin-bottom: 16px;
+      margin-bottom: 18px;
       box-sizing: border-box;
     }
 
@@ -382,7 +335,7 @@
       color: var(--muted);
     }
 
-    /* 5. Top Banner Card in Composite Slides (Height: 100px) */
+    /* 5. Top Banner Card in Composite Slides */
     .banner-card {
       background: linear-gradient(135deg, #ffffff 0%, #f4faff 100%);
       border: 2px solid var(--blue);
@@ -392,10 +345,7 @@
       display: flex;
       align-items: center;
       gap: 20px;
-      height: 100px;
-      min-height: 100px;
-      max-height: 100px;
-      margin-bottom: 16px;
+      margin-bottom: 18px;
       box-sizing: border-box;
     }
 
@@ -404,11 +354,10 @@
       flex-shrink: 0;
     }
 
-    /* Composite Lower Section filling remaining 324px (100px + 16px + 324px = 440px) */
+    /* Composite Lower Section */
     .body-fill-lower {
-      height: 324px !important;
-      min-height: 324px !important;
-      max-height: 324px !important;
+      display: flex;
+      flex-direction: column;
       box-sizing: border-box;
     }
 
@@ -742,73 +691,96 @@
       </div>
 
       <div class="slide-body">
-        <div class="layout-flow">
-          <div class="flow-step">
-            <div class="flow-number">1</div>
-            <h3>React 19 UI & Next.js</h3>
+        <div class="layout-quad">
+          <div class="card">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+              <span class="pill">Presentation Layer</span>
+              <span style="font-size: 22px;">🎮</span>
+            </div>
+            <h3 style="margin-bottom: 6px;">React 19 UI & Client HUD</h3>
             <p>Controls user interactions, navigation, modals, audio triggers, and responsive HUD overlays.</p>
-            <span class="pill" style="margin-top: auto;">Presentation Layer</span>
+            <ul class="feature-list" style="margin-top: 8px;">
+              <li><span class="bullet-check">✔</span> Dynamic mystery photo viewer with high-res lightbox zoom.</li>
+              <li><span class="bullet-check">✔</span> Live round timer, animated score counter, and audio soundscapes.</li>
+            </ul>
           </div>
 
-          <div class="flow-step">
-            <div class="flow-number green">2</div>
-            <h3>GlobeEngine (Three.js)</h3>
-            <p>Autonomous imperative 3D engine encapsulating scene, camera, lights, mesh models, and animations.</p>
-            <span class="pill green" style="margin-top: auto;">3D Graphics Core</span>
+          <div class="card">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+              <span class="pill green">3D Graphics Core</span>
+              <span style="font-size: 22px;">🌐</span>
+            </div>
+            <h3 style="margin-bottom: 6px;">GlobeEngine (Three.js)</h3>
+            <p>Autonomous imperative 3D engine encapsulating scene, camera, lights, models, and interaction.</p>
+            <ul class="feature-list" style="margin-top: 8px;">
+              <li><span class="bullet-check">✔</span> High-resolution sphere geometry with multi-texture presets.</li>
+              <li><span class="bullet-check">✔</span> Smooth touch/mouse orbit controls, pitch, and zoom limits.</li>
+            </ul>
           </div>
 
-          <div class="flow-step">
-            <div class="flow-number yellow">3</div>
-            <h3>WebGL Canvas Shaders</h3>
-            <p>GPU pipeline rendering custom GLSL rim lighting, spherical geometry, and procedural cloth waving.</p>
-            <span class="pill yellow" style="margin-top: auto;">GPU Shader Layer</span>
+          <div class="card">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+              <span class="pill yellow">GPU Shader Layer</span>
+              <span style="font-size: 22px;">✨</span>
+            </div>
+            <h3 style="margin-bottom: 6px;">WebGL Canvas & Shaders</h3>
+            <p>Hardware-accelerated GPU pipeline powering realistic lighting and visual animations.</p>
+            <ul class="feature-list" style="margin-top: 8px;">
+              <li><span class="bullet-check">✔</span> Custom GLSL atmospheric rim shader with Fresnel falloff.</li>
+              <li><span class="bullet-check">✔</span> Procedural cloth waving on 3D flag pins via vertex displacement.</li>
+            </ul>
           </div>
 
-          <div class="flow-step">
-            <div class="flow-number">4</div>
-            <h3>SQLite Serverless DB</h3>
-            <p>Encrypted authentication with `scrypt`, user profiles, session JWTs, and persistent score records.</p>
-            <span class="pill" style="margin-top: auto;">Backend Storage</span>
+          <div class="card">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+              <span class="pill coral">Data & Persistence</span>
+              <span style="font-size: 22px;">💾</span>
+            </div>
+            <h3 style="margin-bottom: 6px;">Accounts, Ranks & Persistence</h3>
+            <p>Manages player profiles, high score tracking, leaderboards, and multiplayer duels.</p>
+            <ul class="feature-list" style="margin-top: 8px;">
+              <li><span class="bullet-check">✔</span> Persistent user profiles, explorer avatars, and personal best records.</li>
+              <li><span class="bullet-check">✔</span> Global competitive leaderboards and instant 1v1 invite links.</li>
+            </ul>
           </div>
         </div>
       </div>
     </section>
 
     <!-- ============================================================= -->
-    <!-- SLIDE 3: MEMBER 1 - Game Lifecycle & State Machine -->
+    <!-- SLIDE 3: MEMBER 1 - 5-Round Match Flow & Gameplay -->
     <!-- ============================================================= -->
-    <section class="slide" data-part="1" data-speaker="Member 1: Game Loop & Lifecycle">
+    <section class="slide" data-part="1" data-speaker="Member 1: 5-Round Match Experience">
       <div class="slide-header">
-        <span class="slide-speaker-tag"><span class="badge-num">Part 1</span> Member 1 &bull; Core Game Logic</span>
-        <h2 class="slide-title">Interactive Round Lifecycle & State Flow</h2>
+        <span class="slide-speaker-tag"><span class="badge-num">Part 1</span> Member 1 &bull; Core Gameplay</span>
+        <h2 class="slide-title">5-Round Match Flow & Interactive Guessing</h2>
       </div>
 
       <div class="slide-body">
         <div class="layout-split">
           <div class="card">
-            <h3>🎮 5-Phase Round Sequence</h3>
+            <h3>🌍 5-Round Solo Exploration</h3>
             <p>
-              The core gameplay transitions deterministically through 5 structured phases each round:
+              Each game challenges the explorer across 5 distinct satellite mystery destinations worldwide:
             </p>
-            <ul class="feature-list" style="margin-top: 12px;">
-              <li><span class="bullet-check">1</span> <strong>Mystery Location:</strong> Satellite photo loads with lightbox zoom for architectural and landscape clues.</li>
-              <li><span class="bullet-check">2</span> <strong>Active Guessing:</strong> Player freely orbits, pitches, and zooms the 3D globe to place their marker pin.</li>
-              <li><span class="bullet-check">3</span> <strong>Pin Confirmation:</strong> Player locks in their guess; the round timer halts and input freezes.</li>
-              <li><span class="bullet-check">4</span> <strong>Cinematic Reveal:</strong> Camera swoops dynamically to reveal the actual location and arches a 3D distance arc.</li>
-              <li><span class="bullet-check">5</span> <strong>Evaluation & Score:</strong> Instant distance readout, animated point count-up, and performance badge.</li>
+            <ul class="feature-list" style="margin-top: 10px;">
+              <li><span class="bullet-check">1</span> <strong>Mystery Location:</strong> High-res photo loads with lightbox zoom for architectural, terrain, and road clues.</li>
+              <li><span class="bullet-check">2</span> <strong>Active 3D Exploration:</strong> Spin, tilt, and zoom the 3D globe to pinpoint the exact location on Earth.</li>
+              <li><span class="bullet-check">3</span> <strong>Pin Lock-in:</strong> Confirm your guess flag; timer freezes and controls lock to prevent accidental movement.</li>
+              <li><span class="bullet-check">4</span> <strong>Cinematic Reveal:</strong> Camera swoops dynamically to the actual location, vaulting a 3D distance arc.</li>
+              <li><span class="bullet-check">5</span> <strong>Evaluation & Recap:</strong> Distance calculation in km, animated score count-up, and final match report.</li>
             </ul>
           </div>
 
           <div class="card" style="background: #fafcfe;">
-            <h3>⚡ Reactive HUD Orchestration</h3>
-            <div class="stat-box" style="margin-bottom: 12px;">
-              <span class="stat-val green">5 Rounds</span>
-              <span class="stat-label">Standard Match Experience</span>
-            </div>
-            <ul class="feature-list">
-              <li><span class="bullet-check">✔</span> <strong>Real-Time HUD:</strong> Live round indicators, running score accumulator, and audio soundscapes.</li>
-              <li><span class="bullet-check">✔</span> <strong>Input Guarding:</strong> Interaction lockouts prevent duplicate clicks or pin shifts during camera animations.</li>
-              <li><span class="bullet-check">✔</span> <strong>Seamless Transitions:</strong> Zero screen reloads; full match flows organically from round 1 to the final podium.</li>
+            <h3>🎯 Precision Proximity Scoring</h3>
+            <p>Score scales exponentially with distance up to <strong>5,000 points</strong> per round (25,000 max total):</p>
+            <ul class="feature-list" style="margin-top: 10px;">
+              <li><span class="bullet-check">✔</span> <strong>&lt; 25 km:</strong> 5,000 Points &bull; Bullseye Tier!</li>
+              <li><span class="bullet-check">✔</span> <strong>&lt; 250 km:</strong> 4,500 – 4,950 Points &bull; Exceptional Guess</li>
+              <li><span class="bullet-check">✔</span> <strong>&lt; 1,000 km:</strong> 3,000 – 4,200 Points &bull; Great Proximity</li>
+              <li><span class="bullet-check">✔</span> <strong>&gt; 5,000 km:</strong> Steep score decay</li>
+              <li><span class="bullet-check">✔</span> <strong>Performance Badges:</strong> Bronze, Silver, and Gold medals awarded at podium finish.</li>
             </ul>
           </div>
         </div>
@@ -816,47 +788,46 @@
     </section>
 
     <!-- ============================================================= -->
-    <!-- SLIDE 4: MEMBER 1 - Game Modes & Scoring Logic -->
+    <!-- SLIDE 4: MEMBER 1 - User Accounts, Leaderboards & Persistence -->
     <!-- ============================================================= -->
-    <section class="slide" data-part="1" data-speaker="Member 1: Modes & Scoring Rules">
+    <section class="slide" data-part="1" data-speaker="Member 1: Accounts & Leaderboard">
       <div class="slide-header">
-        <span class="slide-speaker-tag"><span class="badge-num">Part 1</span> Member 1 &bull; Rules & Progression</span>
-        <h2 class="slide-title">Game Modes & Precision Scoring System</h2>
+        <span class="slide-speaker-tag"><span class="badge-num">Part 1</span> Member 1 &bull; Accounts & Persistence</span>
+        <h2 class="slide-title">User Accounts, Leaderboards & Data Persistence</h2>
       </div>
 
       <div class="slide-body">
         <div class="layout-triple">
           <div class="card">
-            <span class="pill">Mode 1</span>
-            <h3 style="margin-top: 10px;">🌍 Solo Exploration</h3>
-            <p>5-round geography voyage across iconic global monuments, capitals, and natural landscapes.</p>
-            <ul class="feature-list" style="margin-top: 12px;">
-              <li><span class="bullet-check">✔</span> Max 25,000 points per match.</li>
-              <li><span class="bullet-check">✔</span> Satellite photo inspection with high-res zoom.</li>
-              <li><span class="bullet-check">✔</span> Comprehensive end-game report with accuracy percentage.</li>
+            <span class="pill">Player Identity</span>
+            <h3 style="margin-top: 10px;">👤 User Accounts & Profiles</h3>
+            <p>Player identification and customizable explorer profiles:</p>
+            <ul class="feature-list" style="margin-top: 10px;">
+              <li><span class="bullet-check">✔</span> <strong>Custom Avatars:</strong> Choose from unique explorer & astronaut avatars.</li>
+              <li><span class="bullet-check">✔</span> <strong>Personal Statistics:</strong> Tracks games played, win rate, high scores, and bullseye rate.</li>
+              <li><span class="bullet-check">✔</span> <strong>Pre-Seeded Users:</strong> Instant access via pre-seeded test accounts.</li>
             </ul>
           </div>
 
           <div class="card">
-            <span class="pill green">Scoring Rules</span>
-            <h3 style="margin-top: 10px;">🎯 Distance-Decay Formula</h3>
-            <p>Points scale exponentially with geographic proximity up to <strong>5,000 pts</strong> per round:</p>
-            <ul class="feature-list" style="margin-top: 12px;">
-              <li><span class="bullet-check">✔</span> <strong>&lt; 25 km:</strong> 5,000 pts (Bullseye!)</li>
-              <li><span class="bullet-check">✔</span> <strong>&lt; 250 km:</strong> 4,500 – 4,950 pts (Exceptional)</li>
-              <li><span class="bullet-check">✔</span> <strong>&lt; 1,000 km:</strong> 3,000 – 4,200 pts (Great Guess)</li>
-              <li><span class="bullet-check">✔</span> <strong>&gt; 5,000 km:</strong> Minimal points rewarded</li>
+            <span class="pill green">Data Storage</span>
+            <h3 style="margin-top: 10px;">💾 Persistence of Data</h3>
+            <p>Reliable state saving across browsing sessions:</p>
+            <ul class="feature-list" style="margin-top: 10px;">
+              <li><span class="bullet-check">✔</span> <strong>Match History:</strong> Completed match scores automatically saved to database.</li>
+              <li><span class="bullet-check">✔</span> <strong>Session Persistence:</strong> Players remain securely signed in across browser visits.</li>
+              <li><span class="bullet-check">✔</span> <strong>Preference Storage:</strong> Saves favorite globe texture preset and audio volume.</li>
             </ul>
           </div>
 
           <div class="card">
-            <span class="pill yellow">Progression</span>
-            <h3 style="margin-top: 10px;">🏆 Rank & Leaderboards</h3>
-            <p>Player achievements and competitive tracking saved to global rankings:</p>
-            <ul class="feature-list" style="margin-top: 12px;">
-              <li><span class="bullet-check">✔</span> <strong>Performance Tiers:</strong> Gold, Silver, Bronze badges based on total match score.</li>
-              <li><span class="bullet-check">✔</span> <strong>Player Profile:</strong> Tracks games played, win rate, and personal best records.</li>
-              <li><span class="bullet-check">✔</span> <strong>Live Leaderboard:</strong> Compete with global explorers for the top spot.</li>
+            <span class="pill yellow">Rankings</span>
+            <h3 style="margin-top: 10px;">🏆 Global Leaderboard</h3>
+            <p>Competitive ladder celebrating the top geography explorers:</p>
+            <ul class="feature-list" style="margin-top: 10px;">
+              <li><span class="bullet-check">✔</span> <strong>Live Standings:</strong> Real-time ranked ladder showing top scores worldwide.</li>
+              <li><span class="bullet-check">✔</span> <strong>Podium Rankings:</strong> Highlights gold, silver, and bronze championship ranks.</li>
+              <li><span class="bullet-check">✔</span> <strong>Instant Sync:</strong> Leaderboard updates immediately after completing a match.</li>
             </ul>
           </div>
         </div>
@@ -864,12 +835,12 @@
     </section>
 
     <!-- ============================================================= -->
-    <!-- SLIDE 5: MEMBER 1 - 1v1 Battle Arena & Duel Logic -->
+    <!-- SLIDE 5: MEMBER 1 - Multiplayer 1v1 Battle Arena -->
     <!-- ============================================================= -->
-    <section class="slide" data-part="1" data-speaker="Member 1: 1v1 Duel Arena">
+    <section class="slide" data-part="1" data-speaker="Member 1: 1v1 Multiplayer Arena">
       <div class="slide-header">
         <span class="slide-speaker-tag"><span class="badge-num">Part 1</span> Member 1 &bull; Multiplayer Duels</span>
-        <h2 class="slide-title">1v1 Battle Arena & Competitive Duel Rules</h2>
+        <h2 class="slide-title">1v1 Battle Arena & Competitive Multiplayer</h2>
       </div>
 
       <div class="slide-body">
@@ -892,17 +863,31 @@
           </div>
         </div>
 
-        <div class="card body-fill-lower">
-          <h3>⚔️ Real-Time Clash Mechanics</h3>
-          <p>
-            Two players duel face-to-face with identical mystery locations. Proximity dictates survival:
-          </p>
-          <ul class="feature-list" style="margin-top: 14px;">
-            <li><span class="bullet-check">✔</span> <strong>Distance Delta Damage:</strong> Whichever player places their pin further from the target takes damage equal to the difference in kilometers: <strong>Damage = |Dist<sub>P1</sub> &minus; Dist<sub>P2</sub>| &times; Multiplier</strong>.</li>
-            <li><span class="bullet-check">✔</span> <strong>15-Second Pressure Timer:</strong> If a player fails to lock in before 0s, their guess defaults to the antipodal point (maximum distance penalty).</li>
-            <li><span class="bullet-check">✔</span> <strong>Late-Round Multipliers:</strong> Starting from Round 4, damage ramps from 1.0x to 1.5x, creating high-stakes sudden death climaxes.</li>
-            <li><span class="bullet-check">✔</span> <strong>Opponents:</strong> Challenge AI Bots (Casual, Master, Grandmaster) or send instant room invite links (`/invite/[uuid]`) to friends.</li>
-          </ul>
+        <div class="layout-split">
+          <div class="card">
+            <h3>⚔️ Real-Time Combat & Health Rules</h3>
+            <p>
+              Two explorers clash head-to-head on identical mystery locations. Proximity dictates survival:
+            </p>
+            <ul class="feature-list" style="margin-top: 10px;">
+              <li><span class="bullet-check">✔</span> <strong>Distance Delta Damage:</strong> Whichever player is further takes damage equal to the difference in kilometers: <strong>|Dist<sub>P1</sub> &minus; Dist<sub>P2</sub>| &times; Multiplier</strong>.</li>
+              <li><span class="bullet-check">✔</span> <strong>15-Second Turn Timer:</strong> Rapid decision-making. Failing to lock in defaults to the antipodal point (maximum distance penalty).</li>
+              <li><span class="bullet-check">✔</span> <strong>Sudden Death:</strong> Damage escalates to 1.5x in Round 4+ to force aggressive, thrilling endgame finishes.</li>
+            </ul>
+          </div>
+
+          <div class="card" style="background: #fafcfe;">
+            <h3>🌐 Matchmaking & Opponents</h3>
+            <p>
+              Jump into battle against friends or practice against intelligent bots:
+            </p>
+            <ul class="feature-list" style="margin-top: 10px;">
+              <li><span class="bullet-check">✔</span> <strong>1-Click Friend Invites:</strong> Share a `/invite/[uuid]` link with any friend for instant 1v1 lobby entry.</li>
+              <li><span class="bullet-check">✔</span> <strong>Synchronized Rounds:</strong> Both competitors explore the exact same satellite mystery photos in identical sequence.</li>
+              <li><span class="bullet-check">✔</span> <strong>AI Bot Sparring:</strong> Practice against 3 bot tiers (Casual, Master, Grandmaster).</li>
+              <li><span class="bullet-check">✔</span> <strong>Victory Screen:</strong> Match concludes when a player reaches 0 HP, presenting battle stats and rematch options.</li>
+            </ul>
+          </div>
         </div>
       </div>
     </section>
@@ -1285,7 +1270,7 @@ distance = 2 &times; R &times; arcsin(√a)</div>
     <section class="slide" data-part="conclusion" data-speaker="Project Summary">
       <div class="slide-header">
         <span class="slide-speaker-tag"><span class="badge-num">Summary</span> Technical Highlights</span>
-        <h2 class="slide-title">Technology Stack & Key Metrics</h2>
+        <h2 class="slide-title">Technology Stack & Key Features Summary</h2>
       </div>
 
       <div class="slide-body">
@@ -1299,8 +1284,8 @@ distance = 2 &times; R &times; arcsin(√a)</div>
             <span class="stat-label">Concurrent Mode</span>
           </div>
           <div class="stat-box">
-            <span class="stat-val yellow">Next.js 16</span>
-            <span class="stat-label">Turbopack App Router</span>
+            <span class="stat-val yellow">Full-Stack</span>
+            <span class="stat-label">Modern Web App</span>
           </div>
           <div class="stat-box">
             <span class="stat-val coral">60 FPS</span>
@@ -1308,14 +1293,26 @@ distance = 2 &times; R &times; arcsin(√a)</div>
           </div>
         </div>
 
-        <div class="card body-fill-lower">
-          <h3>🏆 Core Project Achievements</h3>
-          <ul class="feature-list" style="margin-top: 12px;">
-            <li><span class="bullet-check">✔</span> High-performance 3D rendering fully separated from React lifecycle overhead.</li>
-            <li><span class="bullet-check">✔</span> Mathematical implementation of spherical coordinate conversions and Haversine physics.</li>
-            <li><span class="bullet-check">✔</span> Custom GLSL shaders for atmospheric glow and procedural cloth waving.</li>
-            <li><span class="bullet-check">✔</span> Frictionless 1v1 multiplayer via shareable seeded `/invite/[uuid]` links.</li>
-          </ul>
+        <div class="layout-split">
+          <div class="card">
+            <h3>🎮 Core Gameplay Highlights</h3>
+            <ul class="feature-list" style="margin-top: 10px;">
+              <li><span class="bullet-check">✔</span> <strong>5-Round Solo Mode:</strong> Proximity scoring up to 25,000 points with accuracy tiers.</li>
+              <li><span class="bullet-check">✔</span> <strong>1v1 Battle Arena:</strong> 5,000 HP combat, 15s turn timer, and distance delta damage.</li>
+              <li><span class="bullet-check">✔</span> <strong>Accounts & Leaderboards:</strong> Persistent player profiles, stats, and live rankings.</li>
+              <li><span class="bullet-check">✔</span> <strong>Instant Invites:</strong> Shareable `/invite/[uuid]` challenge links for 1-click matches.</li>
+            </ul>
+          </div>
+
+          <div class="card" style="background: #fafcfe;">
+            <h3>🌐 3D Graphics & Engineering</h3>
+            <ul class="feature-list" style="margin-top: 10px;">
+              <li><span class="bullet-check">✔</span> <strong>High-Fidelity 3D Globe:</strong> Decoupled Three.js engine maintaining smooth 60 FPS.</li>
+              <li><span class="bullet-check">✔</span> <strong>Spherical Math:</strong> Trigonometric conversions & Haversine geodesic distance physics.</li>
+              <li><span class="bullet-check">✔</span> <strong>Custom GLSL Shaders:</strong> Atmospheric rim glow and procedural waving flag cloth.</li>
+              <li><span class="bullet-check">✔</span> <strong>Cinematic VFX:</strong> Vaulting 3D Catmull-Rom arcs and dynamic camera flight orbits.</li>
+            </ul>
+          </div>
         </div>
       </div>
     </section>
