@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GeoGuess Globe - 3D WebGL Project Presentation</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700;800&family=Nunito:wght@400;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700;800&family=Nunito:wght@400;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap"
+    rel="stylesheet">
   <style>
     :root {
       --bg: #eef9ff;
@@ -46,7 +49,7 @@
 
     body {
       background-color: var(--bg);
-      background-image: 
+      background-image:
         radial-gradient(circle at 10% 20%, #ffffff 0%, transparent 40%),
         radial-gradient(circle at 90% 80%, #ffffff 0%, transparent 45%),
         radial-gradient(#b9dde9 1.5px, transparent 1.5px);
@@ -169,6 +172,7 @@
         opacity: 0;
         transform: translateY(10px);
       }
+
       to {
         opacity: 1;
         transform: translateY(0);
@@ -323,9 +327,17 @@
       line-height: 1.1;
     }
 
-    .stat-val.green { color: var(--green); }
-    .stat-val.yellow { color: var(--yellow-dark); }
-    .stat-val.coral { color: var(--coral-dark); }
+    .stat-val.green {
+      color: var(--green);
+    }
+
+    .stat-val.yellow {
+      color: var(--yellow-dark);
+    }
+
+    .stat-val.coral {
+      color: var(--coral-dark);
+    }
 
     .stat-label {
       font-size: 11.5px;
@@ -408,11 +420,27 @@
       box-sizing: border-box;
     }
 
-    .kw { color: #f472b6; font-weight: 700; }
-    .fn { color: #38bdf8; }
-    .str { color: #86efac; }
-    .num { color: #fde047; }
-    .com { color: #64748b; font-style: italic; }
+    .kw {
+      color: #f472b6;
+      font-weight: 700;
+    }
+
+    .fn {
+      color: #38bdf8;
+    }
+
+    .str {
+      color: #86efac;
+    }
+
+    .num {
+      color: #fde047;
+    }
+
+    .com {
+      color: #64748b;
+      font-style: italic;
+    }
 
     /* Pill Badges */
     .pill {
@@ -442,89 +470,253 @@
       border-color: rgba(255, 200, 0, 0.4);
     }
 
-    /* Hero Slides (Title & Ending) - Locked at 544px Height */
+    /* Hero Slides (Title & Ending) */
     .hero-slide {
       text-align: center;
       align-items: center;
       justify-content: center;
-      gap: 20px;
+      gap: 14px;
+      position: relative;
+    }
+
+    .hero-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 18px;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1.5px solid rgba(28, 176, 246, 0.4);
+      border-radius: 999px;
+      font-family: var(--font-display);
+      font-size: 12.5px;
+      font-weight: 800;
+      color: var(--blue-dark);
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      box-shadow: 0 4px 14px rgba(28, 176, 246, 0.14);
+      backdrop-filter: blur(10px);
+    }
+
+    .kicker-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 10px var(--green);
+      animation: pulseDot 2s infinite ease-in-out;
+    }
+
+    @keyframes pulseDot {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.35); opacity: 0.55; }
+    }
+
+    .hero-mascot-wrapper {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 96px;
+      height: 96px;
+      margin: 2px auto 0;
+    }
+
+    .hero-mascot-glow {
+      position: absolute;
+      inset: -14px;
+      background: radial-gradient(circle, rgba(28, 176, 246, 0.35) 0%, rgba(88, 204, 2, 0.2) 50%, transparent 72%);
+      border-radius: 50%;
+      filter: blur(10px);
+      animation: pulseGlow 4s ease-in-out infinite alternate;
+    }
+
+    @keyframes pulseGlow {
+      0% { transform: scale(0.92); opacity: 0.7; }
+      100% { transform: scale(1.18); opacity: 1; }
     }
 
     .hero-mascot-box {
-      font-size: 64px;
-      filter: drop-shadow(0 12px 24px rgba(28, 176, 246, 0.35));
+      position: relative;
+      width: 84px;
+      height: 84px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 100%);
+      border: 2.5px solid rgba(28, 176, 246, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 42px;
+      box-shadow: 0 10px 26px rgba(28, 176, 246, 0.22), inset 0 2px 4px rgba(255, 255, 255, 0.9);
       animation: floatHero 3.5s ease-in-out infinite;
     }
 
     @keyframes floatHero {
       0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-8px); }
+      50% { transform: translateY(-7px); }
     }
 
     .hero-main-title {
       font-family: var(--font-display);
-      font-size: 48px;
+      font-size: 44px;
       font-weight: 800;
       color: var(--ink);
-      line-height: 1.1;
-      letter-spacing: -1px;
+      line-height: 1.15;
+      letter-spacing: -0.8px;
+      margin-top: 2px;
+    }
+
+    .hero-title-gradient {
+      background: linear-gradient(135deg, var(--blue) 0%, #0284c7 45%, var(--green) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: inline-block;
     }
 
     .hero-sub-text {
-      font-size: 17px;
+      font-size: 16px;
       color: var(--ink-soft);
-      max-width: 680px;
+      max-width: 720px;
       line-height: 1.5;
+      margin: 0 auto;
+    }
+
+    .hero-chips-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .hero-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 14px;
+      background: #ffffff;
+      border: 1.5px solid var(--card-border-strong);
+      border-radius: 999px;
+      font-family: var(--font-body);
+      font-size: 12.5px;
+      font-weight: 800;
+      color: var(--ink);
+      box-shadow: 0 2px 0 rgba(0, 0, 0, 0.04);
     }
 
     .team-cards-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 16px;
-      margin-top: 10px;
-      justify-content: center;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-top: 6px;
       width: 100%;
+      max-width: 1060px;
     }
 
     .team-card {
       background: #ffffff;
       border: 2px solid var(--card-border);
-      border-radius: 18px;
-      padding: 16px 22px;
-      box-shadow: var(--shadow-card);
+      border-radius: 20px;
+      padding: 18px 20px;
+      box-shadow: 0 4px 0 var(--card-border-strong), 0 14px 28px rgba(41, 89, 110, 0.08);
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 6px;
-      min-width: 220px;
-      transition: transform 0.2s ease;
+      text-align: center;
+      gap: 5px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.22s ease;
     }
+
+    .team-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+    }
+
+    .team-card.m1::before { background: linear-gradient(90deg, var(--green), #84cc16); }
+    .team-card.m2::before { background: linear-gradient(90deg, var(--blue), #38bdf8); }
+    .team-card.m3::before { background: linear-gradient(90deg, var(--yellow), #f59e0b); }
 
     .team-card:hover {
-      transform: translateY(-3px);
+      transform: translateY(-4px);
+      box-shadow: 0 6px 0 var(--card-border-strong), 0 20px 36px rgba(41, 89, 110, 0.14);
     }
 
-    .team-card.m1 { border-color: rgba(88, 204, 2, 0.6); }
-    .team-card.m2 { border-color: rgba(28, 176, 246, 0.6); }
-    .team-card.m3 { border-color: rgba(255, 200, 0, 0.6); }
+    .team-card-icon-bubble {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      margin-bottom: 2px;
+    }
+
+    .team-card.m1 .team-card-icon-bubble {
+      background: var(--green-soft);
+      border: 1.5px solid rgba(88, 204, 2, 0.4);
+    }
+
+    .team-card.m2 .team-card-icon-bubble {
+      background: var(--blue-soft);
+      border: 1.5px solid rgba(28, 176, 246, 0.4);
+    }
+
+    .team-card.m3 .team-card-icon-bubble {
+      background: var(--yellow-soft);
+      border: 1.5px solid rgba(255, 200, 0, 0.4);
+    }
 
     .team-card .member-tag {
       font-family: var(--font-display);
-      font-size: 11.5px;
+      font-size: 11px;
       font-weight: 800;
       text-transform: uppercase;
-      letter-spacing: 0.6px;
+      letter-spacing: 0.8px;
+      padding: 3px 10px;
+      border-radius: 999px;
     }
 
-    .team-card.m1 .member-tag { color: var(--green-dark); }
-    .team-card.m2 .member-tag { color: var(--blue-dark); }
-    .team-card.m3 .member-tag { color: #8a6300; }
+    .team-card.m1 .member-tag {
+      background: var(--green-soft);
+      color: var(--green-dark);
+    }
+
+    .team-card.m2 .member-tag {
+      background: var(--blue-soft);
+      color: var(--blue-dark);
+    }
+
+    .team-card.m3 .member-tag {
+      background: var(--yellow-soft);
+      color: #926400;
+    }
 
     .team-card .member-title {
       font-family: var(--font-display);
-      font-size: 16px;
+      font-size: 17px;
       font-weight: 800;
       color: var(--ink);
+      margin-top: 1px;
+    }
+
+    .team-card .member-role-title {
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--ink-soft);
+    }
+
+    .team-card .member-desc {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.45;
+      margin-top: 1px;
     }
 
     /* Bottom Presentation Navigation */
@@ -627,6 +819,7 @@
     }
   </style>
 </head>
+
 <body>
 
   <!-- Top Navigation Bar -->
@@ -649,27 +842,52 @@
     <!-- SLIDE 1: Title Slide (Team Overview) -->
     <!-- ============================================================= -->
     <section class="slide hero-slide active" data-part="intro" data-speaker="Team Introduction">
-      <div class="hero-mascot-box">🌍⚔️</div>
-      <h1 class="hero-main-title">GeoGuess Globe: 3D WebGL</h1>
+      <div class="hero-kicker">
+        <span class="kicker-dot"></span>
+        <span>Interactive 3D WebGL Project</span>
+      </div>
+
+      <div class="hero-mascot-wrapper">
+        <div class="hero-mascot-glow"></div>
+        <div class="hero-mascot-box">🌍⚔️</div>
+      </div>
+
+      <h1 class="hero-main-title">GeoGuess <span class="hero-title-gradient">Globe 3D</span></h1>
+
       <p class="hero-sub-text">
-        An interactive WebGL 3D geography exploration and real-time 1v1 battle duel engine built with Three.js, React 19, and Next.js 16.
+        An interactive WebGL 3D geography exploration and real-time 1v1 battle duel engine built with Three.js, React 19, and Next.js.
       </p>
+
+      <div class="hero-chips-row">
+        <span class="hero-chip">🌐 Three.js WebGL2</span>
+        <span class="hero-chip">✨ Custom GLSL Shaders</span>
+        <span class="hero-chip">⚔️ 1v1 Battle Arena</span>
+        <span class="hero-chip">📐 Spherical Trigonometry</span>
+      </div>
 
       <div class="team-cards-row">
         <div class="team-card m1">
+          <div class="team-card-icon-bubble">🎮</div>
           <span class="member-tag">Member 1</span>
           <span class="member-title">Mallahi Mohammed</span>
-          <p style="font-size: 12px; color: var(--muted); margin-top: 4px;">Game Logic, Modes & Persistence</p>
+          <span class="member-role-title">Game Logic & Modes</span>
+          <p class="member-desc">5-Round Solo Loop &bull; 1v1 Arena Rules &bull; Persistence</p>
         </div>
+
         <div class="team-card m2">
+          <div class="team-card-icon-bubble">🌐</div>
           <span class="member-tag">Member 2</span>
           <span class="member-title">Sayerh Abdelhak</span>
-          <p style="font-size: 12px; color: var(--muted); margin-top: 4px;">Three.js, GLSL & Lighting</p>
+          <span class="member-role-title">3D Globe & WebGL</span>
+          <p class="member-desc">Three.js Core &bull; Multi-Textures &bull; GLSL Rim Lighting</p>
         </div>
+
         <div class="team-card m3">
+          <div class="team-card-icon-bubble">📐</div>
           <span class="member-tag">Member 3</span>
           <span class="member-title">Azzahidi Aymane</span>
-          <p style="font-size: 12px; color: var(--muted); margin-top: 4px;">Spherical Trigonometry & VFX</p>
+          <span class="member-role-title">Math, Raycasting & VFX</span>
+          <p class="member-desc">Spherical Math &bull; Haversine Distance &bull; Cloth Waves</p>
         </div>
       </div>
     </section>
@@ -694,7 +912,8 @@
             <p>Controls user interactions, navigation, modals, audio triggers, and responsive HUD overlays.</p>
             <ul class="feature-list" style="margin-top: 8px;">
               <li><span class="bullet-check">✔</span> Dynamic mystery photo viewer with high-res lightbox zoom.</li>
-              <li><span class="bullet-check">✔</span> Live round timer, animated score counter, and audio soundscapes.</li>
+              <li><span class="bullet-check">✔</span> Live round timer, animated score counter, and audio soundscapes.
+              </li>
             </ul>
           </div>
 
@@ -720,7 +939,8 @@
             <p>Hardware-accelerated GPU pipeline powering realistic lighting and visual animations.</p>
             <ul class="feature-list" style="margin-top: 8px;">
               <li><span class="bullet-check">✔</span> Custom GLSL atmospheric rim shader with Fresnel falloff.</li>
-              <li><span class="bullet-check">✔</span> Procedural cloth waving on 3D flag pins via vertex displacement.</li>
+              <li><span class="bullet-check">✔</span> Procedural cloth waving on 3D flag pins via vertex displacement.
+              </li>
             </ul>
           </div>
 
@@ -732,7 +952,8 @@
             <h3 style="margin-bottom: 6px;">Accounts, Ranks & Persistence</h3>
             <p>Manages player profiles, high score tracking, leaderboards, and multiplayer duels.</p>
             <ul class="feature-list" style="margin-top: 8px;">
-              <li><span class="bullet-check">✔</span> Persistent user profiles, explorer avatars, and personal best records.</li>
+              <li><span class="bullet-check">✔</span> Persistent user profiles, explorer avatars, and personal best
+                records.</li>
               <li><span class="bullet-check">✔</span> Global competitive leaderboards and instant 1v1 invite links.</li>
             </ul>
           </div>
@@ -745,7 +966,8 @@
     <!-- ============================================================= -->
     <section class="slide" data-part="1" data-speaker="Mallahi Mohammed: 5-Round Match">
       <div class="slide-header">
-        <span class="slide-speaker-tag"><span class="badge-num">Part 1</span> Mallahi Mohammed &bull; Core Gameplay</span>
+        <span class="slide-speaker-tag"><span class="badge-num">Part 1</span> Mallahi Mohammed &bull; Core
+          Gameplay</span>
         <h2 class="slide-title">5-Round Match Flow & Interactive Guessing</h2>
       </div>
 
@@ -757,23 +979,33 @@
               Each game challenges the explorer across 5 distinct satellite mystery destinations worldwide:
             </p>
             <ul class="feature-list" style="margin-top: 10px;">
-              <li><span class="bullet-check">1</span> <strong>Mystery Location:</strong> High-res photo loads with lightbox zoom for architectural, terrain, and road clues.</li>
-              <li><span class="bullet-check">2</span> <strong>Active 3D Exploration:</strong> Spin, tilt, and zoom the 3D globe to pinpoint the exact location on Earth.</li>
-              <li><span class="bullet-check">3</span> <strong>Pin Lock-in:</strong> Confirm your guess flag; timer freezes and controls lock to prevent accidental movement.</li>
-              <li><span class="bullet-check">4</span> <strong>Cinematic Reveal:</strong> Camera swoops dynamically to the actual location, vaulting a 3D distance arc.</li>
-              <li><span class="bullet-check">5</span> <strong>Evaluation & Recap:</strong> Distance calculation in km, animated score count-up, and final match report.</li>
+              <li><span class="bullet-check">1</span> <strong>Mystery Location:</strong> High-res photo loads with
+                lightbox zoom for architectural, terrain, and road clues.</li>
+              <li><span class="bullet-check">2</span> <strong>Active 3D Exploration:</strong> Spin, tilt, and zoom the
+                3D globe to pinpoint the exact location on Earth.</li>
+              <li><span class="bullet-check">3</span> <strong>Pin Lock-in:</strong> Confirm your guess flag; timer
+                freezes and controls lock to prevent accidental movement.</li>
+              <li><span class="bullet-check">4</span> <strong>Cinematic Reveal:</strong> Camera swoops dynamically to
+                the actual location, vaulting a 3D distance arc.</li>
+              <li><span class="bullet-check">5</span> <strong>Evaluation & Recap:</strong> Distance calculation in km,
+                animated score count-up, and final match report.</li>
             </ul>
           </div>
 
           <div class="card" style="background: #fafcfe;">
             <h3>🎯 Precision Proximity Scoring</h3>
-            <p>Score scales exponentially with distance up to <strong>5,000 points</strong> per round (25,000 max total):</p>
+            <p>Score scales exponentially with distance up to <strong>5,000 points</strong> per round (25,000 max
+              total):</p>
             <ul class="feature-list" style="margin-top: 10px;">
-              <li><span class="bullet-check">✔</span> <strong>&lt; 25 km:</strong> 5,000 Points &bull; Bullseye Tier!</li>
-              <li><span class="bullet-check">✔</span> <strong>&lt; 250 km:</strong> 4,500 – 4,950 Points &bull; Exceptional Guess</li>
-              <li><span class="bullet-check">✔</span> <strong>&lt; 1,000 km:</strong> 3,000 – 4,200 Points &bull; Great Proximity</li>
+              <li><span class="bullet-check">✔</span> <strong>&lt; 25 km:</strong> 5,000 Points &bull; Bullseye Tier!
+              </li>
+              <li><span class="bullet-check">✔</span> <strong>&lt; 250 km:</strong> 4,500 – 4,950 Points &bull;
+                Exceptional Guess</li>
+              <li><span class="bullet-check">✔</span> <strong>&lt; 1,000 km:</strong> 3,000 – 4,200 Points &bull; Great
+                Proximity</li>
               <li><span class="bullet-check">✔</span> <strong>&gt; 5,000 km:</strong> Steep score decay</li>
-              <li><span class="bullet-check">✔</span> <strong>Performance Badges:</strong> Bronze, Silver, and Gold medals awarded at podium finish.</li>
+              <li><span class="bullet-check">✔</span> <strong>Performance Badges:</strong> Bronze, Silver, and Gold
+                medals awarded at podium finish.</li>
             </ul>
           </div>
         </div>
@@ -785,7 +1017,8 @@
     <!-- ============================================================= -->
     <section class="slide" data-part="1" data-speaker="Mallahi Mohammed: Accounts & Leaderboard">
       <div class="slide-header">
-        <span class="slide-speaker-tag"><span class="badge-num">Part 1</span> Mallahi Mohammed &bull; Accounts & Persistence</span>
+        <span class="slide-speaker-tag"><span class="badge-num">Part 1</span> Mallahi Mohammed &bull; Accounts &
+          Persistence</span>
         <h2 class="slide-title">User Accounts, Leaderboards & Data Persistence</h2>
       </div>
 
@@ -796,9 +1029,12 @@
             <h3 style="margin-top: 10px;">👤 User Accounts & Profiles</h3>
             <p>Player identification and customizable explorer profiles:</p>
             <ul class="feature-list" style="margin-top: 10px;">
-              <li><span class="bullet-check">✔</span> <strong>Custom Avatars:</strong> Choose from unique explorer & astronaut avatars.</li>
-              <li><span class="bullet-check">✔</span> <strong>Personal Statistics:</strong> Tracks games played, win rate, high scores, and bullseye rate.</li>
-              <li><span class="bullet-check">✔</span> <strong>Pre-Seeded Users:</strong> Instant access via pre-seeded test accounts.</li>
+              <li><span class="bullet-check">✔</span> <strong>Custom Avatars:</strong> Choose from unique explorer &
+                astronaut avatars.</li>
+              <li><span class="bullet-check">✔</span> <strong>Personal Statistics:</strong> Tracks games played, win
+                rate, high scores, and bullseye rate.</li>
+              <li><span class="bullet-check">✔</span> <strong>Pre-Seeded Users:</strong> Instant access via pre-seeded
+                test accounts.</li>
             </ul>
           </div>
 
@@ -807,9 +1043,12 @@
             <h3 style="margin-top: 10px;">💾 Persistence of Data</h3>
             <p>Reliable state saving across browsing sessions:</p>
             <ul class="feature-list" style="margin-top: 10px;">
-              <li><span class="bullet-check">✔</span> <strong>Match History:</strong> Completed match scores automatically saved to database.</li>
-              <li><span class="bullet-check">✔</span> <strong>Session Persistence:</strong> Players remain securely signed in across browser visits.</li>
-              <li><span class="bullet-check">✔</span> <strong>Preference Storage:</strong> Saves favorite globe texture preset and audio volume.</li>
+              <li><span class="bullet-check">✔</span> <strong>Match History:</strong> Completed match scores
+                automatically saved to database.</li>
+              <li><span class="bullet-check">✔</span> <strong>Session Persistence:</strong> Players remain securely
+                signed in across browser visits.</li>
+              <li><span class="bullet-check">✔</span> <strong>Preference Storage:</strong> Saves favorite globe texture
+                preset and audio volume.</li>
             </ul>
           </div>
 
@@ -818,9 +1057,12 @@
             <h3 style="margin-top: 10px;">🏆 Global Leaderboard</h3>
             <p>Competitive ladder celebrating the top geography explorers:</p>
             <ul class="feature-list" style="margin-top: 10px;">
-              <li><span class="bullet-check">✔</span> <strong>Live Standings:</strong> Real-time ranked ladder showing top scores worldwide.</li>
-              <li><span class="bullet-check">✔</span> <strong>Podium Rankings:</strong> Highlights gold, silver, and bronze championship ranks.</li>
-              <li><span class="bullet-check">✔</span> <strong>Instant Sync:</strong> Leaderboard updates immediately after completing a match.</li>
+              <li><span class="bullet-check">✔</span> <strong>Live Standings:</strong> Real-time ranked ladder showing
+                top scores worldwide.</li>
+              <li><span class="bullet-check">✔</span> <strong>Podium Rankings:</strong> Highlights gold, silver, and
+                bronze championship ranks.</li>
+              <li><span class="bullet-check">✔</span> <strong>Instant Sync:</strong> Leaderboard updates immediately
+                after completing a match.</li>
             </ul>
           </div>
         </div>
@@ -832,7 +1074,8 @@
     <!-- ============================================================= -->
     <section class="slide" data-part="1" data-speaker="Mallahi Mohammed: 1v1 Arena">
       <div class="slide-header">
-        <span class="slide-speaker-tag"><span class="badge-num">Part 1</span> Mallahi Mohammed &bull; Multiplayer Duels</span>
+        <span class="slide-speaker-tag"><span class="badge-num">Part 1</span> Mallahi Mohammed &bull; Multiplayer
+          Duels</span>
         <h2 class="slide-title">1v1 Battle Arena & Competitive Multiplayer</h2>
       </div>
 
@@ -863,9 +1106,13 @@
               Two explorers clash head-to-head on identical mystery locations. Proximity dictates survival:
             </p>
             <ul class="feature-list" style="margin-top: 10px;">
-              <li><span class="bullet-check">✔</span> <strong>Distance Delta Damage:</strong> Whichever player is further takes damage equal to the difference in kilometers: <strong>|Dist<sub>P1</sub> &minus; Dist<sub>P2</sub>| &times; Multiplier</strong>.</li>
-              <li><span class="bullet-check">✔</span> <strong>15-Second Turn Timer:</strong> Rapid decision-making. Failing to lock in defaults to the antipodal point (maximum distance penalty).</li>
-              <li><span class="bullet-check">✔</span> <strong>Sudden Death:</strong> Damage escalates to 1.5x in Round 4+ to force aggressive, thrilling endgame finishes.</li>
+              <li><span class="bullet-check">✔</span> <strong>Distance Delta Damage:</strong> Whichever player is
+                further takes damage equal to the difference in kilometers: <strong>|Dist<sub>P1</sub> &minus;
+                  Dist<sub>P2</sub>| &times; Multiplier</strong>.</li>
+              <li><span class="bullet-check">✔</span> <strong>15-Second Turn Timer:</strong> Rapid decision-making.
+                Failing to lock in defaults to the antipodal point (maximum distance penalty).</li>
+              <li><span class="bullet-check">✔</span> <strong>Sudden Death:</strong> Damage escalates to 1.5x in Round
+                4+ to force aggressive, thrilling endgame finishes.</li>
             </ul>
           </div>
 
@@ -875,10 +1122,14 @@
               Jump into battle against friends or practice against intelligent bots:
             </p>
             <ul class="feature-list" style="margin-top: 10px;">
-              <li><span class="bullet-check">✔</span> <strong>1-Click Friend Invites:</strong> Share a `/invite/[uuid]` link with any friend for instant 1v1 lobby entry.</li>
-              <li><span class="bullet-check">✔</span> <strong>Synchronized Rounds:</strong> Both competitors explore the exact same satellite mystery photos in identical sequence.</li>
-              <li><span class="bullet-check">✔</span> <strong>AI Bot Sparring:</strong> Practice against 3 bot tiers (Casual, Master, Grandmaster).</li>
-              <li><span class="bullet-check">✔</span> <strong>Victory Screen:</strong> Match concludes when a player reaches 0 HP, presenting battle stats and rematch options.</li>
+              <li><span class="bullet-check">✔</span> <strong>1-Click Friend Invites:</strong> Share a `/invite/[uuid]`
+                link with any friend for instant 1v1 lobby entry.</li>
+              <li><span class="bullet-check">✔</span> <strong>Synchronized Rounds:</strong> Both competitors explore the
+                exact same satellite mystery photos in identical sequence.</li>
+              <li><span class="bullet-check">✔</span> <strong>AI Bot Sparring:</strong> Practice against 3 bot tiers
+                (Casual, Master, Grandmaster).</li>
+              <li><span class="bullet-check">✔</span> <strong>Victory Screen:</strong> Match concludes when a player
+                reaches 0 HP, presenting battle stats and rematch options.</li>
             </ul>
           </div>
         </div>
@@ -890,7 +1141,8 @@
     <!-- ============================================================= -->
     <section class="slide" data-part="2" data-speaker="Sayerh Abdelhak: WebGL Scene">
       <div class="slide-header">
-        <span class="slide-speaker-tag"><span class="badge-num">Part 2</span> Sayerh Abdelhak &bull; Three.js Graphics Pipeline</span>
+        <span class="slide-speaker-tag"><span class="badge-num">Part 2</span> Sayerh Abdelhak &bull; Three.js Graphics
+          Pipeline</span>
         <h2 class="slide-title">WebGL Scene Setup & Camera Rigging</h2>
       </div>
 
@@ -902,25 +1154,31 @@
               The renderer is configured for maximum visual fidelity and optimal GPU resource management:
             </p>
             <ul class="feature-list" style="margin-top: 14px;">
-              <li><span class="bullet-check">✔</span> <strong>ACES Filmic Tone Mapping:</strong> Simulates high dynamic range (HDR) film response to avoid blown-out highlights.</li>
-              <li><span class="bullet-check">✔</span> <strong>Clamped DPR:</strong> `Math.min(devicePixelRatio, 2)` prevents 3x/4x mobile screens from dropping frames.</li>
-              <li><span class="bullet-check">✔</span> <strong>SRGB Color Space:</strong> Ensures texture colors render true-to-life without gamma degradation.</li>
+              <li><span class="bullet-check">✔</span> <strong>ACES Filmic Tone Mapping:</strong> Simulates high dynamic
+                range (HDR) film response to avoid blown-out highlights.</li>
+              <li><span class="bullet-check">✔</span> <strong>Clamped DPR:</strong> `Math.min(devicePixelRatio, 2)`
+                prevents 3x/4x mobile screens from dropping frames.</li>
+              <li><span class="bullet-check">✔</span> <strong>SRGB Color Space:</strong> Ensures texture colors render
+                true-to-life without gamma degradation.</li>
             </ul>
           </div>
 
           <div class="code-box">
-<span class="com">// Three.js WebGLRenderer Setup</span>
-<span class="kw">this</span>.renderer = <span class="kw">new</span> THREE.<span class="fn">WebGLRenderer</span>({
-  antialias: <span class="kw">true</span>,
-  alpha: <span class="kw">true</span>,
-  powerPreference: <span class="str">'high-performance'</span>,
-})
-<span class="kw">this</span>.renderer.<span class="fn">setPixelRatio</span>(
-  Math.<span class="fn">min</span>(window.devicePixelRatio || <span class="num">1</span>, <span class="num">2</span>)
-)
-<span class="kw">this</span>.renderer.outputColorSpace = THREE.SRGBColorSpace
-<span class="kw">this</span>.renderer.toneMapping = THREE.ACESFilmicToneMapping
-<span class="kw">this</span>.renderer.toneMappingExposure = <span class="num">1.18</span></div>
+            <span class="com">// Three.js WebGLRenderer Setup</span>
+            <span class="kw">this</span>.renderer = <span class="kw">new</span> THREE.<span
+              class="fn">WebGLRenderer</span>({
+            antialias: <span class="kw">true</span>,
+            alpha: <span class="kw">true</span>,
+            powerPreference: <span class="str">'high-performance'</span>,
+            })
+            <span class="kw">this</span>.renderer.<span class="fn">setPixelRatio</span>(
+            Math.<span class="fn">min</span>(window.devicePixelRatio || <span class="num">1</span>, <span
+              class="num">2</span>)
+            )
+            <span class="kw">this</span>.renderer.outputColorSpace = THREE.SRGBColorSpace
+            <span class="kw">this</span>.renderer.toneMapping = THREE.ACESFilmicToneMapping
+            <span class="kw">this</span>.renderer.toneMappingExposure = <span class="num">1.18</span>
+          </div>
         </div>
       </div>
     </section>
@@ -930,7 +1188,8 @@
     <!-- ============================================================= -->
     <section class="slide" data-part="2" data-speaker="Sayerh Abdelhak: Globe Textures">
       <div class="slide-header">
-        <span class="slide-speaker-tag"><span class="badge-num">Part 2</span> Sayerh Abdelhak &bull; 3D Models & Textures</span>
+        <span class="slide-speaker-tag"><span class="badge-num">Part 2</span> Sayerh Abdelhak &bull; 3D Models &
+          Textures</span>
         <h2 class="slide-title">Globe Sphere Geometry & Anisotropic Textures</h2>
       </div>
 
@@ -939,7 +1198,8 @@
           <span class="banner-icon">🌐</span>
           <div>
             <h3>High-Resolution Sphere Geometry</h3>
-            <p>Radius of 5.0 units with 72 horizontal and 72 vertical segments (5,184 quads / 10,368 triangles) providing seamless curvature at any zoom distance.</p>
+            <p>Radius of 5.0 units with 72 horizontal and 72 vertical segments (5,184 quads / 10,368 triangles)
+              providing seamless curvature at any zoom distance.</p>
           </div>
         </div>
 
@@ -982,7 +1242,8 @@
     <!-- ============================================================= -->
     <section class="slide" data-part="2" data-speaker="Sayerh Abdelhak: GLSL Shaders">
       <div class="slide-header">
-        <span class="slide-speaker-tag"><span class="badge-num">Part 2</span> Sayerh Abdelhak &bull; Custom GLSL Shaders</span>
+        <span class="slide-speaker-tag"><span class="badge-num">Part 2</span> Sayerh Abdelhak &bull; Custom GLSL
+          Shaders</span>
         <h2 class="slide-title">Atmospheric Glow via Custom GLSL Rim Shader</h2>
       </div>
 
@@ -991,30 +1252,36 @@
           <div class="card">
             <h3>✨ Fresnel Rim Physics</h3>
             <p>
-              An inverted outer sphere (scale 1.14x) uses a custom GLSL shader that calculates the angle between vertex normals and the camera view vector:
+              An inverted outer sphere (scale 1.14x) uses a custom GLSL shader that calculates the angle between vertex
+              normals and the camera view vector:
             </p>
             <ul class="feature-list" style="margin-top: 14px;">
-              <li><span class="bullet-check">✔</span> <strong>`THREE.BackSide`:</strong> Renders only the outer rim shell without obscuring continental maps.</li>
-              <li><span class="bullet-check">✔</span> <strong>Additive Blending:</strong> Glow smoothly layers over the sky background.</li>
-              <li><span class="bullet-check">✔</span> <strong>Exponential Falloff:</strong> Soft $(0.62 - \mathbf{n} \cdot \mathbf{v})^{3.2}$ creates a realistic planetary atmosphere.</li>
+              <li><span class="bullet-check">✔</span> <strong>`THREE.BackSide`:</strong> Renders only the outer rim
+                shell without obscuring continental maps.</li>
+              <li><span class="bullet-check">✔</span> <strong>Additive Blending:</strong> Glow smoothly layers over the
+                sky background.</li>
+              <li><span class="bullet-check">✔</span> <strong>Exponential Falloff:</strong> Soft $(0.62 - \mathbf{n}
+                \cdot \mathbf{v})^{3.2}$ creates a realistic planetary atmosphere.</li>
             </ul>
           </div>
 
           <div class="code-box">
-<span class="com">// GLSL Fragment Shader</span>
-<span class="kw">uniform</span> vec3 glowColor;
-<span class="kw">uniform</span> <span class="kw">float</span> intensity;
-<span class="kw">varying</span> vec3 vNormal;
+            <span class="com">// GLSL Fragment Shader</span>
+            <span class="kw">uniform</span> vec3 glowColor;
+            <span class="kw">uniform</span> <span class="kw">float</span> intensity;
+            <span class="kw">varying</span> vec3 vNormal;
 
-<span class="kw">void</span> <span class="fn">main</span>() {
-  <span class="com">// Dot product between normal and camera gaze</span>
-  <span class="kw">float</span> rim = <span class="fn">pow</span>(
-    <span class="num">0.62</span> - <span class="fn">dot</span>(vNormal, <span class="fn">vec3</span>(<span class="num">0.0</span>, <span class="num">0.0</span>, <span class="num">1.0</span>)), 
-    <span class="num">3.2</span>
-  );
-  gl_FragColor = <span class="fn">vec4</span>(glowColor, <span class="num">1.0</span>) * 
-                 <span class="fn">clamp</span>(rim * intensity, <span class="num">0.0</span>, <span class="num">1.0</span>);
-}</div>
+            <span class="kw">void</span> <span class="fn">main</span>() {
+            <span class="com">// Dot product between normal and camera gaze</span>
+            <span class="kw">float</span> rim = <span class="fn">pow</span>(
+            <span class="num">0.62</span> - <span class="fn">dot</span>(vNormal, <span class="fn">vec3</span>(<span
+              class="num">0.0</span>, <span class="num">0.0</span>, <span class="num">1.0</span>)),
+            <span class="num">3.2</span>
+            );
+            gl_FragColor = <span class="fn">vec4</span>(glowColor, <span class="num">1.0</span>) *
+            <span class="fn">clamp</span>(rim * intensity, <span class="num">0.0</span>, <span class="num">1.0</span>);
+            }
+          </div>
         </div>
       </div>
     </section>
@@ -1024,7 +1291,8 @@
     <!-- ============================================================= -->
     <section class="slide" data-part="2" data-speaker="Sayerh Abdelhak: Lighting Rig">
       <div class="slide-header">
-        <span class="slide-speaker-tag"><span class="badge-num">Part 2</span> Sayerh Abdelhak &bull; 3D Illumination</span>
+        <span class="slide-speaker-tag"><span class="badge-num">Part 2</span> Sayerh Abdelhak &bull; 3D
+          Illumination</span>
         <h2 class="slide-title">Multi-Source 3-Point Lighting Rig</h2>
       </div>
 
@@ -1058,12 +1326,16 @@
         <div class="card" style="background: #fafcfe;">
           <h3>🎯 Visual Goal</h3>
           <p>
-            In real astrophysics, one hemisphere of Earth is always plunged into darkness. In an educational game, players must rotate freely to inspect geography without continents disappearing into black silhouettes.
+            In real astrophysics, one hemisphere of Earth is always plunged into darkness. In an educational game,
+            players must rotate freely to inspect geography without continents disappearing into black silhouettes.
           </p>
           <ul class="feature-list" style="margin-top: 14px;">
-            <li><span class="bullet-check">✔</span> Consistent 360&deg; visibility for all continents, islands, and borders.</li>
-            <li><span class="bullet-check">✔</span> High dynamic contrast highlighting mountain ridges and ocean trenches.</li>
-            <li><span class="bullet-check">✔</span> Soft directional specularity giving the ocean water a realistic liquid sheen.</li>
+            <li><span class="bullet-check">✔</span> Consistent 360&deg; visibility for all continents, islands, and
+              borders.</li>
+            <li><span class="bullet-check">✔</span> High dynamic contrast highlighting mountain ridges and ocean
+              trenches.</li>
+            <li><span class="bullet-check">✔</span> Soft directional specularity giving the ocean water a realistic
+              liquid sheen.</li>
           </ul>
         </div>
       </div>
@@ -1074,7 +1346,8 @@
     <!-- ============================================================= -->
     <section class="slide" data-part="3" data-speaker="Azzahidi Aymane: Spherical Math">
       <div class="slide-header">
-        <span class="slide-speaker-tag"><span class="badge-num">Part 3</span> Azzahidi Aymane &bull; Spherical Mathematics</span>
+        <span class="slide-speaker-tag"><span class="badge-num">Part 3</span> Azzahidi Aymane &bull; Spherical
+          Mathematics</span>
         <h2 class="slide-title">Converting Latitude & Longitude to 3D Cartesian Space</h2>
       </div>
 
@@ -1083,28 +1356,35 @@
           <div class="card">
             <h3>📐 Spherical Coordinate Transformation</h3>
             <p>
-              Spherical trigonometry translates polar angle $\phi$ (latitude) and azimuthal angle $\theta$ (longitude) to 3D $(x, y, z)$ on the globe:
+              Spherical trigonometry translates polar angle $\phi$ (latitude) and azimuthal angle $\theta$ (longitude)
+              to 3D $(x, y, z)$ on the globe:
             </p>
             <div class="code-box" style="margin-top: 12px; height: 260px;">
-<span class="kw">export function</span> <span class="fn">latLonToVector3</span>(lat, lon, radius) {
-  <span class="kw">const</span> phi = THREE.MathUtils.<span class="fn">degToRad</span>(<span class="num">90</span> - lat)
-  <span class="kw">const</span> theta = THREE.MathUtils.<span class="fn">degToRad</span>(lon + <span class="num">180</span>)
+              <span class="kw">export function</span> <span class="fn">latLonToVector3</span>(lat, lon, radius) {
+              <span class="kw">const</span> phi = THREE.MathUtils.<span class="fn">degToRad</span>(<span
+                class="num">90</span> - lat)
+              <span class="kw">const</span> theta = THREE.MathUtils.<span class="fn">degToRad</span>(lon + <span
+                class="num">180</span>)
 
-  <span class="kw">return new</span> THREE.<span class="fn">Vector3</span>(
-    -radius * Math.<span class="fn">sin</span>(phi) * Math.<span class="fn">cos</span>(theta),
-    radius * Math.<span class="fn">cos</span>(phi),
-    radius * Math.<span class="fn">sin</span>(phi) * Math.<span class="fn">sin</span>(theta)
-  )
-}</div>
+              <span class="kw">return new</span> THREE.<span class="fn">Vector3</span>(
+              -radius * Math.<span class="fn">sin</span>(phi) * Math.<span class="fn">cos</span>(theta),
+              radius * Math.<span class="fn">cos</span>(phi),
+              radius * Math.<span class="fn">sin</span>(phi) * Math.<span class="fn">sin</span>(theta)
+              )
+              }
+            </div>
           </div>
 
           <div class="card" style="background: #fafcfe;">
             <h3>🧭 Inverse Vector3 to Lat/Lon</h3>
             <p>When the user clicks the 3D globe, the inverse function extracts real-world geographical coordinates:</p>
             <div class="code-box" style="margin-top: 10px; height: 160px;">
-<span class="kw">const</span> lat = <span class="num">90</span> - radToDeg(Math.<span class="fn">acos</span>(p.y))
-<span class="kw">let</span> lon = radToDeg(Math.<span class="fn">atan2</span>(p.z, -p.x)) - <span class="num">180</span>
-<span class="kw">if</span> (lon < -<span class="num">180</span>) lon += <span class="num">360</span></div>
+              <span class="kw">const</span> lat = <span class="num">90</span> - radToDeg(Math.<span
+                class="fn">acos</span>(p.y))
+              <span class="kw">let</span> lon = radToDeg(Math.<span class="fn">atan2</span>(p.z, -p.x)) - <span
+                class="num">180</span>
+              <span class="kw">if</span> (lon < -<span class="num">180</span>) lon += <span class="num">360</span>
+            </div>
             <ul class="feature-list" style="margin-top: 12px;">
               <li><span class="bullet-check">✔</span> Continuous wrap-around handling at meridian boundaries.</li>
               <li><span class="bullet-check">✔</span> Precision within 0.001 degrees of true geographic position.</li>
@@ -1119,7 +1399,8 @@
     <!-- ============================================================= -->
     <section class="slide" data-part="3" data-speaker="Azzahidi Aymane: Distance Physics">
       <div class="slide-header">
-        <span class="slide-speaker-tag"><span class="badge-num">Part 3</span> Azzahidi Aymane &bull; Geodesic Physics</span>
+        <span class="slide-speaker-tag"><span class="badge-num">Part 3</span> Azzahidi Aymane &bull; Geodesic
+          Physics</span>
         <h2 class="slide-title">Great-Circle Haversine Formula & Scoring Curve</h2>
       </div>
 
@@ -1129,8 +1410,8 @@
             <h3>📏 Great-Circle Haversine Equation</h3>
             <p>Computes shortest surface distance over the Earth ($R = 6,371\text{ km}$):</p>
             <div class="code-box" style="margin-top: 12px; height: 150px;">
-a = sin²(Δlat/2) + cos(lat₁) &times; cos(lat₂) &times; sin²(Δlon/2)
-distance = 2 &times; R &times; arcsin(√a)</div>
+              a = sin²(Δlat/2) + cos(lat₁) &times; cos(lat₂) &times; sin²(Δlon/2)
+              distance = 2 &times; R &times; arcsin(√a)</div>
             <p style="margin-top: 14px; font-size: 13.5px; color: var(--ink-soft);">
               Accurate across the International Date Line and Polar regions, avoiding Mercator projection distortions.
             </p>
@@ -1141,9 +1422,12 @@ distance = 2 &times; R &times; arcsin(√a)</div>
             <p>Score decays non-linearly with distance to reward razor-sharp precision:</p>
             <ul class="feature-list" style="margin-top: 12px;">
               <li><span class="bullet-check">✔</span> <strong>&lt; 25 km:</strong> 5,000 Points (Bullseye tier)</li>
-              <li><span class="bullet-check">✔</span> <strong>&lt; 500 km:</strong> 4,000 &ndash; 4,800 Points (Great guess)</li>
-              <li><span class="bullet-check">✔</span> <strong>&lt; 2,000 km:</strong> 2,000 &ndash; 3,500 Points (Decent guess)</li>
-              <li><span class="bullet-check">✔</span> <strong>&gt; 5,000 km:</strong> Heavy damage dealt in 1v1 battle duel</li>
+              <li><span class="bullet-check">✔</span> <strong>&lt; 500 km:</strong> 4,000 &ndash; 4,800 Points (Great
+                guess)</li>
+              <li><span class="bullet-check">✔</span> <strong>&lt; 2,000 km:</strong> 2,000 &ndash; 3,500 Points (Decent
+                guess)</li>
+              <li><span class="bullet-check">✔</span> <strong>&gt; 5,000 km:</strong> Heavy damage dealt in 1v1 battle
+                duel</li>
             </ul>
           </div>
         </div>
@@ -1155,7 +1439,8 @@ distance = 2 &times; R &times; arcsin(√a)</div>
     <!-- ============================================================= -->
     <section class="slide" data-part="3" data-speaker="Azzahidi Aymane: Raycasting & Pins">
       <div class="slide-header">
-        <span class="slide-speaker-tag"><span class="badge-num">Part 3</span> Azzahidi Aymane &bull; Interactions & Raycasting</span>
+        <span class="slide-speaker-tag"><span class="badge-num">Part 3</span> Azzahidi Aymane &bull; Interactions &
+          Raycasting</span>
         <h2 class="slide-title">Raycasting & Normal Surface Alignment</h2>
       </div>
 
@@ -1167,24 +1452,28 @@ distance = 2 &times; R &times; arcsin(√a)</div>
               Transforms pointer coordinates into a 3D ray through the perspective frustum:
             </p>
             <div class="code-box" style="margin-top: 10px; height: 280px;">
-<span class="kw">this</span>.raycaster.<span class="fn">setFromCamera</span>(<span class="kw">this</span>.pointer, <span class="kw">this</span>.camera)
-<span class="kw">const</span> hits = <span class="kw">this</span>.raycaster.<span class="fn">intersectObject</span>(<span class="kw">this</span>.globe)
+              <span class="kw">this</span>.raycaster.<span class="fn">setFromCamera</span>(<span
+                class="kw">this</span>.pointer, <span class="kw">this</span>.camera)
+              <span class="kw">const</span> hits = <span class="kw">this</span>.raycaster.<span
+                class="fn">intersectObject</span>(<span class="kw">this</span>.globe)
 
-<span class="kw">if</span> (hits.length > <span class="num">0</span>) {
-  <span class="kw">const</span> point = hits[<span class="num">0</span>].point
-  flag.position.<span class="fn">copy</span>(point)
-  <span class="com">// Align flag pole to sphere surface normal</span>
-  flag.quaternion.<span class="fn">setFromUnitVectors</span>(
-    Y_AXIS, point.<span class="fn">clone</span>().<span class="fn">normalize</span>()
-  )
-}</div>
+              <span class="kw">if</span> (hits.length > <span class="num">0</span>) {
+              <span class="kw">const</span> point = hits[<span class="num">0</span>].point
+              flag.position.<span class="fn">copy</span>(point)
+              <span class="com">// Align flag pole to sphere surface normal</span>
+              flag.quaternion.<span class="fn">setFromUnitVectors</span>(
+              Y_AXIS, point.<span class="fn">clone</span>().<span class="fn">normalize</span>()
+              )
+              }
+            </div>
           </div>
 
           <div class="card">
             <h3>🚩 Composite 3D Flag Mesh</h3>
             <p>Built from 4 modular Three.js primitives:</p>
             <ul class="feature-list" style="margin-top: 12px;">
-              <li><span class="bullet-check">✔</span> <strong>Pole:</strong> `CylinderGeometry(0.024, 0.024, 1.0, 8)`</li>
+              <li><span class="bullet-check">✔</span> <strong>Pole:</strong> `CylinderGeometry(0.024, 0.024, 1.0, 8)`
+              </li>
               <li><span class="bullet-check">✔</span> <strong>Finial Ball:</strong> `SphereGeometry(0.055, 14, 14)`</li>
               <li><span class="bullet-check">✔</span> <strong>Cloth:</strong> `PlaneGeometry(0.66, 0.42, 12, 5)`</li>
               <li><span class="bullet-check">✔</span> <strong>Base Ring:</strong> `RingGeometry(0.11, 0.145, 36)`</li>
@@ -1199,7 +1488,8 @@ distance = 2 &times; R &times; arcsin(√a)</div>
     <!-- ============================================================= -->
     <section class="slide" data-part="3" data-speaker="Azzahidi Aymane: Cloth Waves">
       <div class="slide-header">
-        <span class="slide-speaker-tag"><span class="badge-num">Part 3</span> Azzahidi Aymane &bull; Procedural Animation</span>
+        <span class="slide-speaker-tag"><span class="badge-num">Part 3</span> Azzahidi Aymane &bull; Procedural
+          Animation</span>
         <h2 class="slide-title">Real-Time Procedural Cloth Wave Animation</h2>
       </div>
 
@@ -1208,25 +1498,28 @@ distance = 2 &times; R &times; arcsin(√a)</div>
           <span class="banner-icon">🚩</span>
           <div>
             <h3>Dynamic Vertex Mesh Displacement</h3>
-            <p>Every frame of the requestAnimationFrame loop, each vertex of the 12&times;5 subdivided cloth mesh is displaced dynamically along the Z-axis using traveling sine waves:</p>
+            <p>Every frame of the requestAnimationFrame loop, each vertex of the 12&times;5 subdivided cloth mesh is
+              displaced dynamically along the Z-axis using traveling sine waves:</p>
           </div>
         </div>
 
         <div class="card">
           <div class="code-box">
-<span class="kw">function</span> <span class="fn">waveFlag</span>(flag, time) {
-  <span class="kw">const</span> pos = flag.userData.cloth.geometry.attributes.position
+            <span class="kw">function</span> <span class="fn">waveFlag</span>(flag, time) {
+            <span class="kw">const</span> pos = flag.userData.cloth.geometry.attributes.position
 
-  <span class="kw">for</span> (<span class="kw">let</span> i = <span class="num">0</span>; i < pos.count; i++) {
-    <span class="kw">const</span> x = pos.<span class="fn">getX</span>(i)
-    <span class="com">// Propagating wave: amplitude scales with distance from pole (x / FLAG_W)</span>
-    <span class="kw">const</span> z = Math.<span class="fn">sin</span>(x * <span class="num">11</span> - time * <span class="num">5.5</span>) * <span class="num">0.05</span> * (x / FLAG_W)
-    pos.<span class="fn">setZ</span>(i, z)
-  }
+            <span class="kw">for</span> (<span class="kw">let</span> i = <span class="num">0</span>; i < pos.count; i++)
+              { <span class="kw">const</span> x = pos.<span class="fn">getX</span>(i)
+              <span class="com">// Propagating wave: amplitude scales with distance from pole (x / FLAG_W)</span>
+              <span class="kw">const</span> z = Math.<span class="fn">sin</span>(x * <span class="num">11</span> - time
+              * <span class="num">5.5</span>) * <span class="num">0.05</span> * (x / FLAG_W)
+              pos.<span class="fn">setZ</span>(i, z)
+              }
 
-  pos.needsUpdate = <span class="kw">true</span>
-  geometry.<span class="fn">computeVertexNormals</span>()
-}</div>
+              pos.needsUpdate = <span class="kw">true</span>
+              geometry.<span class="fn">computeVertexNormals</span>()
+              }
+          </div>
         </div>
       </div>
     </section>
@@ -1236,7 +1529,8 @@ distance = 2 &times; R &times; arcsin(√a)</div>
     <!-- ============================================================= -->
     <section class="slide" data-part="3" data-speaker="Azzahidi Aymane: 3D Arcs & Camera">
       <div class="slide-header">
-        <span class="slide-speaker-tag"><span class="badge-num">Part 3</span> Azzahidi Aymane &bull; Visual Effects & Camera</span>
+        <span class="slide-speaker-tag"><span class="badge-num">Part 3</span> Azzahidi Aymane &bull; Visual Effects &
+          Camera</span>
         <h2 class="slide-title">Geodesic 3D Arcs & Adaptive Camera Reveal</h2>
       </div>
 
@@ -1246,23 +1540,33 @@ distance = 2 &times; R &times; arcsin(√a)</div>
             <h3>🌈 Elevated Catmull-Rom Arcs</h3>
             <p>Interpolates points along the sphere surface and elevates them into a vaulting 3D tube:</p>
             <div class="code-box" style="margin-top: 10px; height: 260px;">
-<span class="kw">const</span> points = []
-<span class="kw">for</span> (<span class="kw">let</span> i = <span class="num">0</span>; i <= <span class="num">64</span>; i++) {
-  <span class="kw">const</span> t = i / <span class="num">64</span>
-  <span class="kw">const</span> p = start.<span class="fn">clone</span>().<span class="fn">lerp</span>(end, t).<span class="fn">normalize</span>()
-    .<span class="fn">multiplyScalar</span>(GLOBE_RADIUS + Math.<span class="fn">sin</span>(Math.PI * t) * height)
-  points.<span class="fn">push</span>(p)
-}
-<span class="kw">const</span> curve = <span class="kw">new</span> THREE.<span class="fn">CatmullRomCurve3</span>(points)
-<span class="kw">const</span> tube = <span class="kw">new</span> THREE.<span class="fn">TubeGeometry</span>(curve, <span class="num">90</span>, <span class="num">0.038</span>, <span class="num">8</span>)</div>
+              <span class="kw">const</span> points = []
+              <span class="kw">for</span> (<span class="kw">let</span> i = <span class="num">0</span>; i <= <span
+                class="num">64</span>; i++) {
+                <span class="kw">const</span> t = i / <span class="num">64</span>
+                <span class="kw">const</span> p = start.<span class="fn">clone</span>().<span
+                  class="fn">lerp</span>(end, t).<span class="fn">normalize</span>()
+                .<span class="fn">multiplyScalar</span>(GLOBE_RADIUS + Math.<span class="fn">sin</span>(Math.PI * t) *
+                height)
+                points.<span class="fn">push</span>(p)
+                }
+                <span class="kw">const</span> curve = <span class="kw">new</span> THREE.<span
+                  class="fn">CatmullRomCurve3</span>(points)
+                <span class="kw">const</span> tube = <span class="kw">new</span> THREE.<span
+                  class="fn">TubeGeometry</span>(curve, <span class="num">90</span>, <span class="num">0.038</span>,
+                <span class="num">8</span>)
+            </div>
           </div>
 
           <div class="card">
             <h3>🎬 Cinematic Camera Flight</h3>
             <ul class="feature-list" style="margin-top: 8px;">
-              <li><span class="bullet-check">✔</span> <strong>SLERP Arc Interpolation:</strong> Smoothly orbits toward the midpoint between pins.</li>
-              <li><span class="bullet-check">✔</span> <strong>Adaptive Distance Framing:</strong> Camera automatically zooms out for distant guesses (up to 20,000 km) to frame both pins in view.</li>
-              <li><span class="bullet-check">✔</span> <strong>Multiplayer Triangulation:</strong> Simultaneously highlights Player 1, Player 2, and the Answer pin.</li>
+              <li><span class="bullet-check">✔</span> <strong>SLERP Arc Interpolation:</strong> Smoothly orbits toward
+                the midpoint between pins.</li>
+              <li><span class="bullet-check">✔</span> <strong>Adaptive Distance Framing:</strong> Camera automatically
+                zooms out for distant guesses (up to 20,000 km) to frame both pins in view.</li>
+              <li><span class="bullet-check">✔</span> <strong>Multiplayer Triangulation:</strong> Simultaneously
+                highlights Player 1, Player 2, and the Answer pin.</li>
             </ul>
           </div>
         </div>
@@ -1302,20 +1606,28 @@ distance = 2 &times; R &times; arcsin(√a)</div>
           <div class="card">
             <h3>🎮 Core Gameplay Highlights</h3>
             <ul class="feature-list" style="margin-top: 10px;">
-              <li><span class="bullet-check">✔</span> <strong>5-Round Solo Mode:</strong> Proximity scoring up to 25,000 points with accuracy tiers.</li>
-              <li><span class="bullet-check">✔</span> <strong>1v1 Battle Arena:</strong> 5,000 HP combat, 15s turn timer, and distance delta damage.</li>
-              <li><span class="bullet-check">✔</span> <strong>Accounts & Leaderboards:</strong> Persistent player profiles, stats, and live rankings.</li>
-              <li><span class="bullet-check">✔</span> <strong>Instant Invites:</strong> Shareable `/invite/[uuid]` challenge links for 1-click matches.</li>
+              <li><span class="bullet-check">✔</span> <strong>5-Round Solo Mode:</strong> Proximity scoring up to 25,000
+                points with accuracy tiers.</li>
+              <li><span class="bullet-check">✔</span> <strong>1v1 Battle Arena:</strong> 5,000 HP combat, 15s turn
+                timer, and distance delta damage.</li>
+              <li><span class="bullet-check">✔</span> <strong>Accounts & Leaderboards:</strong> Persistent player
+                profiles, stats, and live rankings.</li>
+              <li><span class="bullet-check">✔</span> <strong>Instant Invites:</strong> Shareable `/invite/[uuid]`
+                challenge links for 1-click matches.</li>
             </ul>
           </div>
 
           <div class="card" style="background: #fafcfe;">
             <h3>🌐 3D Graphics & Engineering</h3>
             <ul class="feature-list" style="margin-top: 10px;">
-              <li><span class="bullet-check">✔</span> <strong>High-Fidelity 3D Globe:</strong> Decoupled Three.js engine maintaining smooth 60 FPS.</li>
-              <li><span class="bullet-check">✔</span> <strong>Spherical Math:</strong> Trigonometric conversions & Haversine geodesic distance physics.</li>
-              <li><span class="bullet-check">✔</span> <strong>Custom GLSL Shaders:</strong> Atmospheric rim glow and procedural waving flag cloth.</li>
-              <li><span class="bullet-check">✔</span> <strong>Cinematic VFX:</strong> Vaulting 3D Catmull-Rom arcs and dynamic camera flight orbits.</li>
+              <li><span class="bullet-check">✔</span> <strong>High-Fidelity 3D Globe:</strong> Decoupled Three.js engine
+                maintaining smooth 60 FPS.</li>
+              <li><span class="bullet-check">✔</span> <strong>Spherical Math:</strong> Trigonometric conversions &
+                Haversine geodesic distance physics.</li>
+              <li><span class="bullet-check">✔</span> <strong>Custom GLSL Shaders:</strong> Atmospheric rim glow and
+                procedural waving flag cloth.</li>
+              <li><span class="bullet-check">✔</span> <strong>Cinematic VFX:</strong> Vaulting 3D Catmull-Rom arcs and
+                dynamic camera flight orbits.</li>
             </ul>
           </div>
         </div>
@@ -1334,19 +1646,27 @@ distance = 2 &times; R &times; arcsin(√a)</div>
 
       <div class="team-cards-row">
         <div class="team-card m1">
+          <div class="team-card-icon-bubble">🎮</div>
           <span class="member-tag">Member 1</span>
           <span class="member-title">Mallahi Mohammed</span>
-          <p style="font-size: 12px; color: var(--muted); margin-top: 4px;">Game Logic, Modes & Persistence</p>
+          <span class="member-role-title">Game Logic & Modes</span>
+          <p class="member-desc">5-Round Solo Loop &bull; 1v1 Arena Rules &bull; Persistence</p>
         </div>
+
         <div class="team-card m2">
+          <div class="team-card-icon-bubble">🌐</div>
           <span class="member-tag">Member 2</span>
           <span class="member-title">Sayerh Abdelhak</span>
-          <p style="font-size: 12px; color: var(--muted); margin-top: 4px;">Three.js & GLSL Shaders</p>
+          <span class="member-role-title">3D Globe & WebGL</span>
+          <p class="member-desc">Three.js Core &bull; Multi-Textures &bull; GLSL Rim Lighting</p>
         </div>
+
         <div class="team-card m3">
+          <div class="team-card-icon-bubble">📐</div>
           <span class="member-tag">Member 3</span>
           <span class="member-title">Azzahidi Aymane</span>
-          <p style="font-size: 12px; color: var(--muted); margin-top: 4px;">Math, Pins & Visual FX</p>
+          <span class="member-role-title">Math, Raycasting & VFX</span>
+          <p class="member-desc">Spherical Math &bull; Haversine Distance &bull; Cloth Waves</p>
         </div>
       </div>
     </section>
@@ -1464,9 +1784,9 @@ distance = 2 &times; R &times; arcsin(√a)</div>
 
     function toggleFullscreen() {
       if (!document.fullscreenElement) {
-        document.documentElement.requestFullscreen().catch(() => {})
+        document.documentElement.requestFullscreen().catch(() => { })
       } else {
-        document.exitFullscreen().catch(() => {})
+        document.exitFullscreen().catch(() => { })
       }
     }
 
@@ -1476,4 +1796,5 @@ distance = 2 &times; R &times; arcsin(√a)</div>
     showSlide(0)
   </script>
 </body>
+
 </html>
