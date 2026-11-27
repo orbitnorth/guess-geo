@@ -37,7 +37,7 @@ import {
 } from '@/game/duelBots'
 import { getAvatarById } from '@/lib/data/avatars'
 
-export default function GeoGuessGame() {
+export default function GeoGuessGame({ initialDuelRoom = '', autoStartDuel = false }) {
   const [deck, setDeck] = useState(() => buildDeck())
   const [roundIndex, setRoundIndex] = useState(0)
   const [phase, setPhase] = useState('intro') // intro | guessing | revealing | result | final | duel_guessing | duel_revealing | duel_result | duel_match_over
@@ -74,18 +74,7 @@ export default function GeoGuessGame() {
   const [duelRoundResult, setDuelRoundResult] = useState(null)
   const [isDuelMatchOver, setIsDuelMatchOver] = useState(false)
   const [duelWinner, setDuelWinner] = useState(null)
-  const [initialDuelCode, setInitialDuelCode] = useState('')
-
-  // Check URL query parameters for duel room codes (e.g. ?duel=3CJ4)
-  useEffect(() => {
-    if (typeof window === 'undefined') return
-    const params = new URLSearchParams(window.location.search)
-    const duelParam = params.get('duel')
-    if (duelParam) {
-      setInitialDuelCode(duelParam.toUpperCase().trim())
-      setActiveModal('duel_lobby')
-    }
-  }, [])
+  const [initialDuelCode, setInitialDuelCode] = useState(() => initialDuelRoom || '')
 
   const botGuessRef = useRef(null)
   const duelTimerRef = useRef(null)
@@ -267,11 +256,12 @@ export default function GeoGuessGame() {
 
     if (opponentType === 'friend' && roomCode) {
       freshDeck = buildDeckFromSeed(roomCode, 7)
+      const shortCode = roomCode.length > 8 ? roomCode.slice(0, 8) : roomCode
       chosenBot = {
         id: `friend_${roomCode}`,
-        name: isHost ? `Friend (${roomCode})` : `Host (${roomCode})`,
+        name: isHost ? `Friend (${shortCode})` : `Host (${shortCode})`,
         avatar: 'wanderer',
-        tagline: `1v1 Room ${roomCode}`,
+        tagline: `1v1 Room ${shortCode}`,
         difficulty: 'Medium',
         badgeVariant: 'yellow',
         minSec: 6,
@@ -302,6 +292,29 @@ export default function GeoGuessGame() {
     setPhase('duel_guessing')
     engineRef.current?.startRound()
   }, [])
+
+  // Automatically handle duel invitation via URL param (?duel=...) or initialDuelRoom prop
+  useEffect(() => {
+    const duelCode =
+      initialDuelRoom ||
+      (typeof window !== 'undefined'
+        ? new URLSearchParams(window.location.search).get('duel')
+        : null)
+
+    if (duelCode) {
+      const cleaned = duelCode.trim()
+      setInitialDuelCode(cleaned)
+      if (autoStartDuel) {
+        handleStartDuel({
+          opponentType: 'friend',
+          roomCode: cleaned,
+          isHost: false,
+        })
+      } else {
+        setActiveModal('duel_lobby')
+      }
+    }
+  }, [initialDuelRoom, autoStartDuel, handleStartDuel])
 
   const handleDuelReveal = useCallback(() => {
     if (phase !== 'duel_guessing' || !location) return

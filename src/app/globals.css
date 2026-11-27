@@ -4872,10 +4872,12 @@ kbd {
 
 .code-value {
   font-family: var(--font-display);
-  font-size: 20px;
+  font-size: 14.5px;
   font-weight: 800;
-  letter-spacing: 2px;
+  letter-spacing: 0.5px;
   color: var(--blue-dark);
+  word-break: break-all;
+  user-select: all;
 }
 
 .friend-share-row {
@@ -5024,4 +5026,244 @@ kbd {
     bottom: 12px;
     padding: 12px;
   }
+}
+
+/* ==========================================================================
+   Invite Subroute Landing Page (/invite/[uuid])
+   ========================================================================== */
+.invite-page-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--sky-bg);
+  background-image: radial-gradient(var(--sky-dot) 1.5px, transparent 1.5px);
+  background-size: 24px 24px;
+}
+
+.invite-nav {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 16px 24px;
+  box-sizing: border-box;
+}
+
+.invite-page-main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px 48px;
+  box-sizing: border-box;
+}
+
+.invite-card {
+  width: 100%;
+  max-width: 500px;
+  background: #ffffff;
+  border: 2.5px solid var(--line);
+  border-radius: 28px;
+  padding: 32px 30px;
+  box-shadow: 0 12px 0 var(--line), 0 24px 48px rgba(41, 89, 110, 0.12);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  box-sizing: border-box;
+  animation: floaty 6s ease-in-out infinite;
+}
+
+.invite-mascot-wrap {
+  animation: float 3s ease-in-out infinite alternate;
+  margin-bottom: 4px;
+}
+
+.invite-badge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--blue-soft);
+  color: var(--blue-dark);
+  font-family: var(--font-display);
+  font-size: 11.5px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  margin-top: 10px;
+}
+
+.invite-title {
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--ink);
+  margin: 10px 0 4px;
+}
+
+.invite-subtitle {
+  font-size: 13.5px;
+  color: var(--ink-soft);
+  line-height: 1.45;
+  margin: 0 0 18px;
+}
+
+.invite-room-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: #f6fbfe;
+  border: 1.5px dashed var(--blue);
+  border-radius: 16px;
+  padding: 12px 14px;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 18px;
+}
+
+.invite-room-details {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  min-width: 0;
+  flex: 1;
+}
+
+.invite-room-label {
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.invite-room-id {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--blue-dark);
+  word-break: break-all;
+}
+
+.btn-invite-copy {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #ffffff;
+  border: 2px solid var(--line);
+  border-radius: 12px;
+  padding: 8px 12px;
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ink);
+  cursor: pointer;
+  box-shadow: 0 2px 0 var(--line);
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all 0.15s ease;
+}
+
+.btn-invite-copy:hover {
+  border-color: var(--blue);
+  color: var(--blue-dark);
+}
+
+.invite-rules-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  margin-bottom: 22px;
+  text-align: left;
+}
+
+.invite-rule-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #fafcfe;
+  border: 1.5px solid var(--line);
+  border-radius: 14px;
+  padding: 10px 14px;
+}
+
+.rule-icon {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.rule-copy {
+  display: flex;
+  flex-direction: column;
+}
+
+.rule-copy strong {
+  font-family: var(--font-display);
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.rule-copy span {
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.35;
+}
+
+.invite-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.invite-play-btn {
+  width: 100%;
+  padding: 14px 20px;
+  font-size: 16px;
+  font-weight: 800;
+  border-radius: 16px;
+  box-shadow: 0 5px 0 var(--green-dark);
+}
+
+.invite-solo-link {
+  width: 100%;
+  text-align: center;
+  text-decoration: none;
+}
+
+.invite-root-form {
+  width: 100%;
+  margin-top: 8px;
+}
+
+/* Dark Mode for Invite Subroute */
+[data-theme="dark"] .invite-card {
+  background: #142230;
+  border-color: var(--line);
+  box-shadow: 0 12px 0 #0d1720, 0 24px 48px rgba(0, 0, 0, 0.7);
+}
+
+[data-theme="dark"] .invite-room-box {
+  background: #0f1a24;
+  border-color: var(--blue);
+}
+
+[data-theme="dark"] .invite-room-id {
+  color: #60a5fa;
+}
+
+[data-theme="dark"] .btn-invite-copy {
+  background: #162636;
+  border-color: var(--line);
+  color: var(--ink);
+  box-shadow: 0 2px 0 #0d1720;
+}
+
+[data-theme="dark"] .invite-rule-item {
+  background: #0f1a24;
+  border-color: var(--line);
 }

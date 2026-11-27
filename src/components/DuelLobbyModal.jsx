@@ -6,6 +6,17 @@ import { Modal } from './Modal'
 import { DUEL_BOTS } from '@/game/duelBots'
 import { getAvatarById } from '@/lib/data/avatars'
 
+function generateRoomUuid() {
+  if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+    return crypto.randomUUID()
+  }
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+    const r = (Math.random() * 16) | 0
+    const v = c === 'x' ? r : (r & 0x3) | 0x8
+    return v.toString(16)
+  })
+}
+
 export function DuelLobbyModal({
   isOpen,
   onClose,
@@ -19,21 +30,28 @@ export function DuelLobbyModal({
   const [copied, setCopied] = useState(false)
   const [inputCode, setInputCode] = useState(initialRoomCode)
   const [inputError, setInputError] = useState('')
-  const [hostRoomCode] = useState(() => Math.random().toString(36).substring(2, 6).toUpperCase())
+  const [hostRoomCode] = useState(() => generateRoomUuid())
 
   useEffect(() => {
     if (initialRoomCode) {
       setTab('friend')
       setFriendSubTab('join')
-      setInputCode(initialRoomCode.toUpperCase().trim())
+      setInputCode(initialRoomCode.trim())
     }
   }, [initialRoomCode])
 
   const selectedBot = DUEL_BOTS.find((b) => b.id === selectedBotId) || DUEL_BOTS[1]
 
+  const getInviteUrl = () => {
+    if (typeof window !== 'undefined') {
+      return `${window.location.origin}/invite/${hostRoomCode}`
+    }
+    return `/invite/${hostRoomCode}`
+  }
+
   const handleCopy = () => {
     if (typeof window !== 'undefined') {
-      const url = `${window.location.origin}/?duel=${hostRoomCode}`
+      const url = getInviteUrl()
       navigator.clipboard?.writeText(url)
       setCopied(true)
       setTimeout(() => setCopied(false), 2000)
@@ -54,15 +72,21 @@ export function DuelLobbyModal({
   const cleanAndSetCode = (val) => {
     setInputError('')
     let cleaned = val.trim()
-    // If a full URL is pasted (e.g. http://localhost:3000/?duel=3CJ4), extract query param
-    if (cleaned.includes('duel=')) {
-      const match = cleaned.match(/duel=([a-zA-Z0-9]+)/)
+    // If a subroute invite link is pasted: e.g. http://localhost:3000/invite/uuid
+    if (cleaned.includes('/invite/')) {
+      const match = cleaned.match(/\/invite\/([a-zA-Z0-9_-]+)/)
+      if (match && match[1]) {
+        cleaned = match[1]
+      }
+    } else if (cleaned.includes('duel=')) {
+      // Support legacy ?duel=CODE query params
+      const match = cleaned.match(/duel=([a-zA-Z0-9_-]+)/)
       if (match && match[1]) {
         cleaned = match[1]
       }
     }
-    // Keep max 6 uppercase characters
-    cleaned = cleaned.replace(/[^a-zA-Z0-9]/g, '').toUpperCase().slice(0, 6)
+    // Allow alphanumeric and hyphens (standard UUID format)
+    cleaned = cleaned.replace(/[^a-zA-Z0-9_-]/g, '').slice(0, 48)
     setInputCode(cleaned)
   }
 
@@ -236,7 +260,7 @@ export function DuelLobbyModal({
                 <input
                   type="text"
                   className="friend-code-input"
-                  placeholder="e.g. 3CJ4"
+                  placeholder="Paste room UUID or invite link..."
                   value={inputCode}
                   onChange={(e) => cleanAndSetCode(e.target.value)}
                   maxLength={120}
@@ -271,7 +295,7 @@ export function DuelLobbyModal({
               </p>
 
               <div className="friend-code-box">
-                <span className="code-label">Room Code:</span>
+                <span className="code-label">Room ID:</span>
                 <strong className="code-value">{hostRoomCode}</strong>
               </div>
 
@@ -279,7 +303,7 @@ export function DuelLobbyModal({
                 <input
                   type="text"
                   readOnly
-                  value={typeof window !== 'undefined' ? `${window.location.origin}/?duel=${hostRoomCode}` : ''}
+                  value={getInviteUrl()}
                   className="friend-share-input"
                 />
                 <button
