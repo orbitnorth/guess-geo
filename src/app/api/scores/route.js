@@ -14,12 +14,16 @@ export async function POST(request) {
     }
 
     const userId = authUser ? Number(authUser.id) : null
+    const playerName = authUser ? authUser.name : (body.playerName?.trim() || 'Guest Explorer')
+    const playerAvatar = authUser ? authUser.avatar : (body.playerAvatar?.trim() || 'felix')
     const detailsStr = typeof details === 'string' ? details : details ? JSON.stringify(details) : null
 
     const saved = db
       .insert(scores)
       .values({
         userId,
+        playerName,
+        playerAvatar,
         totalScore: Math.round(totalScore),
         maxScore: Number(maxScore),
         roundsPlayed: Number(roundsPlayed),

@@ -63,6 +63,22 @@ export function initDb() {
     sqlite.exec(`ALTER TABLE users ADD COLUMN password TEXT;`)
   }
 
+  // Ensure scores table has player_name and player_avatar columns for guests & unlinked scores
+  const scoresInfo = sqlite.pragma('table_info(scores)')
+  const scoreCols = scoresInfo.map((col) => col.name)
+  if (!scoreCols.includes('player_name')) {
+    sqlite.exec(`ALTER TABLE scores ADD COLUMN player_name TEXT;`)
+  }
+  if (!scoreCols.includes('player_avatar')) {
+    sqlite.exec(`ALTER TABLE scores ADD COLUMN player_avatar TEXT;`)
+  }
+
+  // Backfill existing guest scores without player_name
+  sqlite.exec(`
+    UPDATE scores SET player_name = 'Guest Explorer', player_avatar = 'felix'
+    WHERE user_id IS NULL AND (player_name IS NULL OR TRIM(player_name) = '');
+  `)
+
   // If email was previously created with NOT NULL constraint, migrate users table to make it nullable
   tableInfo = sqlite.pragma('table_info(users)')
   const emailCol = tableInfo.find((col) => col.name === 'email')

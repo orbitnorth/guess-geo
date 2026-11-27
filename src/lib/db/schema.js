@@ -18,6 +18,8 @@ export const users = sqliteTable('users', {
 export const scores = sqliteTable('scores', {
   id: integer('id').primaryKey({ autoIncrement: true }),
   userId: integer('user_id').references(() => users.id, { onDelete: 'cascade' }),
+  playerName: text('player_name'),
+  playerAvatar: text('player_avatar'),
   totalScore: integer('total_score').notNull(),
   maxScore: integer('max_score').notNull().default(25000),
   roundsPlayed: integer('rounds_played').notNull().default(5),

@@ -228,6 +228,8 @@ export default function GeoGuessGame() {
           maxScore: MAX_TOTAL,
           roundsPlayed: deck.length,
           details: results,
+          playerName: user?.name || 'Guest Explorer',
+          playerAvatar: user?.avatar || 'felix',
         }),
       })
         .then((res) => {

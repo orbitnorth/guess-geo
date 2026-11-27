@@ -13,6 +13,8 @@ export async function GET() {
         createdAt: scores.createdAt,
         userName: users.name,
         userAvatar: users.avatar,
+        playerName: scores.playerName,
+        playerAvatar: scores.playerAvatar,
       })
       .from(scores)
       .leftJoin(users, eq(scores.userId, users.id))
@@ -20,7 +22,16 @@ export async function GET() {
       .limit(20)
       .all()
 
-    return NextResponse.json({ leaderboard: topScores })
+    const sanitized = topScores.map((entry) => ({
+      id: entry.id,
+      totalScore: entry.totalScore,
+      maxScore: entry.maxScore,
+      createdAt: entry.createdAt,
+      userName: entry.userName?.trim() || entry.playerName?.trim() || 'Guest Explorer',
+      userAvatar: entry.userAvatar?.trim() || entry.playerAvatar?.trim() || 'felix',
+    }))
+
+    return NextResponse.json({ leaderboard: sanitized })
   } catch (err) {
     console.error('Leaderboard error:', err)
     return NextResponse.json({ error: 'Failed to retrieve leaderboard.' }, { status: 500 })

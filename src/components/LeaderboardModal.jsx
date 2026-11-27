@@ -78,6 +78,7 @@ export function LeaderboardModal({ isOpen, onClose }) {
                   day: 'numeric',
                 })
               : ''
+            const displayName = entry.userName?.trim() || 'Guest Explorer'
 
             return (
               <div
@@ -96,14 +97,14 @@ export function LeaderboardModal({ isOpen, onClose }) {
                   <div className="leaderboard-avatar-wrap">
                     <img
                       src={avatar.src}
-                      alt={entry.userName}
+                      alt={displayName}
                       width={40}
                       height={40}
                       className="leaderboard-avatar-img"
                     />
                   </div>
                   <div className="leaderboard-user-details">
-                    <strong className="leaderboard-user-name">{entry.userName}</strong>
+                    <strong className="leaderboard-user-name">{displayName}</strong>
                     <span className="leaderboard-user-meta">
                       {avatar.title} • {dateStr}
                     </span>
