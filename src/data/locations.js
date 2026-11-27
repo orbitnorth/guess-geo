@@ -5,7 +5,7 @@
 //  Wikimedia Commons; the URLs request a resized version so the panel
 //  loads quickly.
 // ---------------------------------------------------------------------
-import locationsData from './locations.json'
+import locationsData from './locations.json' with { type: 'json' }
 
 export const ROUNDS = 5
 export const MAX_POINTS = 5000

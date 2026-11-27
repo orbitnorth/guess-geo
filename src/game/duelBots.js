@@ -1,4 +1,4 @@
-import { distanceKm } from './geo'
+import { distanceKm } from './geo.js'
 
 export const INITIAL_HP = 5000
 
@@ -86,10 +86,10 @@ export function generateBotGuess(bot, targetLocation) {
   // Normalize longitude to [-180, 180]
   degLon = ((degLon + 180) % 360 + 360) % 360 - 180
 
-  // Compute simulated response time in seconds
-  const minTime = bot.minTimeSec || 10
-  const maxTime = bot.maxTimeSec || 25
-  const thinkTimeSec = Math.round(minTime + Math.random() * (maxTime - minTime))
+  // Compute simulated response time in seconds (must be within 15-second round)
+  const minTime = bot.minTimeSec || bot.minSec || 3
+  const maxTime = Math.min(12, bot.maxTimeSec || bot.maxSec || 10)
+  const thinkTimeSec = Math.max(2, Math.round(minTime + Math.random() * (maxTime - minTime)))
 
   return {
     lat: degLat,

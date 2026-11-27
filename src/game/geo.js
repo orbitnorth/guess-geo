@@ -28,7 +28,17 @@ export function vector3ToLatLon(point) {
 }
 
 // Great-circle distance in kilometres (haversine formula).
+// Supports both distanceKm(p1, p2) and distanceKm(lat1, lon1, lat2, lon2).
 export function distanceKm(lat1, lon1, lat2, lon2) {
+  if (typeof lat1 === 'object' && lat1 !== null) {
+    const p1 = lat1
+    const p2 = lon1
+    lat1 = p1.lat
+    lon1 = p1.lon
+    lat2 = p2.lat
+    lon2 = p2.lon
+  }
+
   const R = 6371
   const dLat = THREE.MathUtils.degToRad(lat2 - lat1)
   const dLon = THREE.MathUtils.degToRad(lon2 - lon1)

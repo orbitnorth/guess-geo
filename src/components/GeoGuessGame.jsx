@@ -277,6 +277,8 @@ export default function GeoGuessGame({ initialDuelRoom = '', autoStartDuel = fal
         badgeVariant: 'yellow',
         minSec: 3,
         maxSec: 10,
+        minTimeSec: 3,
+        maxTimeSec: 10,
         baseErrorKm: 450,
         varianceKm: 280,
       }
