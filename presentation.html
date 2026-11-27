@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GeoGuess Globe - 3D WebGL Project Presentation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700;800&family=Nunito:wght@400;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0c1824;
+      --card-bg: rgba(18, 32, 47, 0.85);
+      --card-border: rgba(56, 189, 248, 0.25);
+      --text-main: #f1f7fb;
+      --text-soft: #94b2c7;
+      --green: #58cc02;
+      --green-dark: #46a302;
+      --blue: #1cb0f6;
+      --blue-dark: #1899d6;
+      --yellow: #ffc800;
+      --coral: #ff4b4b;
+      --font-display: 'Fredoka', 'Nunito', sans-serif;
+      --font-body: 'Nunito', sans-serif;
+      --font-code: 'JetBrains Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: radial-gradient(circle at 50% 20%, #152b40 0%, #081119 100%);
+      color: var(--text-main);
+      font-family: var(--font-body);
+      min-height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      user-select: none;
+    }
+
+    /* Top presentation navigation bar */
+    .deck-header {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 64px;
+      padding: 0 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(8, 17, 25, 0.7);
+      backdrop-filter: blur(12px);
+      z-index: 50;
+    }
+
+    .deck-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--blue);
+    }
+
+    .brand-icon {
+      font-size: 22px;
+    }
+
+    .member-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      background: rgba(28, 176, 246, 0.15);
+      border: 1.5px solid rgba(28, 176, 246, 0.4);
+      color: var(--blue);
+      transition: all 0.25s ease;
+    }
+
+    .member-badge.part-1 {
+      background: rgba(88, 204, 2, 0.15);
+      border-color: rgba(88, 204, 2, 0.4);
+      color: var(--green);
+    }
+
+    .member-badge.part-2 {
+      background: rgba(28, 176, 246, 0.15);
+      border-color: rgba(28, 176, 246, 0.4);
+      color: var(--blue);
+    }
+
+    .member-badge.part-3 {
+      background: rgba(255, 200, 0, 0.15);
+      border-color: rgba(255, 200, 0, 0.4);
+      color: var(--yellow);
+    }
+
+    /* Slide viewport */
+    .slide-viewport {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 72px 24px 80px;
+      position: relative;
+    }
+
+    .slide {
+      display: none;
+      width: 100%;
+      max-width: 1100px;
+      animation: slideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .slide.active {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(18px) scale(0.985);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    /* Slide Elements */
+    .slide-title-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .slide-subtitle {
+      font-size: 13.5px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-soft);
+    }
+
+    .slide-title {
+      font-family: var(--font-display);
+      font-size: 34px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: #ffffff;
+      line-height: 1.15;
+    }
+
+    .slide-content-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 20px;
+      margin-top: 8px;
+    }
+
+    .content-card {
+      background: var(--card-bg);
+      border: 1.5px solid var(--card-border);
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+      backdrop-filter: blur(10px);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .card-heading {
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 800;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .card-text {
+      font-size: 14.5px;
+      line-height: 1.55;
+      color: var(--text-soft);
+    }
+
+    .card-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      font-size: 14px;
+      color: var(--text-soft);
+    }
+
+    .card-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      line-height: 1.45;
+    }
+
+    .card-list li strong {
+      color: #ffffff;
+    }
+
+    .check-icon {
+      color: var(--green);
+      font-weight: bold;
+      flex-shrink: 0;
+    }
+
+    /* Code block container */
+    .code-block {
+      background: #060d13;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 14px 16px;
+      font-family: var(--font-code);
+      font-size: 12.5px;
+      color: #60a5fa;
+      line-height: 1.55;
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    .code-kw { color: #f472b6; }
+    .code-fn { color: #38bdf8; }
+    .code-str { color: #4ade80; }
+    .code-num { color: #fbbf24; }
+    .code-comment { color: #64748b; font-style: italic; }
+
+    /* Title Slide Special Styling */
+    .hero-slide {
+      text-align: center;
+      align-items: center;
+      gap: 22px !important;
+    }
+
+    .hero-logo-box {
+      font-size: 64px;
+      filter: drop-shadow(0 10px 20px rgba(28, 176, 246, 0.4));
+      animation: float 4s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: 48px;
+      font-weight: 800;
+      color: #ffffff;
+      line-height: 1.1;
+    }
+
+    .hero-subtitle {
+      font-size: 18px;
+      color: var(--text-soft);
+      max-width: 650px;
+      line-height: 1.5;
+    }
+
+    .team-members-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 14px;
+      justify-content: center;
+    }
+
+    .member-pill {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 14px;
+      padding: 12px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .member-pill .member-role {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .member-pill.m1 .member-role { color: var(--green); }
+    .member-pill.m2 .member-role { color: var(--blue); }
+    .member-pill.m3 .member-role { color: var(--yellow); }
+
+    .member-pill .member-name {
+      font-family: var(--font-display);
+      font-size: 15px;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    /* Bottom Control Bar */
+    .deck-footer {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 68px;
+      padding: 0 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(8, 17, 25, 0.7);
+      backdrop-filter: blur(12px);
+      z-index: 50;
+    }
+
+    .deck-progress {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .progress-bar-wrap {
+      width: 200px;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--green), var(--blue), var(--yellow));
+      transition: width 0.3s ease;
+    }
+
+    .slide-counter {
+      font-family: var(--font-code);
+      font-size: 13px;
+      color: var(--text-soft);
+      min-width: 50px;
+    }
+
+    .deck-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-nav {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #ffffff;
+      padding: 8px 16px;
+      border-radius: 12px;
+      font-family: var(--font-display);
+      font-size: 13.5px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+    }
+
+    .btn-nav:hover {
+      background: rgba(255, 255, 255, 0.16);
+      transform: translateY(-1px);
+    }
+
+    .btn-nav:active {
+      transform: translateY(1px);
+    }
+
+    .btn-primary {
+      background: var(--blue);
+      border-color: var(--blue-dark);
+      box-shadow: 0 3px 0 var(--blue-dark);
+    }
+
+    .btn-primary:hover {
+      background: #25baff;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Bar -->
+  <header class="deck-header">
+    <div class="deck-brand">
+      <span class="brand-icon">🌍</span>
+      <span>GeoGuess Globe</span>
+    </div>
+
+    <div id="memberBadge" class="member-badge part-1">
+      <span id="badgeIcon">👤</span>
+      <span id="badgeText">Part 1: Full-Stack Architecture</span>
+    </div>
+  </header>
+
+  <!-- Slide Viewport -->
+  <main class="slide-viewport">
+
+    <!-- Slide 1: Title & Overview -->
+    <section class="slide hero-slide active" data-part="intro" data-speaker="Team Presentation">
+      <div class="hero-logo-box">🌍⚔️</div>
+      <h1 class="hero-title">GeoGuess Globe: 3D WebGL</h1>
+      <p class="hero-subtitle">
+        An interactive WebGL geography challenge built with Three.js, Next.js 16, and real-time 1v1 multi-round battles.
+      </p>
+
+      <div class="team-members-bar">
+        <div class="member-pill m1">
+          <span class="member-role">Member 1</span>
+          <span class="member-name">Architecture & Gameplay</span>
+        </div>
+        <div class="member-pill m2">
+          <span class="member-role">Member 2</span>
+          <span class="member-name">3D Globe & WebGL Shaders</span>
+        </div>
+        <div class="member-pill m3">
+          <span class="member-role">Member 3</span>
+          <span class="member-name">Math, Raycasting & Visual FX</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 2: Member 1 - Full Stack Architecture -->
+    <section class="slide" data-part="1" data-speaker="Member 1: Architecture">
+      <div class="slide-title-wrap">
+        <span class="slide-subtitle">Part 1 &bull; Member 1</span>
+        <h2 class="slide-title">Project Structure & Full-Stack Engine</h2>
+      </div>
+
+      <div class="slide-content-grid">
+        <div class="content-card">
+          <h3 class="card-heading">🏗️ Framework & Backend</h3>
+          <ul class="card-list">
+            <li><span class="check-icon">✔</span> <strong>Next.js 16 (Turbopack):</strong> Hybrid App Router supporting both high-speed client-side 3D canvasing and server-side API routes.</li>
+            <li><span class="check-icon">✔</span> <strong>Serverless SQLite & Drizzle:</strong> Zero-dependency database with auto-initialization (`initDb()`) in `/tmp` for serverless environments.</li>
+            <li><span class="check-icon">✔</span> <strong>JWT & Auth Pipeline:</strong> Secure stateless sessions (`jose` HS256) storing explorer profiles and custom avatars.</li>
+          </ul>
+        </div>
+
+        <div class="content-card">
+          <h3 class="card-heading">📁 Component Decoupling</h3>
+          <ul class="card-list">
+            <li><span class="check-icon">✔</span> <strong>`GlobeEngine.js`:</strong> 100% pure Three.js imperative rendering engine. Completely isolated from React re-renders.</li>
+            <li><span class="check-icon">✔</span> <strong>`GeoGuessGame.jsx`:</strong> State controller coordinating the round deck, timer, score calculation, and duel mechanics.</li>
+            <li><span class="check-icon">✔</span> <strong>UI Modals & HUD:</strong> Lightweight overlay components (`DuelHud`, `Modal`, `RegisterModal`).</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 3: Member 1 - Game Loop & Duel Synchronization -->
+    <section class="slide" data-part="1" data-speaker="Member 1: Gameplay Systems">
+      <div class="slide-title-wrap">
+        <span class="slide-subtitle">Part 1 &bull; Member 1</span>
+        <h2 class="slide-title">1v1 Duel Arena & Room Synchronization</h2>
+      </div>
+
+      <div class="slide-content-grid">
+        <div class="content-card">
+          <h3 class="card-heading">⚔️ 5,000 HP Clash Mechanics</h3>
+          <p class="card-text">
+            Each player starts with 5,000 HP. Distance difference between guesses translates directly to damage against the further player.
+          </p>
+          <ul class="card-list">
+            <li><span class="check-icon">✔</span> <strong>15-Second Rounds:</strong> High-paced countdown timer with auto-lock on expiration.</li>
+            <li><span class="check-icon">✔</span> <strong>Damage Multipliers:</strong> Scale up to 1.5x in later rounds to prevent stale ties.</li>
+          </ul>
+        </div>
+
+        <div class="content-card">
+          <h3 class="card-heading">🔗 Synchronized UUID Subroutes</h3>
+          <p class="card-text">
+            Rooms use deterministic PRNG seeds derived from room UUIDs so that both players explore identical mystery locations without needing complex WebSocket state servers.
+          </p>
+          <div class="code-block"><span class="code-comment">// Room invite subroute: /invite/[uuid]</span>
+<span class="code-kw">const</span> { uuid } = <span class="code-fn">useParams</span>()
+<span class="code-kw">const</span> rngSeed = <span class="code-fn">hashString</span>(uuid)
+<span class="code-kw">const</span> matchDeck = <span class="code-fn">buildDeterministicDeck</span>(rngSeed)</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 4: Member 2 - Three.js WebGL Pipeline -->
+    <section class="slide" data-part="2" data-speaker="Member 2: WebGL Scene">
+      <div class="slide-title-wrap">
+        <span class="slide-subtitle">Part 2 &bull; Member 2</span>
+        <h2 class="slide-title">WebGL Scene Setup & Render Pipeline</h2>
+      </div>
+
+      <div class="slide-content-grid">
+        <div class="content-card">
+          <h3 class="card-heading">🎨 High-Performance Renderer</h3>
+          <p class="card-text">
+            Initialized with ACES Filmic tone mapping and device pixel ratio capping for smooth 60 FPS mobile and desktop performance.
+          </p>
+          <div class="code-block"><span class="code-kw">this</span>.renderer = <span class="code-kw">new</span> THREE.<span class="code-fn">WebGLRenderer</span>({
+  antialias: <span class="code-kw">true</span>,
+  alpha: <span class="code-kw">true</span>,
+  powerPreference: <span class="code-str">'high-performance'</span>,
+})
+<span class="code-kw">this</span>.renderer.toneMapping = THREE.ACESFilmicToneMapping
+<span class="code-kw">this</span>.renderer.toneMappingExposure = <span class="code-num">1.18</span></div>
+        </div>
+
+        <div class="content-card">
+          <h3 class="card-heading">🕹️ OrbitControls with Inertial Damping</h3>
+          <ul class="card-list">
+            <li><span class="check-icon">✔</span> <strong>Smooth Damping:</strong> `dampingFactor = 0.07` produces an organic, heavy rotational feel.</li>
+            <li><span class="check-icon">✔</span> <strong>Polar Clamping:</strong> Prevents gimbal flipping by locking vertical angles between `0.15` and `π - 0.15`.</li>
+            <li><span class="check-icon">✔</span> <strong>Idle Auto-Rotate:</strong> Seamless `0.35` speed drift that smoothly disengages on user touch or drag.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 5: Member 2 - Globe Mesh & Texture Engine -->
+    <section class="slide" data-part="2" data-speaker="Member 2: Geometry & Textures">
+      <div class="slide-title-wrap">
+        <span class="slide-subtitle">Part 2 &bull; Member 2</span>
+        <h2 class="slide-title">Globe Geometry & Multi-Texture Presets</h2>
+      </div>
+
+      <div class="slide-content-grid">
+        <div class="content-card">
+          <h3 class="card-heading">🌐 Sphere Geometry & Anisotropy</h3>
+          <p class="card-text">
+            A 72x72 segmented sphere paired with anisotropic filtering to eliminate blurry coastlines when viewing continents at sharp glancing angles:
+          </p>
+          <div class="code-block"><span class="code-kw">this</span>.globe = <span class="code-kw">new</span> THREE.<span class="code-fn">Mesh</span>(
+  <span class="code-kw">new</span> THREE.<span class="code-fn">SphereGeometry</span>(<span class="code-num">5</span>, <span class="code-num">72</span>, <span class="code-num">72</span>),
+  <span class="code-kw">this</span>.globeMaterial
+)
+earthTexture.anisotropy = renderer.capabilities.<span class="code-fn">getMaxAnisotropy</span>()</div>
+        </div>
+
+        <div class="content-card">
+          <h3 class="card-heading">🖼️ Real-Time Texture Hot-Swapping</h3>
+          <ul class="card-list">
+            <li><span class="check-icon">✔</span> <strong>Day Satellite:</strong> Photorealistic natural Earth satellite imagery.</li>
+            <li><span class="check-icon">✔</span> <strong>NASA Blue Marble:</strong> High-contrast azure oceans with lush continental vegetation.</li>
+            <li><span class="check-icon">✔</span> <strong>Cartographic Atlas:</strong> Light geographic relief with graticule coordinates.</li>
+            <li><span class="check-icon">✔</span> <strong>Zero Rebuilds:</strong> Swaps active textures via cache map without dropping WebGL context.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 6: Member 2 - Custom Atmosphere GLSL Shader -->
+    <section class="slide" data-part="2" data-speaker="Member 2: Shaders & Lighting">
+      <div class="slide-title-wrap">
+        <span class="slide-subtitle">Part 2 &bull; Member 2</span>
+        <h2 class="slide-title">Custom GLSL Atmosphere & 3-Point Lighting</h2>
+      </div>
+
+      <div class="slide-content-grid">
+        <div class="content-card">
+          <h3 class="card-heading">✨ Custom GLSL Fresnel Rim Shader</h3>
+          <p class="card-text">
+            Renders a glowing planetary halo on `BackSide` geometry using an exponential dot-product falloff:
+          </p>
+          <div class="code-block"><span class="code-comment">// GLSL Fragment Shader</span>
+<span class="code-kw">varying</span> vec3 vNormal;
+<span class="code-kw">void</span> <span class="code-fn">main</span>() {
+  <span class="code-kw">float</span> rim = <span class="code-fn">pow</span>(<span class="code-num">0.62</span> - <span class="code-fn">dot</span>(vNormal, <span class="code-fn">vec3</span>(<span class="code-num">0.0</span>, <span class="code-num">0.0</span>, <span class="code-num">1.0</span>)), <span class="code-num">3.2</span>);
+  gl_FragColor = <span class="code-fn">vec4</span>(glowColor, <span class="code-num">1.0</span>) * <span class="code-fn">clamp</span>(rim * intensity, <span class="code-num">0.0</span>, <span class="code-num">1.0</span>);
+}</div>
+        </div>
+
+        <div class="content-card">
+          <h3 class="card-heading">💡 Complete Illumination Rig</h3>
+          <ul class="card-list">
+            <li><span class="check-icon">✔</span> <strong>Dual Opposing Suns:</strong> Directional lights at `(10, 8, 10)` and `(-10, -8, -10)` so neither hemisphere is pitched in darkness.</li>
+            <li><span class="check-icon">✔</span> <strong>Hemisphere Sky Light:</strong> Subtle gradient between white zenith and blue nadir bounce.</li>
+            <li><span class="check-icon">✔</span> <strong>Camera Fill Light:</strong> Parented directly to camera to act as a headlight tracking user gaze.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 7: Member 3 - Spherical Math & Geodesics -->
+    <section class="slide" data-part="3" data-speaker="Member 3: Spherical Math">
+      <div class="slide-title-wrap">
+        <span class="slide-subtitle">Part 3 &bull; Member 3</span>
+        <h2 class="slide-title">Spherical Coordinates & Haversine Distance</h2>
+      </div>
+
+      <div class="slide-content-grid">
+        <div class="content-card">
+          <h3 class="card-heading">📐 Equirectangular to 3D Cartesian</h3>
+          <p class="card-text">
+            Translates geographic latitude ($-90^\circ$ to $+90^\circ$) and longitude ($-180^\circ$ to $+180^\circ$) into 3D Cartesian coordinates on the sphere:
+          </p>
+          <div class="code-block"><span class="code-kw">const</span> phi = THREE.MathUtils.<span class="code-fn">degToRad</span>(<span class="code-num">90</span> - lat)
+<span class="code-kw">const</span> theta = THREE.MathUtils.<span class="code-fn">degToRad</span>(lon + <span class="code-num">180</span>)
+
+<span class="code-kw">return new</span> THREE.<span class="code-fn">Vector3</span>(
+  -radius * Math.<span class="code-fn">sin</span>(phi) * Math.<span class="code-fn">cos</span>(theta),
+  radius * Math.<span class="code-fn">cos</span>(phi),
+  radius * Math.<span class="code-fn">sin</span>(phi) * Math.<span class="code-fn">sin</span>(theta)
+)</div>
+        </div>
+
+        <div class="content-card">
+          <h3 class="card-heading">📏 Great-Circle Haversine Formula</h3>
+          <p class="card-text">
+            Calculates exact planetary surface distance in kilometers:
+          </p>
+          <div class="code-block">a = <span class="code-fn">sin²</span>(Δlat/2) + <span class="code-fn">cos</span>(lat₁) &times; <span class="code-fn">cos</span>(lat₂) &times; <span class="code-fn">sin²</span>(Δlon/2)
+distance = <span class="code-num">2</span> &times; <span class="code-num">6371</span> &times; <span class="code-fn">asin</span>(<span class="code-fn">sqrt</span>(a))</div>
+          <ul class="card-list" style="margin-top: 8px;">
+            <li><span class="check-icon">✔</span> Drives score calculation (0 to 5,000 pts).</li>
+            <li><span class="check-icon">✔</span> Calculates 1v1 battle HP damage penalties.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 8: Member 3 - Raycasting & Procedural Flag Waves -->
+    <section class="slide" data-part="3" data-speaker="Member 3: Interactions & Meshes">
+      <div class="slide-title-wrap">
+        <span class="slide-subtitle">Part 3 &bull; Member 3</span>
+        <h2 class="slide-title">Raycasting & Procedural Flag Wave Animation</h2>
+      </div>
+
+      <div class="slide-content-grid">
+        <div class="content-card">
+          <h3 class="card-heading">🎯 Screen-to-Globe Raycasting</h3>
+          <p class="card-text">
+            Unprojects 2D viewport coordinates onto the 3D globe surface and aligns the flag perpendicular to the sphere normal:
+          </p>
+          <div class="code-block"><span class="code-kw">this</span>.raycaster.<span class="code-fn">setFromCamera</span>(<span class="code-kw">this</span>.pointer, <span class="code-kw">this</span>.camera)
+<span class="code-kw">const</span> hits = <span class="code-kw">this</span>.raycaster.<span class="code-fn">intersectObject</span>(<span class="code-kw">this</span>.globe)
+<span class="code-kw">if</span> (hits.length > <span class="code-num">0</span>) {
+  flag.position.<span class="code-fn">copy</span>(hits[<span class="code-num">0</span>].point)
+  flag.quaternion.<span class="code-fn">setFromUnitVectors</span>(Y_AXIS, hits[<span class="code-num">0</span>].point.<span class="code-fn">normalize</span>())
+}</div>
+        </div>
+
+        <div class="content-card">
+          <h3 class="card-heading">🚩 Procedural Vertex Sine Displacement</h3>
+          <p class="card-text">
+            In the render loop, flag cloth vertices oscillate dynamically to simulate fluttering in the wind:
+          </p>
+          <div class="code-block"><span class="code-kw">for</span> (<span class="code-kw">let</span> i = <span class="code-num">0</span>; i < pos.count; i++) {
+  <span class="code-kw">const</span> x = pos.<span class="code-fn">getX</span>(i)
+  <span class="code-kw">const</span> z = Math.<span class="code-fn">sin</span>(x * <span class="code-num">11</span> - time * <span class="code-num">5.5</span>) * <span class="code-num">0.05</span> * (x / FLAG_W)
+  pos.<span class="code-fn">setZ</span>(i, z)
+}
+geometry.attributes.position.needsUpdate = <span class="code-kw">true</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 9: Member 3 - 3D Geodesic Arcs & Cinematic Camera -->
+    <section class="slide" data-part="3" data-speaker="Member 3: Arcs & Camera">
+      <div class="slide-title-wrap">
+        <span class="slide-subtitle">Part 3 &bull; Member 3</span>
+        <h2 class="slide-title">Geodesic 3D Arcs & Adaptive Camera Reveal</h2>
+      </div>
+
+      <div class="slide-content-grid">
+        <div class="content-card">
+          <h3 class="card-heading">🌈 Elevated 3D Catmull-Rom Arcs</h3>
+          <p class="card-text">
+            Interpolates points along the great circle, raising the altitude proportionally to distance using a sine curve:
+          </p>
+          <div class="code-block"><span class="code-kw">const</span> curve = <span class="code-kw">new</span> THREE.<span class="code-fn">CatmullRomCurve3</span>(points)
+<span class="code-kw">const</span> tube = <span class="code-kw">new</span> THREE.<span class="code-fn">TubeGeometry</span>(curve, <span class="code-num">90</span>, <span class="code-num">0.038</span>, <span class="code-num">8</span>)
+<span class="code-comment">// Progressive draw animation:</span>
+tube.<span class="code-fn">setDrawRange</span>(<span class="code-num">0</span>, progress * totalIndices)</div>
+        </div>
+
+        <div class="content-card">
+          <h3 class="card-heading">🎬 Spherical SLERP Camera Flight</h3>
+          <ul class="card-list">
+            <li><span class="check-icon">✔</span> <strong>SLERP Arc Interpolation:</strong> Camera flies along a great circle towards the midpoint between guess and answer pins.</li>
+            <li><span class="check-icon">✔</span> <strong>Adaptive Distance Framing:</strong> Automatically backs camera away on long-distance errors (e.g. 15,000 km) so both flags fit on screen.</li>
+            <li><span class="check-icon">✔</span> <strong>Dual-Flag Reveals:</strong> Multi-player duel reveals show Player 1 (Blue), Player 2 (Red), and Mystery Location (Green) concurrently.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 10: Summary & Conclusion -->
+    <section class="slide hero-slide" data-part="conclusion" data-speaker="Team Summary">
+      <div class="hero-logo-box">🏆</div>
+      <h2 class="hero-title">Conclusion & Key Takeaways</h2>
+      <p class="hero-subtitle">
+        GeoGuess Globe demonstrates how combining pure WebGL 3D mathematics with modern React architectures creates a rich, gamified educational experience.
+      </p>
+
+      <div class="team-members-bar">
+        <div class="member-pill m1">
+          <span class="member-name">⚡ 60 FPS Three.js Performance</span>
+        </div>
+        <div class="member-pill m2">
+          <span class="member-name">🌐 Custom GLSL Atmosphere</span>
+        </div>
+        <div class="member-pill m3">
+          <span class="member-name">⚔️ Live 1v1 Globe Duels</span>
+        </div>
+      </div>
+
+      <div style="margin-top: 20px;">
+        <span class="member-badge part-1" style="font-size: 14px; padding: 10px 22px;">Thank you! Questions?</span>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Bottom Navigation Deck -->
+  <footer class="deck-footer">
+    <div class="deck-progress">
+      <div class="progress-bar-wrap">
+        <div id="progressFill" class="progress-bar-fill" style="width: 10%;"></div>
+      </div>
+      <span id="slideCounter" class="slide-counter">1 / 10</span>
+    </div>
+
+    <div class="deck-controls">
+      <button id="btnPrev" class="btn-nav" title="Previous Slide (←)">
+        <span>← Prev</span>
+      </button>
+      <button id="btnNext" class="btn-nav btn-primary" title="Next Slide (→ or Space)">
+        <span>Next →</span>
+      </button>
+      <button id="btnFullscreen" class="btn-nav" title="Toggle Fullscreen">
+        <span>⛶</span>
+      </button>
+    </div>
+  </footer>
+
+  <script>
+    const slides = document.querySelectorAll('.slide')
+    const progressFill = document.getElementById('progressFill')
+    const slideCounter = document.getElementById('slideCounter')
+    const memberBadge = document.getElementById('memberBadge')
+    const badgeText = document.getElementById('badgeText')
+    const badgeIcon = document.getElementById('badgeIcon')
+    const btnPrev = document.getElementById('btnPrev')
+    const btnNext = document.getElementById('btnNext')
+    const btnFullscreen = document.getElementById('btnFullscreen')
+
+    let currentIndex = 0
+
+    function updateSlide(index) {
+      if (index < 0) index = 0
+      if (index >= slides.length) index = slides.length - 1
+      currentIndex = index
+
+      slides.forEach((slide, i) => {
+        slide.classList.toggle('active', i === currentIndex)
+      })
+
+      // Update progress
+      const progressPercent = ((currentIndex + 1) / slides.length) * 100
+      progressFill.style.width = `${progressPercent}%`
+      slideCounter.textContent = `${currentIndex + 1} / ${slides.length}`
+
+      // Update speaker badge
+      const activeSlide = slides[currentIndex]
+      const part = activeSlide.getAttribute('data-part')
+      const speaker = activeSlide.getAttribute('data-speaker')
+
+      memberBadge.className = 'member-badge'
+      if (part === '1') {
+        memberBadge.classList.add('part-1')
+        badgeIcon.textContent = '👤'
+      } else if (part === '2') {
+        memberBadge.classList.add('part-2')
+        badgeIcon.textContent = '🌐'
+      } else if (part === '3') {
+        memberBadge.classList.add('part-3')
+        badgeIcon.textContent = '📐'
+      } else {
+        memberBadge.classList.add('part-1')
+        badgeIcon.textContent = '🌍'
+      }
+      badgeText.textContent = speaker || 'GeoGuess Presentation'
+
+      btnPrev.disabled = currentIndex === 0
+      btnNext.textContent = currentIndex === slides.length - 1 ? 'Finish ↺' : 'Next →'
+    }
+
+    btnPrev.addEventListener('click', () => updateSlide(currentIndex - 1))
+    btnNext.addEventListener('click', () => {
+      if (currentIndex === slides.length - 1) {
+        updateSlide(0)
+      } else {
+        updateSlide(currentIndex + 1)
+      }
+    })
+
+    // Keyboard controls (Arrow keys and Space)
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === 'Space' || e.key === ' ') {
+        e.preventDefault()
+        if (currentIndex === slides.length - 1) {
+          updateSlide(0)
+        } else {
+          updateSlide(currentIndex + 1)
+        }
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault()
+        updateSlide(currentIndex - 1)
+      } else if (e.key === 'f' || e.key === 'F') {
+        toggleFullscreen()
+      }
+    })
+
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {})
+      } else {
+        document.exitFullscreen().catch(() => {})
+      }
+    }
+
+    btnFullscreen.addEventListener('click', toggleFullscreen)
+
+    // Initialize
+    updateSlide(0)
+  </script>
+</body>
+</html>
