@@ -2331,7 +2331,11 @@ kbd {
    Cleanly separated, unmerged dialog experiences with cartoon avatars
    ===================================================================== */
 .modal-overlay {
-  z-index: 100;
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1000;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2339,6 +2343,7 @@ kbd {
   background: rgba(27, 47, 59, 0.65);
   backdrop-filter: blur(8px);
   animation: fadeIn 0.2s ease both;
+  cursor: pointer;
 }
 
 .modal-container,
@@ -2355,6 +2360,7 @@ kbd {
   overflow: hidden; /* Keeps outer corners cleanly curved without scrollbar bleeding */
   box-sizing: border-box;
   animation: popIn 0.25s cubic-bezier(0.18, 0.89, 0.32, 1.28) both;
+  cursor: default;
 }
 
 .modal-header {

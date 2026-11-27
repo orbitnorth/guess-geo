@@ -33,8 +33,8 @@ export function Modal({
   if (!isOpen) return null
 
   // Close on backdrop click (outside the modal dialog)
-  const handleBackdropClick = (e) => {
-    if (modalRef.current && !modalRef.current.contains(e.target)) {
+  const handleOverlayClick = (e) => {
+    if (e.target === e.currentTarget) {
       onClose?.()
     }
   }
@@ -52,12 +52,15 @@ export function Modal({
       role="dialog"
       aria-modal="true"
       aria-label={typeof title === 'string' ? title : 'Dialog'}
-      onClick={handleBackdropClick}
+      onClick={handleOverlayClick}
+      onMouseDown={handleOverlayClick}
     >
       <div
         ref={modalRef}
         className={`modal-container ${className}`.trim()}
         style={maxWidth ? { maxWidth } : undefined}
+        onClick={(e) => e.stopPropagation()}
+        onMouseDown={(e) => e.stopPropagation()}
       >
         {/* Fixed Modal Header */}
         <div className="modal-header">
