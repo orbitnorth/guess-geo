@@ -4726,7 +4726,107 @@ kbd {
 .duel-friend-section {
   display: flex;
   flex-direction: column;
+  gap: 14px;
+}
+
+.friend-action-selector {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  background: #f0f7fa;
+  padding: 4px;
+  border-radius: 14px;
+}
+
+.friend-pill-choice {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 9px 12px;
+  border-radius: 10px;
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink-soft);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.friend-pill-choice.is-active {
+  background: #ffffff;
+  color: var(--blue-dark);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.friend-join-box,
+.friend-host-box {
+  display: flex;
+  flex-direction: column;
   gap: 12px;
+}
+
+.friend-input-wrapper {
+  display: flex;
+  gap: 8px;
+  position: relative;
+}
+
+.friend-code-input {
+  flex: 1;
+  border: 2px solid var(--line);
+  border-radius: 14px;
+  padding: 12px 16px;
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 2.5px;
+  color: var(--blue-dark);
+  background: #fafcfe;
+  text-transform: uppercase;
+  transition: all 0.16s ease;
+}
+
+.friend-code-input:focus {
+  border-color: var(--blue);
+  background: #ffffff;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(28, 176, 246, 0.2);
+}
+
+.btn-paste-code {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #ffffff;
+  border: 2px solid var(--line);
+  border-radius: 14px;
+  padding: 0 16px;
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+  cursor: pointer;
+  box-shadow: 0 3px 0 var(--line);
+  transition: all 0.15s ease;
+}
+
+.btn-paste-code:hover {
+  border-color: var(--blue);
+  color: var(--blue-dark);
+  transform: translateY(-1px);
+}
+
+.friend-code-error {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--red);
+  margin-top: -4px;
 }
 
 .friend-info-desc {
@@ -4842,6 +4942,28 @@ kbd {
 [data-theme="dark"] .duel-tab-btn.is-active {
   background: #1a2c3d;
   color: #60a5fa;
+}
+
+[data-theme="dark"] .friend-action-selector {
+  background: #0f1a24;
+}
+
+[data-theme="dark"] .friend-pill-choice.is-active {
+  background: #1a2c3d;
+  color: #60a5fa;
+}
+
+[data-theme="dark"] .friend-code-input {
+  background: #0f1a24;
+  border-color: var(--line);
+  color: #60a5fa;
+}
+
+[data-theme="dark"] .btn-paste-code {
+  background: #162636;
+  border-color: var(--line);
+  color: var(--ink);
+  box-shadow: 0 3px 0 #0d1720;
 }
 
 [data-theme="dark"] .friend-code-box {

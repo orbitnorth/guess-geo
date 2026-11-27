@@ -5,6 +5,7 @@ import { GlobeEngine } from '@/game/GlobeEngine'
 import { distanceKm } from '@/game/geo'
 import {
   buildDeck,
+  buildDeckFromSeed,
   MAX_POINTS,
   MAX_TOTAL,
   scoreForDistance,
@@ -73,6 +74,18 @@ export default function GeoGuessGame() {
   const [duelRoundResult, setDuelRoundResult] = useState(null)
   const [isDuelMatchOver, setIsDuelMatchOver] = useState(false)
   const [duelWinner, setDuelWinner] = useState(null)
+  const [initialDuelCode, setInitialDuelCode] = useState('')
+
+  // Check URL query parameters for duel room codes (e.g. ?duel=3CJ4)
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const params = new URLSearchParams(window.location.search)
+    const duelParam = params.get('duel')
+    if (duelParam) {
+      setInitialDuelCode(duelParam.toUpperCase().trim())
+      setActiveModal('duel_lobby')
+    }
+  }, [])
 
   const botGuessRef = useRef(null)
   const duelTimerRef = useRef(null)
@@ -248,9 +261,25 @@ export default function GeoGuessGame() {
   // ------------------------------------------------------------------
   //  1V1 DUEL MECHANICS
   // ------------------------------------------------------------------
-  const handleStartDuel = useCallback(({ bot }) => {
-    const chosenBot = bot || DUEL_BOTS[1]
-    const freshDeck = buildDeck()
+  const handleStartDuel = useCallback(({ bot, roomCode, opponentType, isHost }) => {
+    let chosenBot = bot || DUEL_BOTS[1]
+    let freshDeck = buildDeck()
+
+    if (opponentType === 'friend' && roomCode) {
+      freshDeck = buildDeckFromSeed(roomCode, 7)
+      chosenBot = {
+        id: `friend_${roomCode}`,
+        name: isHost ? `Friend (${roomCode})` : `Host (${roomCode})`,
+        avatar: 'wanderer',
+        tagline: `1v1 Room ${roomCode}`,
+        difficulty: 'Medium',
+        badgeVariant: 'yellow',
+        minSec: 6,
+        maxSec: 16,
+        baseErrorKm: 450,
+        varianceKm: 280,
+      }
+    }
 
     setDeck(freshDeck)
     setGameMode('duel')
@@ -856,6 +885,7 @@ export default function GeoGuessGame() {
         onClose={() => setActiveModal(null)}
         onStartDuel={handleStartDuel}
         user={user}
+        initialRoomCode={initialDuelCode}
       />
     </div>
   )
