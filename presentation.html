@@ -617,6 +617,96 @@
       margin-top: 4px;
     }
 
+    /* QR Code Showcase in Final Slide */
+    .qr-showcase-container {
+      display: inline-flex;
+      align-items: center;
+      gap: 24px;
+      background: #ffffff;
+      border: 2px solid var(--card-border);
+      border-radius: 20px;
+      padding: 16px 28px;
+      box-shadow: 0 4px 0 var(--card-border-strong), 0 16px 32px rgba(41, 89, 110, 0.08);
+      margin: 4px auto 0;
+      transition: all 0.22s ease;
+    }
+
+    .qr-showcase-container:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 0 var(--card-border-strong), 0 20px 36px rgba(41, 89, 110, 0.12);
+    }
+
+    .qr-box {
+      background: #ffffff;
+      padding: 6px;
+      border-radius: 12px;
+      border: 1.5px solid var(--card-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .qr-image {
+      width: 104px;
+      height: 104px;
+      display: block;
+      border-radius: 6px;
+      image-rendering: pixelated;
+    }
+
+    .qr-info {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      text-align: left;
+      gap: 6px;
+    }
+
+    .qr-badge {
+      display: inline-block;
+      font-family: var(--font-body);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: var(--blue-dark);
+      background: #e0f2fe;
+      border: 1px solid #bae6fd;
+      padding: 3px 10px;
+      border-radius: 999px;
+    }
+
+    .qr-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font-display);
+      font-size: 19px;
+      font-weight: 800;
+      color: var(--blue-dark);
+      text-decoration: none;
+      transition: color 0.18s ease;
+    }
+
+    .qr-link:hover {
+      color: var(--blue);
+      text-decoration: underline;
+    }
+
+    .qr-link-arrow {
+      font-size: 16px;
+      line-height: 1;
+    }
+
+    .qr-hint {
+      font-size: 13px;
+      color: var(--ink-soft);
+      margin: 0;
+      max-width: 300px;
+      line-height: 1.45;
+    }
+
     /* Bottom Presentation Navigation */
     .deck-footer {
       position: absolute;
@@ -1530,6 +1620,20 @@
       <p class="hero-sub-text">
         Interactive 3D WebGL Globe &bull; Fullstack Next.js &bull; Open for Live Demonstration
       </p>
+
+      <div class="qr-showcase-container">
+        <div class="qr-box">
+          <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPAAAADwAQMAAAAEm3vRAAAABlBMVEX///8AAABVwtN+AAAACXBIWXMAAA7EAAAOxAGVKw4bAAABXElEQVRYhe2YsRHCMAxFzblwmRE8SkZLRvMoHoEyRQ6hL8kGDiigtKwiBD9XOv0vRSHM+CdWkrjJn0wHfvSIzqFxwUG8Bdr5dZGbtOMs+caZ8xMla2vtN4muEwM/VdDET1nbyoqzb0n1hpvGqLD1fJfgaFiLRL0lW1oeheMVP2IjxiFaU3oLX1iydkY8S0AnOi8EPdXl8Ix5WFEXwc3KT77JmG86xzasiPtek+mL6tI0Nijm/iKX4LPiLVY4arluMZ9JJ4K3mIjEfZvl+sRQTsIbZ43H2NRmlG49TnGBi/SsHfFVY65xRNYwzqFBk4ksjY6D+KzoqTVjmVGCY9xDRWTzmjZjx3jV4tEvHSySbHmS34Z/X7ggOc1nUVeWtcU5zrYx2VsGVWNknWh4TEVGN3jLLhfPiftqQD72ZLhNvrGJSLbQoW9M6qcltSOsmrJiQgVhNUC9mJziGb/HHfyed/QEahEmAAAAAElFTkSuQmCC" alt="QR Code to guess-geo.vercel.app" class="qr-image" />
+        </div>
+        <div class="qr-info">
+          <span class="qr-badge">Try The App Live</span>
+          <a href="https://guess-geo.vercel.app/" target="_blank" rel="noopener noreferrer" class="qr-link">
+            <span>guess-geo.vercel.app</span>
+            <span class="qr-link-arrow">↗</span>
+          </a>
+          <p class="qr-hint">Scan with your smartphone camera to play 3D solo rounds and 1v1 duels.</p>
+        </div>
+      </div>
 
       <div class="team-cards-row">
         <div class="team-card m1">
