@@ -2426,11 +2426,38 @@ kbd {
 }
 
 .modal-body {
-  flex: 1;
+  flex: 1 1 auto;
+  min-height: 0;
   overflow-y: auto;
   overflow-x: hidden;
   padding: 20px 28px 24px;
   box-sizing: border-box;
+}
+
+/* Fixed Modal Footer Pinned to Bottom */
+.modal-footer {
+  flex-shrink: 0;
+  padding: 16px 28px 20px;
+  background: #ffffff;
+  border-top: 1.5px solid var(--line);
+  box-sizing: border-box;
+}
+
+.modal-footer-inner {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.modal-footer-inner.step-2-buttons {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+}
+
+.modal-footer .modal-footer-switch {
+  margin-top: 12px;
 }
 
 /* Custom Sleek Inset Scrollbars */
@@ -2994,11 +3021,13 @@ kbd {
   justify-content: center;
   gap: 8px;
   width: 100%;
-  padding: 13px 20px;
+  height: 48px;
+  padding: 0 20px;
   font-size: 15px;
   font-weight: 700;
-  margin-top: 6px;
+  margin-top: 0;
   border-radius: 16px;
+  box-sizing: border-box;
 }
 
 .modal-footer-switch {

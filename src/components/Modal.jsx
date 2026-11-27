@@ -13,6 +13,7 @@ export function Modal({
   className = '',
   maxWidth,
   children,
+  footer,
 }) {
   const modalRef = useRef(null)
 
@@ -89,6 +90,13 @@ export function Modal({
         <div className="modal-body custom-scrollbar">
           {children}
         </div>
+
+        {/* Fixed Modal Footer */}
+        {footer && (
+          <div className="modal-footer">
+            {footer}
+          </div>
+        )}
       </div>
     </div>
   )

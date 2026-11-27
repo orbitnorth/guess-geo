@@ -104,6 +104,58 @@ export function RegisterModal({ isOpen, onClose, onAuthSuccess, onSwitchToLogin 
       }
       className="register-modal"
       maxWidth={540}
+      footer={
+        step === 1 ? (
+          <div className="modal-footer-inner">
+            <button
+              type="submit"
+              form="register-step1-form"
+              className="btn btn-green btn-step-continue"
+            >
+              <span>Choose Avatar</span>
+              <Icon name="arrowRight" size={18} strokeWidth={2.4} />
+            </button>
+
+            <div className="modal-footer-switch">
+              <span>Already have an account?</span>
+              <button
+                type="button"
+                className="link-switch-btn"
+                onClick={() => {
+                  setStep(1)
+                  onSwitchToLogin()
+                }}
+              >
+                Sign In here
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div className="modal-footer-inner step-2-buttons">
+            <button
+              type="button"
+              className="btn btn-ghost btn-step-back"
+              onClick={() => {
+                setError('')
+                setStep(1)
+              }}
+              disabled={loading}
+            >
+              ← Back
+            </button>
+
+            <button
+              type="submit"
+              form="register-step2-form"
+              className="btn btn-green btn-auth-submit"
+              disabled={loading}
+            >
+              {loading ? 'Creating Explorer Account...' : 'Complete & Start Exploring'}
+              <Icon name="check" size={18} strokeWidth={2.6} />
+            </button>
+          </div>
+        )
+      }
     >
       {/* Onboarding Step Indicator */}
       <div className="onboarding-stepper" aria-label={`Onboarding Step ${step} of 2`}>
@@ -127,7 +179,7 @@ export function RegisterModal({ isOpen, onClose, onAuthSuccess, onSwitchToLogin 
 
       {step === 1 ? (
         /* STEP 1: Account Credentials */
-        <form onSubmit={handleNextStep} className="auth-step-form">
+        <form id="register-step1-form" onSubmit={handleNextStep} className="auth-step-form">
           <div className="form-fields-stack">
             <div className="form-group">
               <label htmlFor="reg-name" className="form-label">
@@ -194,31 +246,10 @@ export function RegisterModal({ isOpen, onClose, onAuthSuccess, onSwitchToLogin 
               </div>
             </div>
           </div>
-
-          <div className="form-actions-bottom">
-            <button type="submit" className="btn btn-green btn-step-continue">
-              <span>Choose Avatar</span>
-              <Icon name="arrowRight" size={18} strokeWidth={2.4} />
-            </button>
-
-            <div className="modal-footer-switch">
-              <span>Already have an account?</span>
-              <button
-                type="button"
-                className="link-switch-btn"
-                onClick={() => {
-                  setStep(1)
-                  onSwitchToLogin()
-                }}
-              >
-                Sign In here
-              </button>
-            </div>
-          </div>
         </form>
       ) : (
         /* STEP 2: Choose Cartoon Avatar */
-        <form onSubmit={handleFinalSubmit} className="auth-step-form">
+        <form id="register-step2-form" onSubmit={handleFinalSubmit} className="auth-step-form">
           <div className="avatar-step-container">
             {/* Active Avatar Highlight Banner */}
             <div className="selected-avatar-banner">
@@ -271,29 +302,6 @@ export function RegisterModal({ isOpen, onClose, onAuthSuccess, onSwitchToLogin 
                 )
               })}
             </div>
-          </div>
-
-          <div className="form-actions-bottom step-2-buttons">
-            <button
-              type="button"
-              className="btn btn-ghost btn-step-back"
-              onClick={() => {
-                setError('')
-                setStep(1)
-              }}
-              disabled={loading}
-            >
-              ← Back
-            </button>
-
-            <button
-              type="submit"
-              className="btn btn-green btn-auth-submit"
-              disabled={loading}
-            >
-              {loading ? 'Creating Explorer Account...' : 'Complete & Start Exploring'}
-              <Icon name="check" size={18} strokeWidth={2.6} />
-            </button>
           </div>
         </form>
       )}

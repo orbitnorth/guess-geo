@@ -55,6 +55,29 @@ export function LoginModal({ isOpen, onClose, onAuthSuccess, onSwitchToRegister 
       subtitle="Sign in with your username and password to continue your expedition."
       className="login-modal"
       maxWidth={480}
+      footer={
+        <div className="modal-footer-inner">
+          <button
+            type="submit"
+            form="login-form"
+            className="btn btn-blue btn-auth-submit"
+            disabled={loading}
+          >
+            {loading ? 'Signing In...' : 'Sign In to Expedition'}
+            <Icon name="arrowRight" size={17} strokeWidth={2.4} />
+          </button>
+          <div className="modal-footer-switch">
+            <span>Need a new explorer account?</span>
+            <button
+              type="button"
+              className="link-switch-btn"
+              onClick={onSwitchToRegister}
+            >
+              Create an account
+            </button>
+          </div>
+        </div>
+      }
     >
       {error && (
         <div className="auth-alert auth-alert-error" role="alert">
@@ -63,7 +86,7 @@ export function LoginModal({ isOpen, onClose, onAuthSuccess, onSwitchToRegister 
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="auth-form">
+      <form id="login-form" onSubmit={handleSubmit} className="auth-form">
         <div className="form-group">
           <label htmlFor="login-username" className="form-label">
             Username
@@ -109,27 +132,7 @@ export function LoginModal({ isOpen, onClose, onAuthSuccess, onSwitchToRegister 
             </button>
           </div>
         </div>
-
-        <button
-          type="submit"
-          className="btn btn-blue btn-auth-submit"
-          disabled={loading}
-        >
-          {loading ? 'Signing In...' : 'Sign In to Expedition'}
-          <Icon name="arrowRight" size={17} strokeWidth={2.4} />
-        </button>
       </form>
-
-      <div className="modal-footer-switch">
-        <span>Need a new explorer account?</span>
-        <button
-          type="button"
-          className="link-switch-btn"
-          onClick={onSwitchToRegister}
-        >
-          Create an account
-        </button>
-      </div>
     </Modal>
   )
 }
