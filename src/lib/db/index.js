@@ -143,6 +143,10 @@ export function initDb() {
   }
 }
 
+// Automatically initialize schema and tables on startup
+initDb()
+
+
 // Ensure tables exist on boot
 try {
   initDb()
