@@ -470,99 +470,47 @@
       border-color: rgba(255, 200, 0, 0.4);
     }
 
-    /* Hero Slides (Title & Ending) */
-    .hero-slide {
+    /* Hero Title Slide - Fullscreen View without Emojis/Badges */
+    body.is-title-slide .deck-header {
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-100%);
+      transition: all 0.3s ease;
+    }
+
+    body.is-title-slide .slide-viewport {
+      padding: 32px 32px 90px;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .slide.hero-slide {
       text-align: center;
       align-items: center;
       justify-content: center;
-      gap: 14px;
-      position: relative;
+      min-height: calc(100vh - 130px);
+      gap: 24px;
+      padding: 10px 0;
+      box-sizing: border-box;
     }
 
-    .hero-kicker {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 6px 18px;
-      background: rgba(255, 255, 255, 0.9);
-      border: 1.5px solid rgba(28, 176, 246, 0.4);
-      border-radius: 999px;
+    .hero-overline {
       font-family: var(--font-display);
-      font-size: 12.5px;
+      font-size: 13px;
       font-weight: 800;
-      color: var(--blue-dark);
-      letter-spacing: 0.6px;
+      letter-spacing: 3px;
       text-transform: uppercase;
-      box-shadow: 0 4px 14px rgba(28, 176, 246, 0.14);
-      backdrop-filter: blur(10px);
-    }
-
-    .kicker-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--green);
-      box-shadow: 0 0 10px var(--green);
-      animation: pulseDot 2s infinite ease-in-out;
-    }
-
-    @keyframes pulseDot {
-      0%, 100% { transform: scale(1); opacity: 1; }
-      50% { transform: scale(1.35); opacity: 0.55; }
-    }
-
-    .hero-mascot-wrapper {
-      position: relative;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 96px;
-      height: 96px;
-      margin: 2px auto 0;
-    }
-
-    .hero-mascot-glow {
-      position: absolute;
-      inset: -14px;
-      background: radial-gradient(circle, rgba(28, 176, 246, 0.35) 0%, rgba(88, 204, 2, 0.2) 50%, transparent 72%);
-      border-radius: 50%;
-      filter: blur(10px);
-      animation: pulseGlow 4s ease-in-out infinite alternate;
-    }
-
-    @keyframes pulseGlow {
-      0% { transform: scale(0.92); opacity: 0.7; }
-      100% { transform: scale(1.18); opacity: 1; }
-    }
-
-    .hero-mascot-box {
-      position: relative;
-      width: 84px;
-      height: 84px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 100%);
-      border: 2.5px solid rgba(28, 176, 246, 0.35);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 42px;
-      box-shadow: 0 10px 26px rgba(28, 176, 246, 0.22), inset 0 2px 4px rgba(255, 255, 255, 0.9);
-      animation: floatHero 3.5s ease-in-out infinite;
-    }
-
-    @keyframes floatHero {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-7px); }
+      color: var(--blue-dark);
     }
 
     .hero-main-title {
       font-family: var(--font-display);
-      font-size: 44px;
+      font-size: 60px;
       font-weight: 800;
       color: var(--ink);
-      line-height: 1.15;
-      letter-spacing: -0.8px;
-      margin-top: 2px;
+      line-height: 1.08;
+      letter-spacing: -1.5px;
+      margin: 0;
     }
 
     .hero-title-gradient {
@@ -573,56 +521,51 @@
     }
 
     .hero-sub-text {
-      font-size: 16px;
+      font-size: 18px;
       color: var(--ink-soft);
-      max-width: 720px;
-      line-height: 1.5;
+      max-width: 800px;
+      line-height: 1.6;
       margin: 0 auto;
     }
 
-    .hero-chips-row {
+    .hero-meta-row {
       display: flex;
       flex-wrap: wrap;
       align-items: center;
       justify-content: center;
-      gap: 10px;
+      gap: 16px;
+      font-family: var(--font-body);
+      font-size: 13.5px;
+      font-weight: 800;
+      color: var(--ink-soft);
+      letter-spacing: 0.3px;
     }
 
-    .hero-chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 5px 14px;
-      background: #ffffff;
-      border: 1.5px solid var(--card-border-strong);
-      border-radius: 999px;
-      font-family: var(--font-body);
-      font-size: 12.5px;
-      font-weight: 800;
-      color: var(--ink);
-      box-shadow: 0 2px 0 rgba(0, 0, 0, 0.04);
+    .hero-meta-dot {
+      color: var(--card-border-strong);
+      font-size: 16px;
     }
 
     .team-cards-row {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
-      margin-top: 6px;
+      gap: 22px;
+      margin-top: 8px;
       width: 100%;
-      max-width: 1060px;
+      max-width: 1100px;
     }
 
     .team-card {
       background: #ffffff;
       border: 2px solid var(--card-border);
       border-radius: 20px;
-      padding: 18px 20px;
-      box-shadow: 0 4px 0 var(--card-border-strong), 0 14px 28px rgba(41, 89, 110, 0.08);
+      padding: 24px 22px;
+      box-shadow: 0 4px 0 var(--card-border-strong), 0 16px 32px rgba(41, 89, 110, 0.08);
       display: flex;
       flex-direction: column;
       align-items: center;
       text-align: center;
-      gap: 5px;
+      gap: 6px;
       position: relative;
       overflow: hidden;
       transition: all 0.22s ease;
@@ -643,80 +586,35 @@
 
     .team-card:hover {
       transform: translateY(-4px);
-      box-shadow: 0 6px 0 var(--card-border-strong), 0 20px 36px rgba(41, 89, 110, 0.14);
-    }
-
-    .team-card-icon-bubble {
-      width: 42px;
-      height: 42px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
-      margin-bottom: 2px;
-    }
-
-    .team-card.m1 .team-card-icon-bubble {
-      background: var(--green-soft);
-      border: 1.5px solid rgba(88, 204, 2, 0.4);
-    }
-
-    .team-card.m2 .team-card-icon-bubble {
-      background: var(--blue-soft);
-      border: 1.5px solid rgba(28, 176, 246, 0.4);
-    }
-
-    .team-card.m3 .team-card-icon-bubble {
-      background: var(--yellow-soft);
-      border: 1.5px solid rgba(255, 200, 0, 0.4);
-    }
-
-    .team-card .member-tag {
-      font-family: var(--font-display);
-      font-size: 11px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-      padding: 3px 10px;
-      border-radius: 999px;
-    }
-
-    .team-card.m1 .member-tag {
-      background: var(--green-soft);
-      color: var(--green-dark);
-    }
-
-    .team-card.m2 .member-tag {
-      background: var(--blue-soft);
-      color: var(--blue-dark);
-    }
-
-    .team-card.m3 .member-tag {
-      background: var(--yellow-soft);
-      color: #926400;
+      box-shadow: 0 6px 0 var(--card-border-strong), 0 22px 40px rgba(41, 89, 110, 0.14);
     }
 
     .team-card .member-title {
       font-family: var(--font-display);
-      font-size: 17px;
+      font-size: 20px;
       font-weight: 800;
       color: var(--ink);
-      margin-top: 1px;
+      letter-spacing: -0.3px;
     }
 
     .team-card .member-role-title {
       font-family: var(--font-body);
-      font-size: 13px;
+      font-size: 13.5px;
       font-weight: 800;
-      color: var(--ink-soft);
+      color: var(--blue-dark);
+      letter-spacing: 0.3px;
+      margin-top: 1px;
     }
 
+    .team-card.m1 .member-role-title { color: var(--green-dark); }
+    .team-card.m2 .member-role-title { color: var(--blue-dark); }
+    .team-card.m3 .member-role-title { color: #926400; }
+
     .team-card .member-desc {
-      font-size: 12px;
-      color: var(--muted);
-      line-height: 1.45;
-      margin-top: 1px;
+      font-size: 12.5px;
+      color: var(--ink-soft);
+      line-height: 1.5;
+      margin-top: 4px;
     }
 
     /* Bottom Presentation Navigation */
@@ -839,18 +737,10 @@
   <main class="slide-viewport">
 
     <!-- ============================================================= -->
-    <!-- SLIDE 1: Title Slide (Team Overview) -->
+    <!-- SLIDE 1: Title Slide (Fullscreen Overview) -->
     <!-- ============================================================= -->
-    <section class="slide hero-slide active" data-part="intro" data-speaker="Team Introduction">
-      <div class="hero-kicker">
-        <span class="kicker-dot"></span>
-        <span>Interactive 3D WebGL Project</span>
-      </div>
-
-      <div class="hero-mascot-wrapper">
-        <div class="hero-mascot-glow"></div>
-        <div class="hero-mascot-box">🌍⚔️</div>
-      </div>
+    <section class="slide hero-slide active" data-part="intro" data-speaker="Project Introduction">
+      <div class="hero-overline">WebGL &bull; Three.js &bull; Academic Project</div>
 
       <h1 class="hero-main-title">GeoGuess <span class="hero-title-gradient">Globe 3D</span></h1>
 
@@ -858,33 +748,30 @@
         An interactive WebGL 3D geography exploration and real-time 1v1 battle duel engine built with Three.js, React 19, and Next.js.
       </p>
 
-      <div class="hero-chips-row">
-        <span class="hero-chip">🌐 Three.js WebGL2</span>
-        <span class="hero-chip">✨ Custom GLSL Shaders</span>
-        <span class="hero-chip">⚔️ 1v1 Battle Arena</span>
-        <span class="hero-chip">📐 Spherical Trigonometry</span>
+      <div class="hero-meta-row">
+        <span>Three.js WebGL2</span>
+        <span class="hero-meta-dot">&bull;</span>
+        <span>Custom GLSL Shaders</span>
+        <span class="hero-meta-dot">&bull;</span>
+        <span>1v1 Battle Arena</span>
+        <span class="hero-meta-dot">&bull;</span>
+        <span>Spherical Trigonometry</span>
       </div>
 
       <div class="team-cards-row">
         <div class="team-card m1">
-          <div class="team-card-icon-bubble">🎮</div>
-          <span class="member-tag">Member 1</span>
           <span class="member-title">Mallahi Mohammed</span>
           <span class="member-role-title">Game Logic & Modes</span>
           <p class="member-desc">5-Round Solo Loop &bull; 1v1 Arena Rules &bull; Persistence</p>
         </div>
 
         <div class="team-card m2">
-          <div class="team-card-icon-bubble">🌐</div>
-          <span class="member-tag">Member 2</span>
           <span class="member-title">Sayerh Abdelhak</span>
           <span class="member-role-title">3D Globe & WebGL</span>
           <p class="member-desc">Three.js Core &bull; Multi-Textures &bull; GLSL Rim Lighting</p>
         </div>
 
         <div class="team-card m3">
-          <div class="team-card-icon-bubble">📐</div>
-          <span class="member-tag">Member 3</span>
           <span class="member-title">Azzahidi Aymane</span>
           <span class="member-role-title">Math, Raycasting & VFX</span>
           <p class="member-desc">Spherical Math &bull; Haversine Distance &bull; Cloth Waves</p>
@@ -1638,32 +1525,26 @@
     <!-- SLIDE 16: Closing & Q&A Slide -->
     <!-- ============================================================= -->
     <section class="slide hero-slide" data-part="conclusion" data-speaker="Q&A & Demo">
-      <div class="hero-mascot-box">🎉</div>
-      <h2 class="hero-main-title">Thank You! Any Questions?</h2>
+      <div class="hero-overline">WebGL &bull; Project Demonstration</div>
+      <h2 class="hero-main-title">Thank You! Any <span class="hero-title-gradient">Questions?</span></h2>
       <p class="hero-sub-text">
-        Live application available on Vercel & GitHub. Ready for live demonstration and code review!
+        Interactive 3D WebGL Globe &bull; Fullstack Next.js &bull; Open for Live Demonstration
       </p>
 
       <div class="team-cards-row">
         <div class="team-card m1">
-          <div class="team-card-icon-bubble">🎮</div>
-          <span class="member-tag">Member 1</span>
           <span class="member-title">Mallahi Mohammed</span>
           <span class="member-role-title">Game Logic & Modes</span>
           <p class="member-desc">5-Round Solo Loop &bull; 1v1 Arena Rules &bull; Persistence</p>
         </div>
 
         <div class="team-card m2">
-          <div class="team-card-icon-bubble">🌐</div>
-          <span class="member-tag">Member 2</span>
           <span class="member-title">Sayerh Abdelhak</span>
           <span class="member-role-title">3D Globe & WebGL</span>
           <p class="member-desc">Three.js Core &bull; Multi-Textures &bull; GLSL Rim Lighting</p>
         </div>
 
         <div class="team-card m3">
-          <div class="team-card-icon-bubble">📐</div>
-          <span class="member-tag">Member 3</span>
           <span class="member-title">Azzahidi Aymane</span>
           <span class="member-role-title">Math, Raycasting & VFX</span>
           <p class="member-desc">Spherical Math &bull; Haversine Distance &bull; Cloth Waves</p>
@@ -1712,6 +1593,8 @@
       if (index < 0) index = 0
       if (index >= slides.length) index = slides.length - 1
       current = index
+
+      document.body.classList.toggle('is-title-slide', current === 0)
 
       slides.forEach((slide, idx) => {
         slide.classList.toggle('active', idx === current)
