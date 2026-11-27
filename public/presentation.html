@@ -580,9 +580,17 @@
       height: 4px;
     }
 
-    .team-card.m1::before { background: linear-gradient(90deg, var(--green), #84cc16); }
-    .team-card.m2::before { background: linear-gradient(90deg, var(--blue), #38bdf8); }
-    .team-card.m3::before { background: linear-gradient(90deg, var(--yellow), #f59e0b); }
+    .team-card.m1::before {
+      background: linear-gradient(90deg, var(--green), #84cc16);
+    }
+
+    .team-card.m2::before {
+      background: linear-gradient(90deg, var(--blue), #38bdf8);
+    }
+
+    .team-card.m3::before {
+      background: linear-gradient(90deg, var(--yellow), #f59e0b);
+    }
 
     .team-card:hover {
       transform: translateY(-4px);
@@ -606,9 +614,17 @@
       margin-top: 1px;
     }
 
-    .team-card.m1 .member-role-title { color: var(--green-dark); }
-    .team-card.m2 .member-role-title { color: var(--blue-dark); }
-    .team-card.m3 .member-role-title { color: #926400; }
+    .team-card.m1 .member-role-title {
+      color: var(--green-dark);
+    }
+
+    .team-card.m2 .member-role-title {
+      color: var(--blue-dark);
+    }
+
+    .team-card.m3 .member-role-title {
+      color: #926400;
+    }
 
     .team-card .member-desc {
       font-size: 12.5px;
@@ -617,94 +633,170 @@
       margin-top: 4px;
     }
 
-    /* QR Code Showcase in Final Slide */
-    .qr-showcase-container {
-      display: inline-flex;
+    /* Final Slide Big QR & CTA Showcase */
+    .cta-showcase-card {
+      display: flex;
+      flex-direction: row;
       align-items: center;
-      gap: 24px;
+      gap: 36px;
       background: #ffffff;
       border: 2px solid var(--card-border);
-      border-radius: 20px;
-      padding: 16px 28px;
-      box-shadow: 0 4px 0 var(--card-border-strong), 0 16px 32px rgba(41, 89, 110, 0.08);
-      margin: 4px auto 0;
-      transition: all 0.22s ease;
+      border-radius: 24px;
+      padding: 30px 36px;
+      box-shadow: 0 4px 0 var(--card-border-strong), 0 20px 40px rgba(41, 89, 110, 0.09);
+      max-width: 880px;
+      width: 100%;
+      margin: 8px auto 0;
+      box-sizing: border-box;
+      text-align: left;
+      position: relative;
     }
 
-    .qr-showcase-container:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 0 var(--card-border-strong), 0 20px 36px rgba(41, 89, 110, 0.12);
-    }
-
-    .qr-box {
-      background: #ffffff;
-      padding: 6px;
-      border-radius: 12px;
-      border: 1.5px solid var(--card-border);
+    .cta-qr-col {
       display: flex;
+      flex-direction: column;
       align-items: center;
-      justify-content: center;
+      gap: 10px;
       flex-shrink: 0;
     }
 
-    .qr-image {
-      width: 104px;
-      height: 104px;
+    .cta-qr-box {
+      background: #ffffff;
+      padding: 12px;
+      border-radius: 18px;
+      border: 2px solid var(--card-border);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .cta-qr-img {
+      width: 196px;
+      height: 196px;
       display: block;
-      border-radius: 6px;
+      border-radius: 8px;
       image-rendering: pixelated;
     }
 
-    .qr-info {
+    .cta-qr-caption {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--ink-soft);
+      letter-spacing: 0.3px;
+      text-align: center;
+    }
+
+    .cta-content-col {
       display: flex;
       flex-direction: column;
       align-items: flex-start;
-      text-align: left;
-      gap: 6px;
+      gap: 10px;
+      flex: 1;
     }
 
-    .qr-badge {
+    .cta-badge {
       display: inline-block;
       font-family: var(--font-body);
       font-size: 11px;
       font-weight: 800;
-      letter-spacing: 1.2px;
+      letter-spacing: 1.5px;
       text-transform: uppercase;
       color: var(--blue-dark);
       background: #e0f2fe;
       border: 1px solid #bae6fd;
-      padding: 3px 10px;
+      padding: 4px 12px;
       border-radius: 999px;
     }
 
-    .qr-link {
+    .cta-headline {
+      font-family: var(--font-display);
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--ink);
+      line-height: 1.2;
+      letter-spacing: -0.5px;
+      margin: 0;
+    }
+
+    .cta-description {
+      font-size: 14px;
+      color: var(--ink-soft);
+      line-height: 1.55;
+      margin: 0;
+    }
+
+    .cta-features-list {
+      list-style: none;
+      padding: 0;
+      margin: 2px 0 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 13.5px;
+      color: var(--ink);
+    }
+
+    .cta-features-list li {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .cta-features-list li .bullet-check {
+      color: var(--green);
+      font-weight: 800;
+    }
+
+    .cta-actions-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-top: 4px;
+    }
+
+    .cta-launch-btn {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: 10px;
+      background: var(--blue);
+      border: 2px solid var(--blue-dark);
+      color: #ffffff;
+      padding: 12px 24px;
+      border-radius: 14px;
       font-family: var(--font-display);
-      font-size: 19px;
+      font-size: 16px;
       font-weight: 800;
+      text-decoration: none;
+      box-shadow: 0 4px 0 var(--blue-dark);
+      transition: all 0.18s ease;
+      cursor: pointer;
+    }
+
+    .cta-launch-btn:hover {
+      background: #25baff;
+      border-color: #25baff;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 0 var(--blue-dark);
+      color: #ffffff;
+    }
+
+    .cta-launch-btn:active {
+      transform: translateY(2px);
+      box-shadow: 0 1px 0 var(--blue-dark);
+    }
+
+    .cta-url-subtext {
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 700;
       color: var(--blue-dark);
       text-decoration: none;
-      transition: color 0.18s ease;
     }
 
-    .qr-link:hover {
-      color: var(--blue);
+    .cta-url-subtext:hover {
       text-decoration: underline;
-    }
-
-    .qr-link-arrow {
-      font-size: 16px;
-      line-height: 1;
-    }
-
-    .qr-hint {
-      font-size: 13px;
-      color: var(--ink-soft);
-      margin: 0;
-      max-width: 300px;
-      line-height: 1.45;
     }
 
     /* Bottom Presentation Navigation */
@@ -835,7 +927,8 @@
       <h1 class="hero-main-title">GeoGuess <span class="hero-title-gradient">Globe 3D</span></h1>
 
       <p class="hero-sub-text">
-        An interactive WebGL 3D geography exploration and real-time 1v1 battle duel engine built with Three.js, React 19, and Next.js.
+        An interactive WebGL 3D geography exploration and real-time 1v1 battle duel engine built with Three.js, React
+        19, and Next.js.
       </p>
 
       <div class="hero-meta-row">
@@ -862,7 +955,7 @@
         </div>
 
         <div class="team-card m3">
-          <span class="member-title">Azzahidi Aymane</span>
+          <span class="member-title">Azzahidi Aymen</span>
           <span class="member-role-title">Math, Raycasting & VFX</span>
           <p class="member-desc">Spherical Math &bull; Haversine Distance &bull; Cloth Waves</p>
         </div>
@@ -1319,11 +1412,11 @@
     </section>
 
     <!-- ============================================================= -->
-    <!-- SLIDE 10: Azzahidi Aymane - Spherical Coordinates & Math -->
+    <!-- SLIDE 10: Azzahidi Aymen - Spherical Coordinates & Math -->
     <!-- ============================================================= -->
-    <section class="slide" data-part="3" data-speaker="Azzahidi Aymane: Spherical Math">
+    <section class="slide" data-part="3" data-speaker="Azzahidi Aymen: Spherical Math">
       <div class="slide-header">
-        <span class="slide-speaker-tag"><span class="badge-num">Part 3</span> Azzahidi Aymane &bull; Spherical
+        <span class="slide-speaker-tag"><span class="badge-num">Part 3</span> Azzahidi Aymen &bull; Spherical
           Mathematics</span>
         <h2 class="slide-title">Converting Latitude & Longitude to 3D Cartesian Space</h2>
       </div>
@@ -1372,11 +1465,11 @@
     </section>
 
     <!-- ============================================================= -->
-    <!-- SLIDE 11: Azzahidi Aymane - Haversine Distance Physics -->
+    <!-- SLIDE 11: Azzahidi Aymen - Haversine Distance Physics -->
     <!-- ============================================================= -->
-    <section class="slide" data-part="3" data-speaker="Azzahidi Aymane: Distance Physics">
+    <section class="slide" data-part="3" data-speaker="Azzahidi Aymen: Distance Physics">
       <div class="slide-header">
-        <span class="slide-speaker-tag"><span class="badge-num">Part 3</span> Azzahidi Aymane &bull; Geodesic
+        <span class="slide-speaker-tag"><span class="badge-num">Part 3</span> Azzahidi Aymen &bull; Geodesic
           Physics</span>
         <h2 class="slide-title">Great-Circle Haversine Formula & Scoring Curve</h2>
       </div>
@@ -1412,11 +1505,11 @@
     </section>
 
     <!-- ============================================================= -->
-    <!-- SLIDE 12: Azzahidi Aymane - Raycasting & Surface Pins -->
+    <!-- SLIDE 12: Azzahidi Aymen - Raycasting & Surface Pins -->
     <!-- ============================================================= -->
-    <section class="slide" data-part="3" data-speaker="Azzahidi Aymane: Raycasting & Pins">
+    <section class="slide" data-part="3" data-speaker="Azzahidi Aymen: Raycasting & Pins">
       <div class="slide-header">
-        <span class="slide-speaker-tag"><span class="badge-num">Part 3</span> Azzahidi Aymane &bull; Interactions &
+        <span class="slide-speaker-tag"><span class="badge-num">Part 3</span> Azzahidi Aymen &bull; Interactions &
           Raycasting</span>
         <h2 class="slide-title">Raycasting & Normal Surface Alignment</h2>
       </div>
@@ -1461,11 +1554,11 @@
     </section>
 
     <!-- ============================================================= -->
-    <!-- SLIDE 13: Azzahidi Aymane - Procedural Cloth Wave Animation -->
+    <!-- SLIDE 13: Azzahidi Aymen - Procedural Cloth Wave Animation -->
     <!-- ============================================================= -->
-    <section class="slide" data-part="3" data-speaker="Azzahidi Aymane: Cloth Waves">
+    <section class="slide" data-part="3" data-speaker="Azzahidi Aymen: Cloth Waves">
       <div class="slide-header">
-        <span class="slide-speaker-tag"><span class="badge-num">Part 3</span> Azzahidi Aymane &bull; Procedural
+        <span class="slide-speaker-tag"><span class="badge-num">Part 3</span> Azzahidi Aymen &bull; Procedural
           Animation</span>
         <h2 class="slide-title">Real-Time Procedural Cloth Wave Animation</h2>
       </div>
@@ -1502,11 +1595,11 @@
     </section>
 
     <!-- ============================================================= -->
-    <!-- SLIDE 14: Azzahidi Aymane - 3D Geodesic Arcs & Camera Flights -->
+    <!-- SLIDE 14: Azzahidi Aymen - 3D Geodesic Arcs & Camera Flights -->
     <!-- ============================================================= -->
-    <section class="slide" data-part="3" data-speaker="Azzahidi Aymane: 3D Arcs & Camera">
+    <section class="slide" data-part="3" data-speaker="Azzahidi Aymen: 3D Arcs & Camera">
       <div class="slide-header">
-        <span class="slide-speaker-tag"><span class="badge-num">Part 3</span> Azzahidi Aymane &bull; Visual Effects &
+        <span class="slide-speaker-tag"><span class="badge-num">Part 3</span> Azzahidi Aymen &bull; Visual Effects &
           Camera</span>
         <h2 class="slide-title">Geodesic 3D Arcs & Adaptive Camera Reveal</h2>
       </div>
@@ -1618,40 +1711,41 @@
       <div class="hero-overline">WebGL &bull; Project Demonstration</div>
       <h2 class="hero-main-title">Thank You! Any <span class="hero-title-gradient">Questions?</span></h2>
       <p class="hero-sub-text">
-        Interactive 3D WebGL Globe &bull; Fullstack Next.js &bull; Open for Live Demonstration
+        Interactive 3D WebGL Globe &bull; Fullstack Next.js &bull; Scan or click below to play live
       </p>
 
-      <div class="qr-showcase-container">
-        <div class="qr-box">
-          <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPAAAADwAQMAAAAEm3vRAAAABlBMVEX///8AAABVwtN+AAAACXBIWXMAAA7EAAAOxAGVKw4bAAABXElEQVRYhe2YsRHCMAxFzblwmRE8SkZLRvMoHoEyRQ6hL8kGDiigtKwiBD9XOv0vRSHM+CdWkrjJn0wHfvSIzqFxwUG8Bdr5dZGbtOMs+caZ8xMla2vtN4muEwM/VdDET1nbyoqzb0n1hpvGqLD1fJfgaFiLRL0lW1oeheMVP2IjxiFaU3oLX1iydkY8S0AnOi8EPdXl8Ix5WFEXwc3KT77JmG86xzasiPtek+mL6tI0Nijm/iKX4LPiLVY4arluMZ9JJ4K3mIjEfZvl+sRQTsIbZ43H2NRmlG49TnGBi/SsHfFVY65xRNYwzqFBk4ksjY6D+KzoqTVjmVGCY9xDRWTzmjZjx3jV4tEvHSySbHmS34Z/X7ggOc1nUVeWtcU5zrYx2VsGVWNknWh4TEVGN3jLLhfPiftqQD72ZLhNvrGJSLbQoW9M6qcltSOsmrJiQgVhNUC9mJziGb/HHfyed/QEahEmAAAAAElFTkSuQmCC" alt="QR Code to guess-geo.vercel.app" class="qr-image" />
-        </div>
-        <div class="qr-info">
-          <span class="qr-badge">Try The App Live</span>
-          <a href="https://guess-geo.vercel.app/" target="_blank" rel="noopener noreferrer" class="qr-link">
-            <span>guess-geo.vercel.app</span>
-            <span class="qr-link-arrow">↗</span>
-          </a>
-          <p class="qr-hint">Scan with your smartphone camera to play 3D solo rounds and 1v1 duels.</p>
-        </div>
-      </div>
-
-      <div class="team-cards-row">
-        <div class="team-card m1">
-          <span class="member-title">Mallahi Mohammed</span>
-          <span class="member-role-title">Game Logic & Modes</span>
-          <p class="member-desc">5-Round Solo Loop &bull; 1v1 Arena Rules &bull; Persistence</p>
+      <div class="cta-showcase-card">
+        <div class="cta-qr-col">
+          <div class="cta-qr-box">
+            <img
+              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPAAAADwAQMAAAAEm3vRAAAABlBMVEX///8AAABVwtN+AAAACXBIWXMAAA7EAAAOxAGVKw4bAAABXElEQVRYhe2YsRHCMAxFzblwmRE8SkZLRvMoHoEyRQ6hL8kGDiigtKwiBD9XOv0vRSHM+CdWkrjJn0wHfvSIzqFxwUG8Bdr5dZGbtOMs+caZ8xMla2vtN4muEwM/VdDET1nbyoqzb0n1hpvGqLD1fJfgaFiLRL0lW1oeheMVP2IjxiFaU3oLX1iydkY8S0AnOi8EPdXl8Ix5WFEXwc3KT77JmG86xzasiPtek+mL6tI0Nijm/iKX4LPiLVY4arluMZ9JJ4K3mIjEfZvl+sRQTsIbZ43H2NRmlG49TnGBi/SsHfFVY65xRNYwzqFBk4ksjY6D+KzoqTVjmVGCY9xDRWTzmjZjx3jV4tEvHSySbHmS34Z/X7ggOc1nUVeWtcU5zrYx2VsGVWNknWh4TEVGN3jLLhfPiftqQD72ZLhNvrGJSLbQoW9M6qcltSOsmrJiQgVhNUC9mJziGb/HHfyed/QEahEmAAAAAElFTkSuQmCC"
+              alt="Scan QR code to play GeoGuess Globe 3D" class="cta-qr-img" />
+          </div>
+          <span class="cta-qr-caption">Scan with phone camera</span>
         </div>
 
-        <div class="team-card m2">
-          <span class="member-title">Sayerh Abdelhak</span>
-          <span class="member-role-title">3D Globe & WebGL</span>
-          <p class="member-desc">Three.js Core &bull; Multi-Textures &bull; GLSL Rim Lighting</p>
-        </div>
+        <div class="cta-content-col">
+          <span class="cta-badge">Live Production Game</span>
+          <h3 class="cta-headline">Ready to Test Your Geography?</h3>
+          <p class="cta-description">
+            Explore satellite mystery views on a 3D WebGL globe with atmospheric GLSL shaders and real-time multiplayer duels.
+          </p>
 
-        <div class="team-card m3">
-          <span class="member-title">Azzahidi Aymane</span>
-          <span class="member-role-title">Math, Raycasting & VFX</span>
-          <p class="member-desc">Spherical Math &bull; Haversine Distance &bull; Cloth Waves</p>
+          <ul class="cta-features-list">
+            <li><span class="bullet-check">✔</span> <strong>5-Round Solo Mode:</strong> Proximity distance scoring up to 25,000 pts</li>
+            <li><span class="bullet-check">✔</span> <strong>1v1 Battle Arena:</strong> Real-time HP combat with instant invite links</li>
+            <li><span class="bullet-check">✔</span> <strong>Instant Web Access:</strong> Smooth 60 FPS on mobile and desktop browsers</li>
+          </ul>
+
+          <div class="cta-actions-row">
+            <a href="https://guess-geo.vercel.app/" target="_blank" rel="noopener noreferrer" class="cta-launch-btn">
+              <span>Play GeoGuess 3D</span>
+              <span class="cta-btn-arrow">&rarr;</span>
+            </a>
+            <a href="https://guess-geo.vercel.app/" target="_blank" rel="noopener noreferrer" class="cta-url-subtext">
+              guess-geo.vercel.app ↗
+            </a>
+          </div>
         </div>
       </div>
     </section>
