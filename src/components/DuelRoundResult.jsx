@@ -1,6 +1,7 @@
 'use client'
 
 import { Icon } from './Icons'
+import { sound } from '@/audio/SoundEngine'
 import { getAvatarById } from '@/lib/data/avatars'
 
 export function DuelRoundResult({
@@ -41,6 +42,23 @@ export function DuelRoundResult({
           </span>
         </div>
       </div>
+
+      {/* Edge Natural Voice Commentary */}
+      {result.reaction && (
+        <div className="duel-reaction-strip">
+          <span className="duel-reaction-icon">🎙️</span>
+          <p className="duel-reaction-quote">&ldquo;{result.reaction.text}&rdquo;</p>
+          <button
+            type="button"
+            className="btn-replay-voice btn-duel-voice"
+            onClick={() => sound.playAudioClip(result.reaction.audio)}
+            title="Replay Edge Natural Voice commentary"
+            aria-label="Replay voice line"
+          >
+            <Icon name="volume" size={14} />
+          </button>
+        </div>
+      )}
 
       {/* Side-by-side Distance Comparison */}
       <div className="duel-comparison-grid">

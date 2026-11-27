@@ -1,3 +1,5 @@
+import reactionsData from '@/data/reactions.json'
+
 // ---------------------------------------------------------------------
 //  SOUND ENGINE
 //  Every effect is synthesised with the Web Audio API, so there are no
@@ -601,6 +603,68 @@ class SoundEngine {
     notes.forEach((freq, index) => {
       this.bell(freq, { volume: 0.12, delay: index * 0.09, ring: 1.2 })
     })
+  }
+
+  // ------------------------------------------------------------------
+  //  MICROSOFT EDGE NATURAL TTS FUNNY VOICE REACTIONS
+  // ------------------------------------------------------------------
+  getRandomReaction(category = 'okay') {
+    const pool = reactionsData[category] || reactionsData.okay || []
+    if (!pool.length) return null
+    const filtered = pool.filter((item) => item.id !== this.lastReactionId)
+    const selected = (filtered.length ? filtered : pool)[Math.floor(Math.random() * (filtered.length ? filtered.length : pool.length))]
+    this.lastReactionId = selected.id
+    return selected
+  }
+
+  playReaction(category = 'okay') {
+    const reaction = this.getRandomReaction(category)
+    if (!this.muted && reaction && reaction.audio) {
+      // Delay slightly (350ms) so the sound effect (chime/whoosh) hits first, then the voice line drops
+      setTimeout(() => {
+        if (!this.muted) {
+          this.playAudioClip(reaction.audio)
+        }
+      }, 350)
+    }
+    return reaction
+  }
+
+  playAudioClip(url) {
+    if (this.muted) return
+    try {
+      if (this.currentAudio) {
+        this.currentAudio.pause()
+        this.currentAudio.currentTime = 0
+      }
+      const audio = new Audio(url)
+      audio.volume = 0.95
+      this.currentAudio = audio
+      audio.play().catch(() => {
+        // Fallback to Web Speech synthesis if HTML5 audio fails
+      })
+    } catch {
+      // Audio playback failed
+    }
+  }
+
+  // Fallback: Web Speech API with Edge Natural voice targeting
+  speakText(text) {
+    if (this.muted || typeof window === 'undefined' || !window.speechSynthesis) return
+    try {
+      window.speechSynthesis.cancel()
+      const utterance = new SpeechSynthesisUtterance(text)
+      const voices = window.speechSynthesis.getVoices()
+      const naturalVoice = voices.find(
+        (v) => (v.name.includes('Natural') || v.name.includes('Online')) && v.lang.startsWith('en')
+      ) || voices.find((v) => v.lang.startsWith('en'))
+      if (naturalVoice) utterance.voice = naturalVoice
+      utterance.rate = 1.05
+      utterance.pitch = 1.02
+      window.speechSynthesis.speak(utterance)
+    } catch {
+      // Ignore
+    }
   }
 }
 

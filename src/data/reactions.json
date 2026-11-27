@@ -1,0 +1,132 @@
+{
+  "great": [
+    {
+      "id": "great_1",
+      "text": "Boom! Are you living in satellite orbit or what?",
+      "audio": "/audio/tts/great_1.mp3"
+    },
+    {
+      "id": "great_2",
+      "text": "Holy geography! Did you drop that pin with a microscope?!",
+      "audio": "/audio/tts/great_2.mp3"
+    },
+    {
+      "id": "great_3",
+      "text": "Spot on! Even the local street cats are clapping.",
+      "audio": "/audio/tts/great_3.mp3"
+    },
+    {
+      "id": "great_4",
+      "text": "Unbelievable! You just sniped that location from outer space!",
+      "audio": "/audio/tts/great_4.mp3"
+    },
+    {
+      "id": "great_5",
+      "text": "Chef's kiss! The FBI wants to know your location, literally.",
+      "audio": "/audio/tts/great_5.mp3"
+    },
+    {
+      "id": "great_6",
+      "text": "Bullseye! Did you personally pave that road or something?",
+      "audio": "/audio/tts/great_6.mp3"
+    }
+  ],
+  "okay": [
+    {
+      "id": "okay_1",
+      "text": "Well, same continent at least! A quick 40-hour taxi ride and you're there.",
+      "audio": "/audio/tts/okay_1.mp3"
+    },
+    {
+      "id": "okay_2",
+      "text": "Close! If the Earth was ten times smaller, that would be a bullseye.",
+      "audio": "/audio/tts/okay_2.mp3"
+    },
+    {
+      "id": "okay_3",
+      "text": "Not bad, not bad! You didn't drown in the ocean, so that's a win.",
+      "audio": "/audio/tts/okay_3.mp3"
+    },
+    {
+      "id": "okay_4",
+      "text": "Right neighborhood, wrong country! Your GPS definitely needs coffee.",
+      "audio": "/audio/tts/okay_4.mp3"
+    },
+    {
+      "id": "okay_5",
+      "text": "Hey, points are points! We won't tell anyone about the missing kilometers.",
+      "audio": "/audio/tts/okay_5.mp3"
+    },
+    {
+      "id": "okay_6",
+      "text": "You're in the ballpark! Granted, the ballpark is the size of Brazil.",
+      "audio": "/audio/tts/okay_6.mp3"
+    }
+  ],
+  "bad": [
+    {
+      "id": "bad_1",
+      "text": "Bro, did you sneeze while clicking?! You're in another hemisphere!",
+      "audio": "/audio/tts/bad_1.mp3"
+    },
+    {
+      "id": "bad_2",
+      "text": "Congratulations, you just discovered a brand new ocean! Completely wrong though.",
+      "audio": "/audio/tts/bad_2.mp3"
+    },
+    {
+      "id": "bad_3",
+      "text": "Pack your scuba gear, because you just planted a flag in the middle of nowhere.",
+      "audio": "/audio/tts/bad_3.mp3"
+    },
+    {
+      "id": "bad_4",
+      "text": "Are you on Earth, or did you accidentally drop your pin on Mars?!",
+      "audio": "/audio/tts/bad_4.mp3"
+    },
+    {
+      "id": "bad_5",
+      "text": "Oof! If you were any further, you'd be in a different solar system.",
+      "audio": "/audio/tts/bad_5.mp3"
+    },
+    {
+      "id": "bad_6",
+      "text": "That's not even the same tectonic plate, my friend!",
+      "audio": "/audio/tts/bad_6.mp3"
+    }
+  ],
+  "duel_win": [
+    {
+      "id": "duel_win_1",
+      "text": "Direct hit! That's gotta hurt their geographical pride!",
+      "audio": "/audio/tts/duel_win_1.mp3"
+    },
+    {
+      "id": "duel_win_2",
+      "text": "Kaboom! Sent them flying halfway across the Pacific!",
+      "audio": "/audio/tts/duel_win_2.mp3"
+    },
+    {
+      "id": "duel_win_3",
+      "text": "Clinical strike! They didn't see that one coming.",
+      "audio": "/audio/tts/duel_win_3.mp3"
+    }
+  ],
+  "duel_loss": [
+    {
+      "id": "duel_loss_1",
+      "text": "Ouch! You just got sent packing straight to the stratosphere!",
+      "audio": "/audio/tts/duel_loss_1.mp3"
+    },
+    {
+      "id": "duel_loss_2",
+      "text": "Mayday, mayday! Your health pool is leaking like a broken faucet!",
+      "audio": "/audio/tts/duel_loss_2.mp3"
+    },
+    {
+      "id": "duel_loss_3",
+      "text": "That's gotta sting! Time to dust off your atlas.",
+      "audio": "/audio/tts/duel_loss_3.mp3"
+    }
+  ]
+}

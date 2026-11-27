@@ -1,5 +1,6 @@
 import { formatKm } from '@/game/geo'
 import { MAX_POINTS, TIER_LABEL } from '@/data/locations'
+import { sound } from '@/audio/SoundEngine'
 import { Icon } from './Icons'
 
 export function ResultCard({ result, isLast, onNext }) {
@@ -28,6 +29,24 @@ export function ResultCard({ result, isLast, onNext }) {
       <div className="meter" aria-hidden="true">
         <span style={{ width: `${width}%` }} />
       </div>
+
+      {result.reaction && (
+        <div className={`result-reaction-bubble tier-${result.tier}`}>
+          <div className="reaction-body">
+            <span className="reaction-speaker-badge">🎙️ Explorer</span>
+            <p className="reaction-quote">&ldquo;{result.reaction.text}&rdquo;</p>
+          </div>
+          <button
+            type="button"
+            className="btn-replay-voice"
+            onClick={() => sound.playAudioClip(result.reaction.audio)}
+            title="Replay Edge Natural Voice commentary"
+            aria-label="Replay voice line"
+          >
+            <Icon name="volume" size={15} strokeWidth={2.4} />
+          </button>
+        </div>
+      )}
 
       <footer className="result-foot">
         <div className="result-points-block">

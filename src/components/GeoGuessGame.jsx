@@ -217,7 +217,9 @@ export default function GeoGuessGame({ initialDuelRoom = '', autoStartDuel = fal
       setDuelWinner(nextP1Hp > nextP2Hp ? 'p1' : 'p2')
     }
 
-    setDuelRoundResult(outcome)
+    const reactionCategory = outcome.winner === 'p1' ? 'duel_win' : outcome.winner === 'p2' ? 'duel_loss' : 'okay'
+    const reaction = sound.playReaction(reactionCategory)
+    setDuelRoundResult({ ...outcome, reaction })
     setPhase('duel_result')
   }, [p1Hp, p2Hp, duelRound])
 
@@ -228,6 +230,8 @@ export default function GeoGuessGame({ initialDuelRoom = '', autoStartDuel = fal
     }
     const tier = pendingTierRef.current || 'okay'
     sound.result(tier)
+    const reaction = sound.playReaction(tier)
+    setRoundResult((prev) => (prev ? { ...prev, reaction } : prev))
     setPhase('result')
   }, [gameMode, handleDuelRevealComplete])
 
