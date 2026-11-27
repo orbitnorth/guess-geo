@@ -96,8 +96,6 @@ export function RegisterModal({ isOpen, onClose, onAuthSuccess, onSwitchToLogin 
         setError('')
         onClose()
       }}
-      badge={`Step ${step} of 2 • ${step === 1 ? 'Explorer ID' : 'Choose Avatar'}`}
-      badgeVariant="blue"
       title={step === 1 ? 'Create Account' : 'Pick your Avatar'}
       subtitle={
         step === 1
