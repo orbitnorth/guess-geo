@@ -1,8 +1,9 @@
 'use client'
 
-import { useState, use } from 'react'
+import { useState } from 'react'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
+import { useParams } from 'next/navigation'
 import { Icon } from '@/components/Icons'
 import { Mascot } from '@/components/Mascot'
 
@@ -16,10 +17,10 @@ const GeoGuessGame = dynamic(() => import('@/components/GeoGuessGame'), {
   ),
 })
 
-export default function InviteSubRoutePage({ params }) {
-  // In Next.js 15/16, unwrap params with React's use()
-  const resolvedParams = use(params)
-  const uuid = (resolvedParams?.uuid || '').trim()
+export default function InviteSubRoutePage() {
+  const routeParams = useParams()
+  const rawUuid = routeParams?.uuid || ''
+  const uuid = (Array.isArray(rawUuid) ? rawUuid[0] : String(rawUuid)).trim()
 
   const [isPlaying, setIsPlaying] = useState(false)
   const [copied, setCopied] = useState(false)
