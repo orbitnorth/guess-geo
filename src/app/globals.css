@@ -2341,16 +2341,18 @@ kbd {
   animation: fadeIn 0.2s ease both;
 }
 
+.modal-container,
 .account-modal {
   position: relative;
   background: #ffffff;
   border-radius: var(--radius-card);
-  box-shadow: 0 12px 0 var(--line-strong), 0 32px 64px rgba(41, 89, 110, 0.25);
+  box-shadow: 0 12px 0 var(--line-strong), 0 32px 64px rgba(41, 89, 110, 0.28);
   width: 100%;
   max-width: 580px;
-  max-height: 90vh;
-  overflow-y: auto;
-  padding: 28px 28px 24px;
+  max-height: min(88vh, 760px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* Keeps outer corners cleanly curved without scrollbar bleeding */
   box-sizing: border-box;
   animation: popIn 0.25s cubic-bezier(0.18, 0.89, 0.32, 1.28) both;
 }
@@ -2360,7 +2362,60 @@ kbd {
   align-items: flex-start;
   justify-content: space-between;
   gap: 16px;
-  margin-bottom: 20px;
+  padding: 24px 28px 16px;
+  flex-shrink: 0;
+  border-bottom: 1px solid var(--line);
+  background: #ffffff;
+  box-sizing: border-box;
+}
+
+.modal-body {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 20px 28px 24px;
+  box-sizing: border-box;
+}
+
+/* Custom Sleek Inset Scrollbars */
+.custom-scrollbar,
+.modal-body,
+.leaderboard-list,
+.history-list {
+  scrollbar-width: thin;
+  scrollbar-color: #c0dce7 transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar,
+.modal-body::-webkit-scrollbar,
+.leaderboard-list::-webkit-scrollbar,
+.history-list::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track,
+.modal-body::-webkit-scrollbar-track,
+.leaderboard-list::-webkit-scrollbar-track,
+.history-list::-webkit-scrollbar-track {
+  background: transparent;
+  margin: 6px 0;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb,
+.modal-body::-webkit-scrollbar-thumb,
+.leaderboard-list::-webkit-scrollbar-thumb,
+.history-list::-webkit-scrollbar-thumb {
+  background: #c5e0ec;
+  border-radius: 999px;
+  transition: background 0.15s ease;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover,
+.modal-body::-webkit-scrollbar-thumb:hover,
+.leaderboard-list::-webkit-scrollbar-thumb:hover,
+.history-list::-webkit-scrollbar-thumb:hover {
+  background: #97c8dc;
 }
 
 .modal-title-group {
@@ -2527,9 +2582,9 @@ kbd {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 10px;
-  max-height: 270px;
+  max-height: 250px;
   overflow-y: auto;
-  padding: 4px;
+  padding: 4px 8px 6px 2px;
   box-sizing: border-box;
 }
 
