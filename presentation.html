@@ -716,8 +716,8 @@
       <div class="team-cards-row">
         <div class="team-card m1">
           <span class="member-tag">Member 1</span>
-          <span class="member-title">Full-Stack & Systems</span>
-          <p style="font-size: 12px; color: var(--muted); margin-top: 4px;">Architecture, Auth & 1v1 Duels</p>
+          <span class="member-title">Game Logic & Modes</span>
+          <p style="font-size: 12px; color: var(--muted); margin-top: 4px;">Game Loops, Scoring & 1v1 Arena</p>
         </div>
         <div class="team-card m2">
           <span class="member-tag">Member 2</span>
@@ -775,38 +775,40 @@
     </section>
 
     <!-- ============================================================= -->
-    <!-- SLIDE 3: MEMBER 1 - Full Stack Architecture -->
+    <!-- SLIDE 3: MEMBER 1 - Game Lifecycle & State Machine -->
     <!-- ============================================================= -->
-    <section class="slide" data-part="1" data-speaker="Member 1: Architecture & Backend">
+    <section class="slide" data-part="1" data-speaker="Member 1: Game Loop & Lifecycle">
       <div class="slide-header">
-        <span class="slide-speaker-tag"><span class="badge-num">Part 1</span> Member 1 &bull; Full-Stack Architecture</span>
-        <h2 class="slide-title">Next.js 16 App Router & Component Decoupling</h2>
+        <span class="slide-speaker-tag"><span class="badge-num">Part 1</span> Member 1 &bull; Core Game Logic</span>
+        <h2 class="slide-title">Interactive Round Lifecycle & State Flow</h2>
       </div>
 
       <div class="slide-body">
         <div class="layout-split">
           <div class="card">
-            <h3>🏗️ Modular Component Structure</h3>
+            <h3>🎮 5-Phase Round Sequence</h3>
             <p>
-              React components are strictly decoupled from Three.js render loops to prevent unnecessary component tree reconciliation and guarantee 60 FPS:
+              The core gameplay transitions deterministically through 5 structured phases each round:
             </p>
-            <ul class="feature-list" style="margin-top: 14px;">
-              <li><span class="bullet-check">✔</span> <strong>`src/game/GlobeEngine.js`:</strong> Pure vanilla Three.js class. Exposes clean imperative methods (`setGuess`, `reveal`, `zoom`, `setTexture`).</li>
-              <li><span class="bullet-check">✔</span> <strong>`src/components/GeoGuessGame.jsx`:</strong> Central state orchestrator managing decks, timer, scores, audio, and duel flows.</li>
-              <li><span class="bullet-check">✔</span> <strong>`src/components/Modal.jsx`:</strong> Accessible dialog component featuring focus trap, keyboard Escape listener, and 3D Duolingo styling.</li>
+            <ul class="feature-list" style="margin-top: 12px;">
+              <li><span class="bullet-check">1</span> <strong>Mystery Location:</strong> Satellite photo loads with lightbox zoom for architectural and landscape clues.</li>
+              <li><span class="bullet-check">2</span> <strong>Active Guessing:</strong> Player freely orbits, pitches, and zooms the 3D globe to place their marker pin.</li>
+              <li><span class="bullet-check">3</span> <strong>Pin Confirmation:</strong> Player locks in their guess; the round timer halts and input freezes.</li>
+              <li><span class="bullet-check">4</span> <strong>Cinematic Reveal:</strong> Camera swoops dynamically to reveal the actual location and arches a 3D distance arc.</li>
+              <li><span class="bullet-check">5</span> <strong>Evaluation & Score:</strong> Instant distance readout, animated point count-up, and performance badge.</li>
             </ul>
           </div>
 
           <div class="card" style="background: #fafcfe;">
-            <h3>⚡ Production Optimization</h3>
+            <h3>⚡ Reactive HUD Orchestration</h3>
             <div class="stat-box" style="margin-bottom: 12px;">
-              <span class="stat-val green">765ms</span>
-              <span class="stat-label">Turbopack Production Build</span>
+              <span class="stat-val green">5 Rounds</span>
+              <span class="stat-label">Standard Match Experience</span>
             </div>
             <ul class="feature-list">
-              <li><span class="bullet-check">✔</span> Dynamic code splitting on heavy 3D modules (`next/dynamic` with `ssr: false`).</li>
-              <li><span class="bullet-check">✔</span> Google variable fonts (`Fredoka` & `Nunito`) preloaded with zero layout shift.</li>
-              <li><span class="bullet-check">✔</span> Fast client-side SVG audio effects and ambient game music controller.</li>
+              <li><span class="bullet-check">✔</span> <strong>Real-Time HUD:</strong> Live round indicators, running score accumulator, and audio soundscapes.</li>
+              <li><span class="bullet-check">✔</span> <strong>Input Guarding:</strong> Interaction lockouts prevent duplicate clicks or pin shifts during camera animations.</li>
+              <li><span class="bullet-check">✔</span> <strong>Seamless Transitions:</strong> Zero screen reloads; full match flows organically from round 1 to the final podium.</li>
             </ul>
           </div>
         </div>
@@ -814,40 +816,47 @@
     </section>
 
     <!-- ============================================================= -->
-    <!-- SLIDE 4: MEMBER 1 - Authentication & Security Pipeline -->
+    <!-- SLIDE 4: MEMBER 1 - Game Modes & Scoring Logic -->
     <!-- ============================================================= -->
-    <section class="slide" data-part="1" data-speaker="Member 1: Authentication & DB">
+    <section class="slide" data-part="1" data-speaker="Member 1: Modes & Scoring Rules">
       <div class="slide-header">
-        <span class="slide-speaker-tag"><span class="badge-num">Part 1</span> Member 1 &bull; Security & Database</span>
-        <h2 class="slide-title">Stateless JWT Authentication & Serverless SQLite</h2>
+        <span class="slide-speaker-tag"><span class="badge-num">Part 1</span> Member 1 &bull; Rules & Progression</span>
+        <h2 class="slide-title">Game Modes & Precision Scoring System</h2>
       </div>
 
       <div class="slide-body">
         <div class="layout-triple">
           <div class="card">
-            <h3>🔒 Password Hashing</h3>
-            <p>Cryptographically secure password storage using Node's native `scrypt` with random 16-byte salt:</p>
-            <div class="code-box" style="margin-top: 8px; height: 180px;"><span class="kw">const</span> salt = crypto.<span class="fn">randomBytes</span>(<span class="num">16</span>)
-<span class="kw">const</span> hash = crypto.<span class="fn">scryptSync</span>(pwd, salt, <span class="num">64</span>)
-<span class="kw">return</span> <span class="str">`</span>${salt}:${hash}<span class="str">`</span></div>
+            <span class="pill">Mode 1</span>
+            <h3 style="margin-top: 10px;">🌍 Solo Exploration</h3>
+            <p>5-round geography voyage across iconic global monuments, capitals, and natural landscapes.</p>
+            <ul class="feature-list" style="margin-top: 12px;">
+              <li><span class="bullet-check">✔</span> Max 25,000 points per match.</li>
+              <li><span class="bullet-check">✔</span> Satellite photo inspection with high-res zoom.</li>
+              <li><span class="bullet-check">✔</span> Comprehensive end-game report with accuracy percentage.</li>
+            </ul>
           </div>
 
           <div class="card">
-            <h3>🎫 Stateless JWT Tokens</h3>
-            <p>Tokens signed with HS256 via `jose` library. Allows persistent explorer logins across sessions:</p>
-            <div class="code-box" style="margin-top: 8px; height: 180px;"><span class="kw">const</span> token = <span class="kw">await</span> <span class="kw">new</span> <span class="fn">SignJWT</span>(user)
-  .<span class="fn">setProtectedHeader</span>({ alg: <span class="str">'HS256'</span> })
-  .<span class="fn">setExpirationTime</span>(<span class="str">'30d'</span>)
-  .<span class="fn">sign</span>(secret)</div>
+            <span class="pill green">Scoring Rules</span>
+            <h3 style="margin-top: 10px;">🎯 Distance-Decay Formula</h3>
+            <p>Points scale exponentially with geographic proximity up to <strong>5,000 pts</strong> per round:</p>
+            <ul class="feature-list" style="margin-top: 12px;">
+              <li><span class="bullet-check">✔</span> <strong>&lt; 25 km:</strong> 5,000 pts (Bullseye!)</li>
+              <li><span class="bullet-check">✔</span> <strong>&lt; 250 km:</strong> 4,500 – 4,950 pts (Exceptional)</li>
+              <li><span class="bullet-check">✔</span> <strong>&lt; 1,000 km:</strong> 3,000 – 4,200 pts (Great Guess)</li>
+              <li><span class="bullet-check">✔</span> <strong>&gt; 5,000 km:</strong> Minimal points rewarded</li>
+            </ul>
           </div>
 
           <div class="card">
-            <h3>📁 Serverless `/tmp` DB</h3>
-            <p>Drizzle ORM over `better-sqlite3`. On Vercel serverless functions, redirects to writable `/tmp`:</p>
-            <ul class="feature-list" style="margin-top: 10px;">
-              <li><span class="bullet-check">✔</span> Auto-init tables on startup (`initDb()`).</li>
-              <li><span class="bullet-check">✔</span> Pre-seeded default users: <strong>`king`</strong> & <strong>`admin`</strong>.</li>
-              <li><span class="bullet-check">✔</span> Synchronous zero-latency relational queries.</li>
+            <span class="pill yellow">Progression</span>
+            <h3 style="margin-top: 10px;">🏆 Rank & Leaderboards</h3>
+            <p>Player achievements and competitive tracking saved to global rankings:</p>
+            <ul class="feature-list" style="margin-top: 12px;">
+              <li><span class="bullet-check">✔</span> <strong>Performance Tiers:</strong> Gold, Silver, Bronze badges based on total match score.</li>
+              <li><span class="bullet-check">✔</span> <strong>Player Profile:</strong> Tracks games played, win rate, and personal best records.</li>
+              <li><span class="bullet-check">✔</span> <strong>Live Leaderboard:</strong> Compete with global explorers for the top spot.</li>
             </ul>
           </div>
         </div>
@@ -855,12 +864,12 @@
     </section>
 
     <!-- ============================================================= -->
-    <!-- SLIDE 5: MEMBER 1 - 1v1 Battle Arena & Seed Sync -->
+    <!-- SLIDE 5: MEMBER 1 - 1v1 Battle Arena & Duel Logic -->
     <!-- ============================================================= -->
-    <section class="slide" data-part="1" data-speaker="Member 1: 1v1 Battle Arena">
+    <section class="slide" data-part="1" data-speaker="Member 1: 1v1 Duel Arena">
       <div class="slide-header">
-        <span class="slide-speaker-tag"><span class="badge-num">Part 1</span> Member 1 &bull; Multiplayer Architecture</span>
-        <h2 class="slide-title">1v1 Duel Arena & Seed-Synchronized Matches</h2>
+        <span class="slide-speaker-tag"><span class="badge-num">Part 1</span> Member 1 &bull; Multiplayer Duels</span>
+        <h2 class="slide-title">1v1 Battle Arena & Competitive Duel Rules</h2>
       </div>
 
       <div class="slide-body">
@@ -871,27 +880,28 @@
           </div>
           <div class="stat-box">
             <span class="stat-val yellow">15s</span>
-            <span class="stat-label">Round Countdown Timer</span>
+            <span class="stat-label">Turn Countdown Timer</span>
           </div>
           <div class="stat-box">
             <span class="stat-val green">1.0x &rarr; 1.5x</span>
-            <span class="stat-label">Late Round Multiplier</span>
+            <span class="stat-label">Pressure Multiplier</span>
           </div>
           <div class="stat-box">
-            <span class="stat-val">UUID v4</span>
-            <span class="stat-label">Synchronized Room Seed</span>
+            <span class="stat-val">Δ Distance</span>
+            <span class="stat-label">HP Damage Inflicted</span>
           </div>
         </div>
 
         <div class="card body-fill-lower">
-          <h3>🔗 Deterministic Room Synchronization</h3>
+          <h3>⚔️ Real-Time Clash Mechanics</h3>
           <p>
-            Instead of heavy real-time server sockets, 1v1 friend duels use the room UUID as a deterministic PRNG seed:
+            Two players duel face-to-face with identical mystery locations. Proximity dictates survival:
           </p>
-          <ul class="feature-list" style="margin-top: 16px;">
-            <li><span class="bullet-check">✔</span> <strong>Identical Mystery Photos:</strong> Both players receive the exact same 7 satellite mystery locations in the same sequence.</li>
-            <li><span class="bullet-check">✔</span> <strong>Dedicated Subroute:</strong> Friends join directly via `/invite/[uuid]` with instant 1-click battle acceptance.</li>
-            <li><span class="bullet-check">✔</span> <strong>Fair Competitive Clash:</strong> Accuracy distance difference directly inflicts HP damage to the opponent.</li>
+          <ul class="feature-list" style="margin-top: 14px;">
+            <li><span class="bullet-check">✔</span> <strong>Distance Delta Damage:</strong> Whichever player places their pin further from the target takes damage equal to the difference in kilometers: <strong>Damage = |Dist<sub>P1</sub> &minus; Dist<sub>P2</sub>| &times; Multiplier</strong>.</li>
+            <li><span class="bullet-check">✔</span> <strong>15-Second Pressure Timer:</strong> If a player fails to lock in before 0s, their guess defaults to the antipodal point (maximum distance penalty).</li>
+            <li><span class="bullet-check">✔</span> <strong>Late-Round Multipliers:</strong> Starting from Round 4, damage ramps from 1.0x to 1.5x, creating high-stakes sudden death climaxes.</li>
+            <li><span class="bullet-check">✔</span> <strong>Opponents:</strong> Challenge AI Bots (Casual, Master, Grandmaster) or send instant room invite links (`/invite/[uuid]`) to friends.</li>
           </ul>
         </div>
       </div>
@@ -1323,7 +1333,7 @@ distance = 2 &times; R &times; arcsin(√a)</div>
       <div class="team-cards-row">
         <div class="team-card m1">
           <span class="member-tag">Member 1</span>
-          <span class="member-title">Full-Stack Architecture</span>
+          <span class="member-title">Game Logic & Modes</span>
         </div>
         <div class="team-card m2">
           <span class="member-tag">Member 2</span>
