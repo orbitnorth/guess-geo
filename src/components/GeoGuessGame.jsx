@@ -46,6 +46,7 @@ export default function GeoGuessGame({ initialDuelRoom = '', autoStartDuel = fal
   const [results, setResults] = useState([])
   const [totalScore, setTotalScore] = useState(0)
   const [photoState, setPhotoState] = useState('loading')
+  const [photoCollapsed, setPhotoCollapsed] = useState(false)
   const [lightboxOpen, setLightboxOpen] = useState(false)
   const [muted, setMuted] = useState(() => sound.isMuted)
   const [isTouch, setIsTouch] = useState(false)
@@ -186,6 +187,9 @@ export default function GeoGuessGame({ initialDuelRoom = '', autoStartDuel = fal
     engineRef.current?.setGuess(lat, lon)
     setGuess({ lat, lon })
     sound.pin()
+    if (typeof window !== 'undefined' && window.innerWidth <= 768) {
+      setPhotoCollapsed(true)
+    }
   }, [])
 
   const handleDuelRevealComplete = useCallback(() => {
@@ -511,6 +515,7 @@ export default function GeoGuessGame({ initialDuelRoom = '', autoStartDuel = fal
     setRoundIndex(nextIndex)
     setRoundResult(null)
     setGuess(null)
+    setPhotoCollapsed(false)
     setPhotoState('loading')
     setPhase('guessing')
     engineRef.current?.startRound()
@@ -526,6 +531,7 @@ export default function GeoGuessGame({ initialDuelRoom = '', autoStartDuel = fal
     setResults([])
     setTotalScore(0)
     setGuess(null)
+    setPhotoCollapsed(false)
     setPhotoState('loading')
     setLightboxOpen(false)
     setPhase('guessing')
@@ -731,6 +737,8 @@ export default function GeoGuessGame({ initialDuelRoom = '', autoStartDuel = fal
           hint={hint}
           roundNumber={gameMode === 'duel' ? duelRound : roundIndex + 1}
           totalRounds={gameMode === 'duel' ? 7 : deck.length}
+          collapsed={photoCollapsed}
+          onToggleCollapse={setPhotoCollapsed}
           onLoad={() => setPhotoState('ready')}
           onError={() => setPhotoState('error')}
           onExpand={openLightbox}

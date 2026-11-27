@@ -44,6 +44,8 @@ const paths = {
       <path d="M3.2 4.2v5.2h5.2" />
     </>
   ),
+  chevronDown: <path d="m6 9 6 6 6-6" />,
+  chevronUp: <path d="m18 15-6-6-6 6" />,
   arrowRight: <path d="M4.5 12h15M13.5 6l6 6-6 6" />,
   arrowLeft: <path d="M19.5 12h-15M10.5 18l-6-6 6-6" />,
   target: (

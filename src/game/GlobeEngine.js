@@ -407,6 +407,8 @@ export class GlobeEngine {
       config.url,
       (texture) => {
         texture.colorSpace = THREE.SRGBColorSpace
+        texture.wrapS = THREE.RepeatWrapping
+        texture.wrapT = THREE.ClampToEdgeWrapping
         texture.anisotropy = this.renderer.capabilities.getMaxAnisotropy()
         this.textureCache.set(config.url, texture)
       },
@@ -476,6 +478,8 @@ export class GlobeEngine {
         config.url,
         (loaded) => {
           loaded.colorSpace = THREE.SRGBColorSpace
+          loaded.wrapS = THREE.RepeatWrapping
+          loaded.wrapT = THREE.ClampToEdgeWrapping
           if (this.renderer) {
             loaded.anisotropy = this.renderer.capabilities.getMaxAnisotropy()
           }
