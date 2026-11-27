@@ -2571,27 +2571,27 @@ kbd {
 .auth-form {
   display: flex;
   flex-direction: column;
+  gap: 16px;
 }
 
-/* Two-Step Onboarding with Consistent Modal Height */
+.auth-form .form-group {
+  margin-bottom: 0;
+}
+
+/* Two-Step Onboarding with Natural Proportions */
 .fixed-height-modal {
-  height: 620px;
-  max-height: min(88vh, 620px);
-  min-height: 540px;
+  max-height: min(88vh, 660px);
 }
 
 .auth-step-form {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  height: 100%;
-  min-height: 440px;
 }
 
 .form-fields-stack {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 16px;
 }
 
 .onboarding-stepper {
@@ -2652,8 +2652,8 @@ kbd {
 .form-actions-bottom {
   display: flex;
   flex-direction: column;
-  margin-top: auto;
-  padding-top: 14px;
+  margin-top: 22px;
+  padding-top: 0;
 }
 
 .step-2-buttons {
@@ -2664,7 +2664,8 @@ kbd {
 }
 
 .btn-step-back {
-  padding: 13px 20px;
+  height: 48px;
+  padding: 0 20px;
   font-family: var(--font-display);
   font-weight: 700;
   font-size: 14.5px;
@@ -2672,6 +2673,8 @@ kbd {
   background: var(--line);
   color: var(--ink);
   transition: all 0.15s ease;
+  box-sizing: border-box;
+  flex-shrink: 0;
 }
 
 .btn-step-back:hover {
@@ -2684,18 +2687,21 @@ kbd {
   justify-content: center;
   gap: 8px;
   width: 100%;
-  padding: 13px 20px;
+  height: 48px;
+  padding: 0 20px;
   font-size: 15px;
   font-weight: 700;
   border-radius: 16px;
+  box-sizing: border-box;
 }
 
-/* Username input prefix and password toggler */
+/* Username input prefix and password toggler - 100% uniform width & height */
 .input-prefix-wrap {
   position: relative;
   display: flex;
   align-items: center;
   width: 100%;
+  box-sizing: border-box;
 }
 
 .input-prefix {
@@ -2706,10 +2712,17 @@ kbd {
   font-size: 15px;
   color: var(--muted);
   pointer-events: none;
+  z-index: 2;
 }
 
-.input-with-prefix {
-  padding-left: 32px !important;
+.input-prefix-wrap .form-input,
+.input-prefix-wrap input {
+  width: 100% !important;
+  flex: 1 1 100% !important;
+  min-width: 0 !important;
+  height: 48px !important;
+  padding-left: 34px !important;
+  box-sizing: border-box !important;
 }
 
 .input-password-wrap {
@@ -2717,10 +2730,17 @@ kbd {
   display: flex;
   align-items: center;
   width: 100%;
+  box-sizing: border-box;
 }
 
-.input-password-field {
-  padding-right: 68px !important;
+.input-password-wrap .form-input,
+.input-password-wrap input {
+  width: 100% !important;
+  flex: 1 1 100% !important;
+  min-width: 0 !important;
+  height: 48px !important;
+  padding-right: 70px !important;
+  box-sizing: border-box !important;
 }
 
 .password-toggle-btn {
@@ -2730,9 +2750,12 @@ kbd {
   font-size: 12px;
   font-weight: 700;
   color: var(--blue-dark);
-  padding: 4px 8px;
+  padding: 6px 10px;
   border-radius: 8px;
   cursor: pointer;
+  z-index: 2;
+  background: transparent;
+  border: none;
 }
 
 .password-toggle-btn:hover {
@@ -2743,7 +2766,7 @@ kbd {
   font-size: 11px;
   color: var(--muted);
   font-weight: 600;
-  margin-top: 4px;
+  margin-top: 5px;
 }
 
 /* Selected Avatar Highlight Banner */
@@ -2804,7 +2827,7 @@ kbd {
 }
 
 .form-group {
-  margin-bottom: 18px;
+  margin-bottom: 0;
   display: flex;
   flex-direction: column;
 }
@@ -2818,9 +2841,12 @@ kbd {
 }
 
 .form-input {
+  width: 100%;
+  display: block;
   font-family: var(--font-body);
   font-size: 14.5px;
-  padding: 11px 16px;
+  height: 48px;
+  padding: 0 16px;
   border: 2px solid var(--line-strong);
   border-radius: 14px;
   background: #fdfefe;
@@ -2869,10 +2895,12 @@ kbd {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 10px;
-  max-height: 250px;
+  max-height: 230px;
   overflow-y: auto;
-  padding: 4px 8px 6px 2px;
+  padding: 4px 6px 4px 2px;
   box-sizing: border-box;
+  scrollbar-width: thin;
+  scrollbar-color: #c0dce7 transparent;
 }
 
 .cartoon-avatar-card {

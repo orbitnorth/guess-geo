@@ -104,8 +104,8 @@ export function RegisterModal({ isOpen, onClose, onAuthSuccess, onSwitchToLogin 
           ? 'Enter your name, unique username, and password to start.'
           : 'Choose the cartoon adventurer that represents you on the globe.'
       }
-      className="register-modal fixed-height-modal"
-      maxWidth={580}
+      className="register-modal"
+      maxWidth={540}
     >
       {/* Onboarding Step Indicator */}
       <div className="onboarding-stepper" aria-label={`Onboarding Step ${step} of 2`}>
