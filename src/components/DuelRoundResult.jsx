@@ -74,7 +74,7 @@ export function DuelRoundResult({
       {/* Advance Action */}
       <button
         type="button"
-        className="btn-modal-action btn-full-action btn-duel-advance"
+        className="btn btn-blue btn-full-action btn-duel-advance"
         onClick={onNext}
         autoFocus
       >

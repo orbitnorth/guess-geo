@@ -4513,8 +4513,27 @@ kbd {
   color: var(--muted);
 }
 
+.btn-full-action {
+  width: 100%;
+}
+
+.btn-duel-start-action {
+  width: 100%;
+  padding: 14px 24px;
+  font-size: 16px;
+  font-weight: 800;
+  border-radius: 16px;
+  box-shadow: 0 5px 0 var(--green-dark);
+}
+
 .btn-duel-advance {
-  margin-top: 2px;
+  width: 100%;
+  padding: 13px 22px;
+  font-size: 15px;
+  font-weight: 800;
+  border-radius: 14px;
+  box-shadow: 0 4px 0 var(--blue-dark);
+  margin-top: 4px;
 }
 
 /* Duel Game Over & Lobby Modals */

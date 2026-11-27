@@ -116,10 +116,10 @@ export function DuelLobbyModal({
       footer={
         <button
           type="button"
-          className="btn-modal-action btn-full-action btn-duel-start-action"
+          className="btn btn-green btn-xl btn-full-action btn-duel-start-action"
           onClick={handleStart}
         >
-          <Icon name="lightning" size={18} strokeWidth={2.4} />
+          <Icon name="lightning" size={20} strokeWidth={2.6} />
           <span>
             {tab === 'bot'
               ? 'Start 1v1 Bot Duel'
