@@ -35,6 +35,33 @@ const COLORS = {
   atmosphere: 0x8fd9ff,
 }
 
+export const GLOBE_TEXTURES = {
+  day: {
+    id: 'day',
+    name: 'Day Satellite',
+    description: 'Vibrant natural daylight photography',
+    url: 'https://unpkg.com/three-globe/example/img/earth-day.jpg',
+    atmosphereColor: 0x8fd9ff,
+    atmosphereIntensity: 0.55,
+  },
+  night: {
+    id: 'night',
+    name: 'Night Lights',
+    description: 'Illuminated city networks & dark oceans',
+    url: 'https://unpkg.com/three-globe/example/img/earth-night.jpg',
+    atmosphereColor: 0x4da8ff,
+    atmosphereIntensity: 0.65,
+  },
+  dark: {
+    id: 'dark',
+    name: 'Dark Minimal',
+    description: 'High-contrast midnight aesthetic',
+    url: 'https://unpkg.com/three-globe/example/img/earth-dark.jpg',
+    atmosphereColor: 0x38bdf8,
+    atmosphereIntensity: 0.45,
+  },
+}
+
 const Y_AXIS = new THREE.Vector3(0, 1, 0)
 const Z_AXIS = new THREE.Vector3(0, 0, 1)
 
@@ -270,6 +297,9 @@ export class GlobeEngine {
     this.downX = 0
     this.downY = 0
 
+    this.textureCache = new Map()
+    this.currentTextureKey = this.callbacks.initialTexture || 'day'
+
     this.buildScene()
     this.buildHoverRing()
     this.bindEvents()
@@ -346,12 +376,16 @@ export class GlobeEngine {
   }
 
   buildGlobe() {
+    const initialKey = this.currentTextureKey || 'day'
+    const config = GLOBE_TEXTURES[initialKey] || GLOBE_TEXTURES.day
     const textureLoader = new THREE.TextureLoader()
+
     const earthTexture = textureLoader.load(
-      'https://unpkg.com/three-globe/example/img/earth-day.jpg',
+      config.url,
       (texture) => {
         texture.colorSpace = THREE.SRGBColorSpace
         texture.anisotropy = this.renderer.capabilities.getMaxAnisotropy()
+        this.textureCache.set(config.url, texture)
       },
       undefined,
       () => {
@@ -374,11 +408,19 @@ export class GlobeEngine {
     )
     this.scene.add(this.globe)
 
-    const atmosphere = new THREE.Mesh(
+    this.atmosphereMaterial = makeAtmosphereMaterial()
+    if (config.atmosphereColor) {
+      this.atmosphereMaterial.uniforms.glowColor.value.set(config.atmosphereColor)
+    }
+    if (config.atmosphereIntensity) {
+      this.atmosphereMaterial.uniforms.intensity.value = config.atmosphereIntensity
+    }
+
+    this.atmosphere = new THREE.Mesh(
       new THREE.SphereGeometry(GLOBE_RADIUS * 1.14, 64, 64),
-      makeAtmosphereMaterial(),
+      this.atmosphereMaterial,
     )
-    this.scene.add(atmosphere)
+    this.scene.add(this.atmosphere)
 
     // A pale outline keeps the globe crisp against the bright sky.
     const halo = new THREE.Mesh(
@@ -393,6 +435,48 @@ export class GlobeEngine {
       }),
     )
     this.scene.add(halo)
+  }
+
+  setTexture(key = 'day') {
+    const config = GLOBE_TEXTURES[key] || GLOBE_TEXTURES.day
+    this.currentTextureKey = key
+
+    if (this.textureCache.has(config.url)) {
+      const cached = this.textureCache.get(config.url)
+      if (this.globeMaterial) {
+        this.globeMaterial.map = cached
+        this.globeMaterial.needsUpdate = true
+      }
+    } else {
+      const loader = new THREE.TextureLoader()
+      loader.load(
+        config.url,
+        (loaded) => {
+          loaded.colorSpace = THREE.SRGBColorSpace
+          if (this.renderer) {
+            loaded.anisotropy = this.renderer.capabilities.getMaxAnisotropy()
+          }
+          this.textureCache.set(config.url, loaded)
+          if (this.currentTextureKey === key && this.globeMaterial) {
+            this.globeMaterial.map = loaded
+            this.globeMaterial.needsUpdate = true
+          }
+        },
+        undefined,
+        (err) => {
+          console.warn('Failed to load globe texture:', config.url, err)
+        },
+      )
+    }
+
+    if (this.atmosphereMaterial && this.atmosphereMaterial.uniforms) {
+      if (config.atmosphereColor) {
+        this.atmosphereMaterial.uniforms.glowColor.value.set(config.atmosphereColor)
+      }
+      if (config.atmosphereIntensity) {
+        this.atmosphereMaterial.uniforms.intensity.value = config.atmosphereIntensity
+      }
+    }
   }
 
   buildHoverRing() {
@@ -829,5 +913,8 @@ export class GlobeEngine {
     this.renderer.dispose()
     this.renderer.forceContextLoss?.()
     this.renderer.domElement.remove()
+
+    this.textureCache.forEach((tex) => tex.dispose())
+    this.textureCache.clear()
   }
 }

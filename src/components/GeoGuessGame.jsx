@@ -22,6 +22,7 @@ import { RegisterModal } from './RegisterModal'
 import { LoginModal } from './LoginModal'
 import { LeaderboardModal } from './LeaderboardModal'
 import { ProfileModal } from './ProfileModal'
+import { SettingsModal } from './SettingsModal'
 import { getAvatarById } from '@/lib/data/avatars'
 
 export default function GeoGuessGame() {
@@ -37,11 +38,15 @@ export default function GeoGuessGame() {
   const [muted, setMuted] = useState(() => sound.isMuted)
   const [isTouch, setIsTouch] = useState(false)
 
-  // Auth & Modal state: null | 'register' | 'login' | 'leaderboard' | 'profile'
+  // Auth & Modal state: null | 'register' | 'login' | 'leaderboard' | 'profile' | 'settings'
   const [user, setUser] = useState(null)
   const [token, setToken] = useState(null)
   const [activeModal, setActiveModal] = useState(null)
   const [scoreSaved, setScoreSaved] = useState(false)
+
+  // Appearance & Texture Settings
+  const [theme, setTheme] = useState('light')
+  const [globeTexture, setGlobeTexture] = useState('day')
 
   const stageRef = useRef(null)
   const confirmRef = useRef(null)
@@ -56,6 +61,15 @@ export default function GeoGuessGame() {
   // Detect touch on mount
   useEffect(() => {
     setIsTouch(window.matchMedia?.('(pointer: coarse)').matches ?? false)
+  }, [])
+
+  // Restore settings and theme from localStorage
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('geoguess_theme') || 'light'
+    const savedTexture = localStorage.getItem('geoguess_globe_texture') || 'day'
+    setTheme(savedTheme)
+    setGlobeTexture(savedTexture)
+    document.documentElement.setAttribute('data-theme', savedTheme)
   }, [])
 
   // Restore authenticated session from localStorage
@@ -92,13 +106,33 @@ export default function GeoGuessGame() {
     localStorage.removeItem('guess_geo_token')
   }
 
+  const handleThemeChange = (newTheme) => {
+    setTheme(newTheme)
+    localStorage.setItem('geoguess_theme', newTheme)
+    document.documentElement.setAttribute('data-theme', newTheme)
+    sound.click?.()
+  }
+
+  const handleGlobeTextureChange = (newTexture) => {
+    setGlobeTexture(newTexture)
+    localStorage.setItem('geoguess_globe_texture', newTexture)
+    engineRef.current?.setTexture(newTexture)
+    sound.click?.()
+  }
+
   // ------------------------------------------------------------------
   //  THREE.JS LIFECYCLE
   // ------------------------------------------------------------------
   useEffect(() => {
     if (!stageRef.current) return undefined
 
+    const initialTexture =
+      typeof window !== 'undefined'
+        ? localStorage.getItem('geoguess_globe_texture') || 'day'
+        : 'day'
+
     const engine = new GlobeEngine(stageRef.current, {
+      initialTexture,
       onPick: (latLon) => callbacksRef.current.onPick?.(latLon),
       onRevealComplete: () => callbacksRef.current.onRevealComplete?.(),
       onFlagScreen: (info) => callbacksRef.current.onFlagScreen?.(info),
@@ -516,6 +550,26 @@ export default function GeoGuessGame() {
         token={token}
         onAuthSuccess={handleAuthSuccess}
         onLogout={handleLogout}
+      />
+
+      {/* Floating Settings Button in bottom-right corner */}
+      <button
+        type="button"
+        className="btn-settings-corner"
+        onClick={() => setActiveModal('settings')}
+        aria-label="Game Settings"
+        title="Settings & Appearance"
+      >
+        <Icon name="settings" size={24} strokeWidth={2.2} />
+      </button>
+
+      <SettingsModal
+        isOpen={activeModal === 'settings'}
+        onClose={() => setActiveModal(null)}
+        theme={theme}
+        onThemeChange={handleThemeChange}
+        globeTexture={globeTexture}
+        onGlobeTextureChange={handleGlobeTextureChange}
       />
     </div>
   )
