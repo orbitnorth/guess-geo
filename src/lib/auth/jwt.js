@@ -7,7 +7,8 @@ const ALGORITHM = 'HS256'
 export async function signUserToken(user) {
   return await new jose.SignJWT({
     id: user.id,
-    email: user.email,
+    username: user.username,
+    email: user.email || null,
     name: user.name,
     avatar: user.avatar,
   })

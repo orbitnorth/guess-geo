@@ -118,7 +118,7 @@ export function ProfileModal({ user, token, isOpen, onClose, onAuthSuccess, onLo
             <div className="profile-hero-info">
               <strong className="profile-hero-name">{user?.name}</strong>
               <span className="profile-hero-title">{currentAvatar.title}</span>
-              <span className="profile-hero-email">{user?.email}</span>
+              <span className="profile-hero-email">@{user?.username || 'explorer'}</span>
             </div>
             <button
               type="button"

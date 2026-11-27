@@ -12,7 +12,13 @@ export async function GET(request) {
     }
 
     const user = db
-      .select()
+      .select({
+        id: users.id,
+        username: users.username,
+        name: users.name,
+        avatar: users.avatar,
+        createdAt: users.createdAt,
+      })
       .from(users)
       .where(eq(users.id, Number(authUser.id)))
       .get()

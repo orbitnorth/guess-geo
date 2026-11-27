@@ -22,7 +22,6 @@ export function IntroScreen({
           </span>
           <div className="brand-text">
             <strong>GeoGuess</strong>
-            <span className="hero-edition-badge">Globe Edition</span>
           </div>
         </div>
 
@@ -90,11 +89,6 @@ export function IntroScreen({
       <main className="hero-body">
         {/* Left Column: Copy & Actions */}
         <div className="hero-content">
-          <div className="hero-eyebrow">
-            <span className="eyebrow-pill">3D Geography Challenge</span>
-            <span className="eyebrow-text">91 Landmarks across 58 Countries</span>
-          </div>
-
           <h1 className="hero-title">
             Spin the globe.
             <br />

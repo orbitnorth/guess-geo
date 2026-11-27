@@ -3,49 +3,65 @@ import { eq, sql } from 'drizzle-orm'
 import { db } from '@/lib/db'
 import { users } from '@/lib/db/schema'
 import { signUserToken } from '@/lib/auth/jwt'
+import { hashPassword } from '@/lib/auth/password'
 
 export async function POST(request) {
   try {
     const body = await request.json().catch(() => ({}))
-    const { email, name, avatar } = body
+    const { name, username, password, avatar } = body
 
-    if (!email || typeof email !== 'string') {
-      return NextResponse.json({ error: 'Valid email is required.' }, { status: 400 })
-    }
-    const cleanEmail = email.trim().toLowerCase()
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    if (!emailRegex.test(cleanEmail)) {
-      return NextResponse.json({ error: 'Please enter a valid email address.' }, { status: 400 })
-    }
-
+    // Validate name
     if (!name || typeof name !== 'string' || name.trim().length < 2) {
-      return NextResponse.json({ error: 'Name must be at least 2 characters long.' }, { status: 400 })
+      return NextResponse.json({ error: 'Full name must be at least 2 characters long.' }, { status: 400 })
     }
     const cleanName = name.trim()
 
+    // Validate username
+    if (!username || typeof username !== 'string') {
+      return NextResponse.json({ error: 'Username is required.' }, { status: 400 })
+    }
+    const cleanUsername = username.trim().toLowerCase()
+    const usernameRegex = /^[a-z0-9_.-]{3,24}$/
+    if (!usernameRegex.test(cleanUsername)) {
+      return NextResponse.json(
+        { error: 'Username must be 3-24 characters and only contain letters, numbers, dots, or underscores.' },
+        { status: 400 }
+      )
+    }
+
+    // Validate password
+    if (!password || typeof password !== 'string' || password.length < 4) {
+      return NextResponse.json({ error: 'Password must be at least 4 characters long.' }, { status: 400 })
+    }
+
+    // Validate avatar
     if (!avatar || typeof avatar !== 'string') {
-      return NextResponse.json({ error: 'Please select an avatar.' }, { status: 400 })
+      return NextResponse.json({ error: 'Please choose your cartoon explorer avatar.' }, { status: 400 })
     }
     const cleanAvatar = avatar.trim()
 
+    // Check if username is already taken
     const existing = db
       .select()
       .from(users)
-      .where(eq(sql`lower(${users.email})`, cleanEmail))
+      .where(eq(sql`lower(${users.username})`, cleanUsername))
       .get()
 
     if (existing) {
       return NextResponse.json(
-        { error: 'An account with this email already exists.', existing: true },
+        { error: 'This username is already taken. Please choose another.', existing: true },
         { status: 409 }
       )
     }
 
+    const hashedPassword = hashPassword(password)
     const now = new Date().toISOString()
+
     const newUser = db
       .insert(users)
       .values({
-        email: cleanEmail,
+        username: cleanUsername,
+        password: hashedPassword,
         name: cleanName,
         avatar: cleanAvatar,
         createdAt: now,
@@ -54,12 +70,20 @@ export async function POST(request) {
       .returning()
       .get()
 
-    const token = await signUserToken(newUser)
+    const safeUser = {
+      id: newUser.id,
+      username: newUser.username,
+      name: newUser.name,
+      avatar: newUser.avatar,
+      createdAt: newUser.createdAt,
+    }
+
+    const token = await signUserToken(safeUser)
 
     return NextResponse.json(
       {
         message: 'Account created successfully.',
-        user: newUser,
+        user: safeUser,
         token,
       },
       { status: 201 }

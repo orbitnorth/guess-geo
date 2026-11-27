@@ -34,11 +34,19 @@ export async function PUT(request) {
       return NextResponse.json({ error: 'User not found.' }, { status: 404 })
     }
 
-    const token = await signUserToken(updatedUser)
+    const safeUser = {
+      id: updatedUser.id,
+      username: updatedUser.username,
+      name: updatedUser.name,
+      avatar: updatedUser.avatar,
+      createdAt: updatedUser.createdAt,
+    }
+
+    const token = await signUserToken(safeUser)
 
     return NextResponse.json({
       message: 'Profile updated successfully.',
-      user: updatedUser,
+      user: safeUser,
       token,
     })
   } catch (err) {

@@ -5,7 +5,9 @@ import { Icon } from './Icons'
 import { Modal } from './Modal'
 
 export function LoginModal({ isOpen, onClose, onAuthSuccess, onSwitchToRegister }) {
-  const [email, setEmail] = useState('')
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
@@ -18,7 +20,10 @@ export function LoginModal({ isOpen, onClose, onAuthSuccess, onSwitchToRegister 
       const res = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({
+          username: username.trim().toLowerCase(),
+          password,
+        }),
       })
       const data = await res.json()
 
@@ -27,7 +32,8 @@ export function LoginModal({ isOpen, onClose, onAuthSuccess, onSwitchToRegister 
       }
 
       onAuthSuccess(data.user, data.token)
-      setEmail('')
+      setUsername('')
+      setPassword('')
       onClose()
     } catch (err) {
       setError(err.message)
@@ -39,11 +45,14 @@ export function LoginModal({ isOpen, onClose, onAuthSuccess, onSwitchToRegister 
   return (
     <Modal
       isOpen={isOpen}
-      onClose={onClose}
+      onClose={() => {
+        setError('')
+        onClose()
+      }}
       badge="Existing Explorer"
       badgeVariant="blue"
       title="Welcome Back"
-      subtitle="Sign in with your registered email to continue your expedition."
+      subtitle="Sign in with your username and password to continue your expedition."
       className="login-modal"
       maxWidth={480}
     >
@@ -56,19 +65,49 @@ export function LoginModal({ isOpen, onClose, onAuthSuccess, onSwitchToRegister 
 
       <form onSubmit={handleSubmit} className="auth-form">
         <div className="form-group">
-          <label htmlFor="login-email" className="form-label">
-            Registered Email
+          <label htmlFor="login-username" className="form-label">
+            Username
           </label>
-          <input
-            id="login-email"
-            type="email"
-            className="form-input"
-            placeholder="explorer@earth.io"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            autoFocus
-          />
+          <div className="input-prefix-wrap">
+            <span className="input-prefix">@</span>
+            <input
+              id="login-username"
+              type="text"
+              className="form-input input-with-prefix"
+              placeholder="amelia_explorer"
+              value={username}
+              onChange={(e) => setUsername(e.target.value.toLowerCase().replace(/\s+/g, ''))}
+              required
+              autoFocus
+              autoCapitalize="none"
+              autoCorrect="off"
+            />
+          </div>
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="login-password" className="form-label">
+            Password
+          </label>
+          <div className="input-password-wrap">
+            <input
+              id="login-password"
+              type={showPassword ? 'text' : 'password'}
+              className="form-input input-password-field"
+              placeholder="Your password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            <button
+              type="button"
+              className="password-toggle-btn"
+              onClick={() => setShowPassword(!showPassword)}
+              tabIndex={-1}
+            >
+              {showPassword ? 'Hide' : 'Show'}
+            </button>
+          </div>
         </div>
 
         <button

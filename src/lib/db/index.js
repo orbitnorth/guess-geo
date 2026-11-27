@@ -29,7 +29,9 @@ export function initDb() {
   sqlite.exec(`
     CREATE TABLE IF NOT EXISTS users (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      email TEXT NOT NULL UNIQUE,
+      username TEXT UNIQUE,
+      password TEXT,
+      email TEXT,
       name TEXT NOT NULL,
       avatar TEXT NOT NULL,
       created_at TEXT NOT NULL,
@@ -46,10 +48,23 @@ export function initDb() {
       created_at TEXT NOT NULL
     );
 
-    CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
     CREATE INDEX IF NOT EXISTS idx_scores_user_id ON scores(user_id);
     CREATE INDEX IF NOT EXISTS idx_scores_total_score ON scores(total_score DESC);
   `)
+
+  // Check for column migrations if users table was created previously without username/password
+  const tableInfo = sqlite.pragma('table_info(users)')
+  const columnNames = tableInfo.map((col) => col.name)
+
+  if (!columnNames.includes('username')) {
+    sqlite.exec(`ALTER TABLE users ADD COLUMN username TEXT;`)
+  }
+  if (!columnNames.includes('password')) {
+    sqlite.exec(`ALTER TABLE users ADD COLUMN password TEXT;`)
+  }
+
+  // Create unique index on username after column is guaranteed to exist
+  sqlite.exec(`CREATE UNIQUE INDEX IF NOT EXISTS idx_users_username ON users(username);`)
 }
 
 // Ensure tables exist on boot
