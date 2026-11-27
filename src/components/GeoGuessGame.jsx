@@ -23,12 +23,23 @@ import { LoginModal } from './LoginModal'
 import { LeaderboardModal } from './LeaderboardModal'
 import { ProfileModal } from './ProfileModal'
 import { SettingsModal } from './SettingsModal'
+import { DuelHud } from './DuelHud'
+import { DuelRoundResult } from './DuelRoundResult'
+import { DuelGameOverModal } from './DuelGameOverModal'
+import { DuelLobbyModal } from './DuelLobbyModal'
+import {
+  DUEL_BOTS,
+  INITIAL_HP,
+  generateBotGuess,
+  calculateDuelRound,
+  getRoundMultiplier,
+} from '@/game/duelBots'
 import { getAvatarById } from '@/lib/data/avatars'
 
 export default function GeoGuessGame() {
   const [deck, setDeck] = useState(() => buildDeck())
   const [roundIndex, setRoundIndex] = useState(0)
-  const [phase, setPhase] = useState('intro') // intro | guessing | revealing | result | final
+  const [phase, setPhase] = useState('intro') // intro | guessing | revealing | result | final | duel_guessing | duel_revealing | duel_result | duel_match_over
   const [guess, setGuess] = useState(null)
   const [roundResult, setRoundResult] = useState(null)
   const [results, setResults] = useState([])
@@ -38,7 +49,7 @@ export default function GeoGuessGame() {
   const [muted, setMuted] = useState(() => sound.isMuted)
   const [isTouch, setIsTouch] = useState(false)
 
-  // Auth & Modal state: null | 'register' | 'login' | 'leaderboard' | 'profile' | 'settings'
+  // Auth & Modal state: null | 'register' | 'login' | 'leaderboard' | 'profile' | 'settings' | 'duel_lobby'
   const [user, setUser] = useState(null)
   const [token, setToken] = useState(null)
   const [activeModal, setActiveModal] = useState(null)
@@ -47,6 +58,26 @@ export default function GeoGuessGame() {
   // Appearance & Texture Settings
   const [theme, setTheme] = useState('light')
   const [globeTexture, setGlobeTexture] = useState('day')
+
+  // Game Mode: 'solo' | 'duel'
+  const [gameMode, setGameMode] = useState('solo')
+
+  // 1v1 Duel State
+  const [duelBot, setDuelBot] = useState(() => DUEL_BOTS[1])
+  const [duelRound, setDuelRound] = useState(1)
+  const [p1Hp, setP1Hp] = useState(INITIAL_HP)
+  const [p2Hp, setP2Hp] = useState(INITIAL_HP)
+  const [duelTimeLeft, setDuelTimeLeft] = useState(45)
+  const [p1LockedIn, setP1LockedIn] = useState(false)
+  const [p2LockedIn, setP2LockedIn] = useState(false)
+  const [duelRoundResult, setDuelRoundResult] = useState(null)
+  const [isDuelMatchOver, setIsDuelMatchOver] = useState(false)
+  const [duelWinner, setDuelWinner] = useState(null)
+
+  const botGuessRef = useRef(null)
+  const duelTimerRef = useRef(null)
+  const botTimerRef = useRef(null)
+  const duelOutcomeRef = useRef(null)
 
   const stageRef = useRef(null)
   const confirmRef = useRef(null)
@@ -155,11 +186,44 @@ export default function GeoGuessGame() {
     sound.pin()
   }, [])
 
+  const handleDuelRevealComplete = useCallback(() => {
+    const outcome = duelOutcomeRef.current
+    if (!outcome) return
+
+    let nextP1Hp = p1Hp
+    let nextP2Hp = p2Hp
+
+    if (outcome.winner === 'p1') {
+      nextP2Hp = Math.max(0, p2Hp - outcome.p2Damage)
+      setP2Hp(nextP2Hp)
+      sound.damage?.()
+    } else if (outcome.winner === 'p2') {
+      nextP1Hp = Math.max(0, p1Hp - outcome.p1Damage)
+      setP1Hp(nextP1Hp)
+      sound.damage?.()
+    } else {
+      sound.result?.('okay')
+    }
+
+    const matchOver = nextP1Hp <= 0 || nextP2Hp <= 0 || duelRound >= 7
+    setIsDuelMatchOver(matchOver)
+    if (matchOver) {
+      setDuelWinner(nextP1Hp > nextP2Hp ? 'p1' : 'p2')
+    }
+
+    setDuelRoundResult(outcome)
+    setPhase('duel_result')
+  }, [p1Hp, p2Hp, duelRound])
+
   const handleRevealComplete = useCallback(() => {
+    if (gameMode === 'duel') {
+      handleDuelRevealComplete()
+      return
+    }
     const tier = pendingTierRef.current || 'okay'
     sound.result(tier)
     setPhase('result')
-  }, [])
+  }, [gameMode, handleDuelRevealComplete])
 
   const handleFlagScreen = useCallback((info) => {
     const button = confirmRef.current
@@ -180,6 +244,151 @@ export default function GeoGuessGame() {
     onRevealComplete: handleRevealComplete,
     onFlagScreen: handleFlagScreen,
   }
+
+  // ------------------------------------------------------------------
+  //  1V1 DUEL MECHANICS
+  // ------------------------------------------------------------------
+  const handleStartDuel = useCallback(({ bot }) => {
+    const chosenBot = bot || DUEL_BOTS[1]
+    const freshDeck = buildDeck()
+
+    setDeck(freshDeck)
+    setGameMode('duel')
+    setDuelBot(chosenBot)
+    setP1Hp(INITIAL_HP)
+    setP2Hp(INITIAL_HP)
+    setDuelRound(1)
+    setRoundIndex(0)
+    setGuess(null)
+    setP1LockedIn(false)
+    setP2LockedIn(false)
+    setDuelRoundResult(null)
+    setIsDuelMatchOver(false)
+    setDuelWinner(null)
+    setPhotoState('loading')
+    setActiveModal(null)
+
+    sound.unlock()
+    sound.duelStart?.()
+    setPhase('duel_guessing')
+    engineRef.current?.startRound()
+  }, [])
+
+  const handleDuelReveal = useCallback(() => {
+    if (phase !== 'duel_guessing' || !location) return
+
+    if (duelTimerRef.current) clearInterval(duelTimerRef.current)
+    if (botTimerRef.current) clearTimeout(botTimerRef.current)
+
+    const p1Coord = guess || { lat: 0, lon: 0 }
+    const p2Coord = botGuessRef.current || generateBotGuess(duelBot, location)
+
+    const outcome = calculateDuelRound({
+      p1Guess: guess ? p1Coord : null,
+      p2Guess: p2Coord,
+      location,
+      roundNumber: duelRound,
+    })
+    duelOutcomeRef.current = outcome
+
+    setPhase('duel_revealing')
+
+    engineRef.current?.revealDuel({
+      p1: { lat: p1Coord.lat, lon: p1Coord.lon, color: 0x1cb0f6 },
+      p2: { lat: p2Coord.lat, lon: p2Coord.lon, color: 0xff4b4b },
+      location,
+    })
+
+    sound.pop(0.5)
+    sound.arc(0.55, 1.5)
+  }, [phase, guess, duelBot, location, duelRound])
+
+  const handleConfirmDuel = useCallback(() => {
+    if (!guess || phase !== 'duel_guessing') return
+    setP1LockedIn(true)
+    sound.confirm()
+
+    if (p2LockedIn) {
+      handleDuelReveal()
+    } else {
+      if (botTimerRef.current) clearTimeout(botTimerRef.current)
+      botTimerRef.current = setTimeout(() => {
+        setP2LockedIn(true)
+      }, Math.min(5000, duelTimeLeft * 1000))
+    }
+  }, [guess, phase, p2LockedIn, duelTimeLeft, handleDuelReveal])
+
+  const handleNextDuelRound = useCallback(() => {
+    if (isDuelMatchOver) {
+      if (duelWinner === 'p1') {
+        sound.fanfare()
+      }
+      setPhase('duel_match_over')
+      return
+    }
+
+    const nextRound = duelRound + 1
+    setDuelRound(nextRound)
+    setRoundIndex((i) => (i + 1) % deck.length)
+    setGuess(null)
+    setP1LockedIn(false)
+    setP2LockedIn(false)
+    setDuelRoundResult(null)
+    setPhotoState('loading')
+    setPhase('duel_guessing')
+    sound.roundStart?.()
+    engineRef.current?.startRound()
+  }, [isDuelMatchOver, duelWinner, duelRound, deck.length])
+
+  const handleLeaveDuel = useCallback(() => {
+    if (duelTimerRef.current) clearInterval(duelTimerRef.current)
+    if (botTimerRef.current) clearTimeout(botTimerRef.current)
+    engineRef.current?.clearMarkers()
+    setGameMode('solo')
+    setPhase('intro')
+  }, [])
+
+  // Duel Guessing countdown and simulated bot thinking
+  useEffect(() => {
+    if (gameMode !== 'duel' || phase !== 'duel_guessing' || !location) return
+
+    setDuelTimeLeft(45)
+    setP1LockedIn(false)
+    setP2LockedIn(false)
+
+    const botGuess = generateBotGuess(duelBot, location)
+    botGuessRef.current = botGuess
+
+    botTimerRef.current = setTimeout(() => {
+      setP2LockedIn(true)
+    }, botGuess.thinkTimeSec * 1000)
+
+    duelTimerRef.current = setInterval(() => {
+      setDuelTimeLeft((prev) => {
+        if (prev <= 1) {
+          return 0
+        }
+        if (prev <= 6) {
+          sound.countdownTick?.()
+        }
+        return prev - 1
+      })
+    }, 1000)
+
+    return () => {
+      if (duelTimerRef.current) clearInterval(duelTimerRef.current)
+      if (botTimerRef.current) clearTimeout(botTimerRef.current)
+    }
+  }, [gameMode, phase, duelRound, duelBot, location])
+
+  // Reveal duel round when both players lock in or timer hits 0
+  useEffect(() => {
+    if (gameMode !== 'duel' || phase !== 'duel_guessing') return
+
+    if ((p1LockedIn && p2LockedIn) || duelTimeLeft === 0) {
+      handleDuelReveal()
+    }
+  }, [p1LockedIn, p2LockedIn, duelTimeLeft, gameMode, phase, handleDuelReveal])
 
   const handleStart = () => {
     sound.unlock()
@@ -351,7 +560,7 @@ export default function GeoGuessGame() {
     <div className="app">
       <div className="stage" ref={stageRef} />
 
-      {phase !== 'intro' && (
+      {phase !== 'intro' && gameMode === 'solo' && (
         <header className="topbar">
           <div className="brand">
             <span className="brand-mark">
@@ -432,13 +641,38 @@ export default function GeoGuessGame() {
         </header>
       )}
 
-      {phase !== 'intro' && (
+      {/* 1v1 Duel HUD */}
+      {phase !== 'intro' && gameMode === 'duel' && (
+        <DuelHud
+          p1={{
+            name: user?.name || 'You',
+            avatar: user?.avatar || 'felix',
+            hp: p1Hp,
+            maxHp: INITIAL_HP,
+            isLockedIn: p1LockedIn,
+          }}
+          p2={{
+            name: duelBot?.name || 'Opponent',
+            avatar: duelBot?.avatar || 'aneka',
+            hp: p2Hp,
+            maxHp: INITIAL_HP,
+            isLockedIn: p2LockedIn,
+          }}
+          timeLeft={duelTimeLeft}
+          roundNumber={duelRound}
+          multiplier={getRoundMultiplier(duelRound)}
+          phase={phase}
+          onLeaveDuel={handleLeaveDuel}
+        />
+      )}
+
+      {phase !== 'intro' && phase !== 'duel_match_over' && (
         <PhotoPanel
           location={location}
           photoState={photoState}
           hint={hint}
-          roundNumber={roundIndex + 1}
-          totalRounds={deck.length}
+          roundNumber={gameMode === 'duel' ? duelRound : roundIndex + 1}
+          totalRounds={gameMode === 'duel' ? 7 : deck.length}
           onLoad={() => setPhotoState('ready')}
           onError={() => setPhotoState('error')}
           onExpand={openLightbox}
@@ -475,21 +709,63 @@ export default function GeoGuessGame() {
         </div>
       )}
 
-      {phase === 'guessing' && guess && (
+      {/* Confirm Button */}
+      {((gameMode === 'solo' && phase === 'guessing') || (gameMode === 'duel' && phase === 'duel_guessing' && !p1LockedIn)) && guess && (
         <button
           type="button"
           ref={confirmRef}
           className="confirm-btn"
-          onClick={handleConfirm}
+          onClick={gameMode === 'duel' ? handleConfirmDuel : handleConfirm}
         >
           <Icon name="check" size={14} strokeWidth={2.2} />
-          Confirm guess
+          {gameMode === 'duel' ? 'Lock In Guess' : 'Confirm guess'}
           <kbd>Enter</kbd>
         </button>
       )}
 
-      {phase === 'result' && roundResult && (
+      {/* Solo Result Card */}
+      {gameMode === 'solo' && phase === 'result' && roundResult && (
         <ResultCard result={roundResult} isLast={isLastRound} onNext={handleNext} />
+      )}
+
+      {/* 1v1 Duel Round Result */}
+      {gameMode === 'duel' && phase === 'duel_result' && duelRoundResult && (
+        <DuelRoundResult
+          result={duelRoundResult}
+          p1={{
+            name: user?.name || 'You',
+            avatar: user?.avatar || 'felix',
+            hp: p1Hp,
+          }}
+          p2={{
+            name: duelBot?.name || 'Opponent',
+            avatar: duelBot?.avatar || 'aneka',
+            hp: p2Hp,
+          }}
+          isMatchOver={isDuelMatchOver}
+          onNext={handleNextDuelRound}
+        />
+      )}
+
+      {/* 1v1 Match Over Modal */}
+      {gameMode === 'duel' && phase === 'duel_match_over' && (
+        <DuelGameOverModal
+          isOpen={true}
+          isWinner={duelWinner === 'p1'}
+          p1={{
+            name: user?.name || 'You',
+            avatar: user?.avatar || 'felix',
+            hp: p1Hp,
+          }}
+          p2={{
+            name: duelBot?.name || 'Opponent',
+            avatar: duelBot?.avatar || 'aneka',
+            hp: p2Hp,
+          }}
+          roundsPlayed={duelRound}
+          onRematch={() => handleStartDuel({ bot: duelBot })}
+          onExit={handleLeaveDuel}
+        />
       )}
 
       {phase === 'final' && (
@@ -507,6 +783,7 @@ export default function GeoGuessGame() {
       {phase === 'intro' && (
         <IntroScreen
           onStart={handleStart}
+          onOpenDuel={() => setActiveModal('duel_lobby')}
           muted={muted}
           onToggleMute={toggleMute}
           user={user}
@@ -572,6 +849,13 @@ export default function GeoGuessGame() {
         onThemeChange={handleThemeChange}
         globeTexture={globeTexture}
         onGlobeTextureChange={handleGlobeTextureChange}
+      />
+
+      <DuelLobbyModal
+        isOpen={activeModal === 'duel_lobby'}
+        onClose={() => setActiveModal(null)}
+        onStartDuel={handleStartDuel}
+        user={user}
       />
     </div>
   )

@@ -4,6 +4,7 @@ import { getAvatarSrc } from '@/lib/data/avatars'
 
 export function IntroScreen({
   onStart,
+  onOpenDuel,
   muted,
   onToggleMute,
   user,
@@ -26,6 +27,16 @@ export function IntroScreen({
         </div>
 
         <div className="hero-nav-actions">
+          <button
+            type="button"
+            className="hero-nav-btn hero-duel-nav-btn"
+            onClick={onOpenDuel}
+            title="1v1 Battle Arena"
+          >
+            <Icon name="swords" size={16} />
+            <span>1v1 Duel</span>
+          </button>
+
           <button
             type="button"
             className="hero-nav-btn"
@@ -105,8 +116,17 @@ export function IntroScreen({
               className="btn btn-green btn-hero-start"
               onClick={onStart}
             >
-              <span>Start Exploring</span>
+              <span>Solo Expedition</span>
               <Icon name="arrowRight" size={19} strokeWidth={2.4} />
+            </button>
+
+            <button
+              type="button"
+              className="btn btn-hero-duel"
+              onClick={onOpenDuel}
+            >
+              <Icon name="swords" size={18} strokeWidth={2.2} />
+              <span>1v1 Duel</span>
             </button>
 
             <button
@@ -115,7 +135,7 @@ export function IntroScreen({
               onClick={onOpenLeaderboard}
             >
               <Icon name="trophy" size={17} />
-              <span>View Leaderboard</span>
+              <span>Leaderboard</span>
             </button>
           </div>
         </div>

@@ -33,6 +33,8 @@ const COLORS = {
   arc: 0xffc800,
   hover: 0xffffff,
   atmosphere: 0x8fd9ff,
+  p1: 0x1cb0f6,
+  p2: 0xff4b4b,
 }
 
 export const GLOBE_TEXTURES = {
@@ -153,7 +155,7 @@ function waveFlag(flag, time) {
   geometry.computeVertexNormals()
 }
 
-function createArc(lat1, lon1, lat2, lon2) {
+function createArc(lat1, lon1, lat2, lon2, color = COLORS.arc) {
   const start = latLonToVector3(lat1, lon1, 1)
   const end = latLonToVector3(lat2, lon2, 1)
 
@@ -178,14 +180,14 @@ function createArc(lat1, lon1, lat2, lon2) {
 
   const core = new THREE.Mesh(
     coreGeometry,
-    new THREE.MeshBasicMaterial({ color: COLORS.arc, transparent: true, opacity: 0.95 }),
+    new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.95 }),
   )
   const glow = new THREE.Mesh(
     glowGeometry,
     new THREE.MeshBasicMaterial({
-      color: 0xffe28a,
+      color,
       transparent: true,
-      opacity: 0.16,
+      opacity: 0.18,
       blending: THREE.AdditiveBlending,
       depthWrite: false,
     }),
@@ -281,6 +283,10 @@ export class GlobeEngine {
     this.answerFlag = null
     this.arc = null
     this.travelDot = null
+
+    this.duelFlags = []
+    this.duelArcs = []
+    this.duelDots = []
 
     this.resultTime = 0
     this.resultAnimating = false
@@ -611,6 +617,89 @@ export class GlobeEngine {
     this.flyTo(mid.multiplyScalar(targetDistance), 1.6)
   }
 
+  revealDuel({ p1, p2, location }) {
+    if (!p1 || !p2 || !location) return
+
+    this.roundFinished = true
+    this.hoverRing.visible = false
+    this.renderer.domElement.style.cursor = 'default'
+
+    this.clearMarkers()
+
+    // 1. Player 1 Flag (Blue default)
+    const p1Color = p1.color || COLORS.p1
+    const p1Flag = createFlag(p1Color)
+    placeFlag(p1Flag, p1.lat, p1.lon)
+    this.globe.add(p1Flag)
+
+    // 2. Player 2 Flag (Coral/Red default)
+    const p2Color = p2.color || COLORS.p2
+    const p2Flag = createFlag(p2Color)
+    placeFlag(p2Flag, p2.lat, p2.lon)
+    p2Flag.scale.setScalar(0.0001)
+    this.globe.add(p2Flag)
+
+    // 3. Target Answer Flag (Green)
+    const answerFlag = createFlag(COLORS.answer)
+    placeFlag(answerFlag, location.lat, location.lon)
+    answerFlag.scale.setScalar(0.0001)
+    this.globe.add(answerFlag)
+
+    // 4. Arcs from both players toward the answer
+    const arc1 = createArc(p1.lat, p1.lon, location.lat, location.lon, p1Color)
+    const arc2 = createArc(p2.lat, p2.lon, location.lat, location.lon, p2Color)
+    this.globe.add(arc1)
+    this.globe.add(arc2)
+
+    // 5. Travel dots
+    const dot1 = createDot()
+    const dot2 = createDot()
+    dot1.visible = false
+    dot2.visible = false
+    this.globe.add(dot1)
+    this.globe.add(dot2)
+
+    this.duelFlags = [p1Flag, p2Flag, answerFlag]
+    this.duelArcs = [arc1, arc2]
+    this.duelDots = [dot1, dot2]
+    this.answerFlag = answerFlag
+
+    this.resultTime = 0
+    this.resultAnimating = true
+    this.revealNotified = false
+
+    // Camera framing for all 3 coordinates
+    const v1 = latLonToVector3(p1.lat, p1.lon, 1)
+    const v2 = latLonToVector3(p2.lat, p2.lon, 1)
+    const vAns = latLonToVector3(location.lat, location.lon, 1)
+
+    let mid = v1.clone().add(v2).add(vAns)
+    if (mid.lengthSq() < 0.0001) {
+      mid = vAns.clone()
+    }
+    mid.normalize()
+
+    if (Math.abs(mid.y) > 0.985) {
+      mid.x += mid.x >= 0 ? 0.04 : -0.04
+      mid.normalize()
+    }
+
+    const a12 = v1.angleTo(v2)
+    const a1Ans = v1.angleTo(vAns)
+    const a2Ans = v2.angleTo(vAns)
+    const maxAngle = Math.max(a12, a1Ans, a2Ans)
+
+    const spanFactor = Math.sin(maxAngle * 0.5)
+    const arcHeight = Math.min(0.18 + maxAngle * 0.85, 2.1)
+    const targetDistance = THREE.MathUtils.clamp(
+      11.0 + spanFactor * 13.5 + (maxAngle / Math.PI) * 3.0 + arcHeight * 0.9,
+      11.0,
+      26.0,
+    )
+
+    this.flyTo(mid.multiplyScalar(targetDistance), 1.6)
+  }
+
   clearMarkers() {
     disposeObject(this.guessFlag)
     disposeObject(this.answerFlag)
@@ -620,6 +709,20 @@ export class GlobeEngine {
     this.answerFlag = null
     this.arc = null
     this.travelDot = null
+
+    if (this.duelFlags) {
+      this.duelFlags.forEach((flag) => disposeObject(flag))
+      this.duelFlags = []
+    }
+    if (this.duelArcs) {
+      this.duelArcs.forEach((arc) => disposeObject(arc))
+      this.duelArcs = []
+    }
+    if (this.duelDots) {
+      this.duelDots.forEach((dot) => disposeObject(dot))
+      this.duelDots = []
+    }
+
     this.resultAnimating = false
     this.revealNotified = false
   }
@@ -792,8 +895,9 @@ export class GlobeEngine {
   }
 
   updateFlags() {
-    ;[this.guessFlag, this.answerFlag].forEach((flag) => {
-      if (flag) waveFlag(flag, this.elapsed)
+    const flagsToWave = [this.guessFlag, this.answerFlag, ...this.duelFlags].filter(Boolean)
+    flagsToWave.forEach((flag) => {
+      waveFlag(flag, this.elapsed)
     })
 
     if (this.guessFlag && this.guessFlag.userData.plantStart !== undefined) {
@@ -816,22 +920,42 @@ export class GlobeEngine {
     this.resultTime += delta
 
     const popT = Math.min(this.resultTime / POP_TIME, 1)
-    this.answerFlag.scale.setScalar(Math.max(0.0001, easeOutBack(popT)))
+    if (this.answerFlag) {
+      this.answerFlag.scale.setScalar(Math.max(0.0001, easeOutBack(popT)))
+    }
+    // In duel mode, also pop in the second player's flag (p2)
+    if (this.duelFlags && this.duelFlags[1]) {
+      this.duelFlags[1].scale.setScalar(Math.max(0.0001, easeOutBack(popT)))
+    }
 
     const drawT = Math.min(Math.max((this.resultTime - POP_TIME) / DRAW_TIME, 0), 1)
     const fraction = easeOutCubic(drawT)
 
-    this.arc.userData.meshes.forEach((mesh) => {
-      const indexCount = mesh.geometry.index.count
-      const visible = Math.ceil((fraction * indexCount) / 3) * 3
-      mesh.geometry.setDrawRange(0, visible)
+    const activeArcs = this.duelArcs.length ? this.duelArcs : this.arc ? [this.arc] : []
+    activeArcs.forEach((arc) => {
+      arc.userData.meshes.forEach((mesh) => {
+        const indexCount = mesh.geometry.index.count
+        const visible = Math.ceil((fraction * indexCount) / 3) * 3
+        mesh.geometry.setDrawRange(0, visible)
+      })
     })
 
     if (drawT >= 1) {
       const dotT = ((this.resultTime - POP_TIME - DRAW_TIME) % DOT_TIME) / DOT_TIME
-      this.travelDot.position.copy(this.arc.userData.curve.getPoint(dotT))
-      this.travelDot.visible = true
-      this.travelDot.scale.setScalar(1 + Math.sin(this.elapsed * 8) * 0.08)
+      if (this.duelArcs.length && this.duelDots.length) {
+        this.duelDots.forEach((dot, idx) => {
+          const arc = this.duelArcs[idx]
+          if (arc) {
+            dot.position.copy(arc.userData.curve.getPoint(dotT))
+            dot.visible = true
+            dot.scale.setScalar(1 + Math.sin(this.elapsed * 8) * 0.08)
+          }
+        })
+      } else if (this.travelDot && this.arc) {
+        this.travelDot.position.copy(this.arc.userData.curve.getPoint(dotT))
+        this.travelDot.visible = true
+        this.travelDot.scale.setScalar(1 + Math.sin(this.elapsed * 8) * 0.08)
+      }
     }
 
     if (!this.revealNotified && this.resultTime >= POP_TIME + DRAW_TIME + 0.1) {

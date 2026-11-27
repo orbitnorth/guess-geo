@@ -564,6 +564,44 @@ class SoundEngine {
       reverb: 0.55,
     })
   }
+
+  damage() {
+    this.tone({
+      freq: 180,
+      endFreq: 55,
+      duration: 0.28,
+      type: 'triangle',
+      volume: 0.22,
+      attack: 0.005,
+      reverb: 0.25,
+    })
+    this.noise({
+      from: 1400,
+      to: 200,
+      duration: 0.22,
+      volume: 0.12,
+      attack: 0.01,
+      reverb: 0.2,
+    })
+  }
+
+  countdownTick() {
+    this.tone({
+      freq: 680,
+      endFreq: 640,
+      duration: 0.04,
+      type: 'sine',
+      volume: 0.06,
+      attack: 0.002,
+    })
+  }
+
+  duelStart() {
+    const notes = [NOTE.C4, NOTE.E4, NOTE.G4, NOTE.C5]
+    notes.forEach((freq, index) => {
+      this.bell(freq, { volume: 0.12, delay: index * 0.09, ring: 1.2 })
+    })
+  }
 }
 
 export const sound = new SoundEngine()

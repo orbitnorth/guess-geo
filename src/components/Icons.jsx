@@ -122,6 +122,32 @@ const paths = {
   moon: (
     <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
   ),
+  swords: (
+    <>
+      <line x1="14.5" y1="17.5" x2="3" y2="6" />
+      <polyline points="3 3 6 3 17.5 14.5" />
+      <line x1="13" y1="19" x2="19" y2="13" />
+      <line x1="16" y1="16" x2="20" y2="20" />
+      <line x1="9.5" y1="17.5" x2="21" y2="6" />
+      <polyline points="21 3 18 3 6.5 14.5" />
+      <line x1="11" y1="19" x2="5" y2="13" />
+      <line x1="8" y1="16" x2="4" y2="20" />
+    </>
+  ),
+  lightning: (
+    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+  ),
+  heart: (
+    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+  ),
+  timer: (
+    <>
+      <circle cx="12" cy="13" r="8" />
+      <path d="M12 9v4l2.5 2.5" />
+      <path d="M10 2h4" />
+      <path d="m4.6 6.4 1.4-1.4" />
+    </>
+  ),
 }
 
 export function Icon({ name, size = 18, strokeWidth = 1.7, className = '', ...rest }) {
