@@ -1,6 +1,9 @@
+'use client'
+
 import { AnimatedNumber } from './AnimatedNumber'
 import { Icon } from './Icons'
 import { Mascot } from './Mascot'
+import { Modal } from './Modal'
 
 const CONFETTI_COLORS = ['#58cc02', '#1cb0f6', '#ffc800', '#ff4b4b', '#ce82ff', '#7ed957']
 
@@ -19,12 +22,20 @@ function ratingFor(ratio) {
   return 'Trail starter'
 }
 
-export function FinalScreen({ results, totalScore, maxTotal, onRestart, scoreSaved, user, onOpenLeaderboard }) {
+export function FinalScreen({
+  results,
+  totalScore,
+  maxTotal,
+  onRestart,
+  scoreSaved,
+  user,
+  onOpenLeaderboard,
+}) {
   const ratio = maxTotal > 0 ? totalScore / maxTotal : 0
   const stars = ratio >= 0.78 ? 3 : ratio >= 0.45 ? 2 : 1
 
   return (
-    <div className="overlay final-overlay" role="dialog" aria-modal="true" aria-label="Final score">
+    <>
       <div className="confetti" aria-hidden="true">
         {CONFETTI.map((piece, index) => (
           <span
@@ -42,70 +53,83 @@ export function FinalScreen({ results, totalScore, maxTotal, onRestart, scoreSav
         ))}
       </div>
 
-      <div className="final-card">
-        <div className="final-mascot">
-          <Mascot size={124} />
-        </div>
-
-        <span className="meta">Session complete</span>
-        <h2 className="final-rating">{ratingFor(ratio)}</h2>
-
-        <div className="final-stars" aria-label={`${stars} of 3 stars earned`}>
-          {[1, 2, 3].map((slot) => (
-            <span
-              key={slot}
-              className={`final-star${slot <= stars ? ' is-on' : ''}`}
-              style={{ animationDelay: `${slot * 0.12}s` }}
-            >
-              <Icon name="star" size={46} />
-            </span>
-          ))}
-        </div>
-
-        <div className="final-score-row">
-          <span className="final-score">
-            <AnimatedNumber value={totalScore} duration={1400} />
-          </span>
-          <span className="final-max">/ {maxTotal.toLocaleString()}</span>
-        </div>
-
-        {user && scoreSaved && (
-          <div className="score-saved-badge">
-            <Icon name="check" size={14} strokeWidth={3} />
-            <span>Score recorded to {user.name}&apos;s profile</span>
-          </div>
-        )}
-
-        <div className="final-summary">
-          {results.map((result, index) => (
-            <div className="summary-row" key={`${result.name}-${index}`}>
-              <span className="summary-index">{index + 1}</span>
-              <span className="summary-name">{result.name}</span>
-              <span className={`summary-points tier-${result.tier}`}>
-                +{result.points.toLocaleString()}
-              </span>
-            </div>
-          ))}
-        </div>
-
-        <div className="final-actions-row">
-          <button type="button" className="btn btn-green btn-xl" onClick={onRestart}>
-            Play again
-            <Icon name="reset" size={18} strokeWidth={2.2} />
-          </button>
-
-          {onOpenLeaderboard && (
+      <Modal
+        isOpen={true}
+        onClose={onRestart}
+        badge="Session Complete"
+        badgeVariant="green"
+        title={ratingFor(ratio)}
+        subtitle="Expedition complete • All 5 world sites scored"
+        className="final-screen-modal"
+        maxWidth={480}
+        footer={
+          <div className="final-modal-footer">
             <button
               type="button"
-              className="btn btn-ghost btn-final-leaderboard"
-              onClick={onOpenLeaderboard}
+              className="btn btn-green btn-final-play"
+              onClick={onRestart}
             >
-              <Icon name="trophy" size={16} />
-              <span>Leaderboard</span>
+              <span>Play again</span>
+              <Icon name="reset" size={17} strokeWidth={2.4} />
             </button>
+
+            {onOpenLeaderboard && (
+              <button
+                type="button"
+                className="btn btn-ghost btn-final-lead"
+                onClick={onOpenLeaderboard}
+              >
+                <Icon name="trophy" size={16} />
+                <span>Leaderboard</span>
+              </button>
+            )}
+          </div>
+        }
+      >
+        <div className="final-screen-content">
+          <div className="final-screen-mascot-wrap">
+            <Mascot size={82} />
+          </div>
+
+          <div className="final-screen-stars" aria-label={`${stars} of 3 stars earned`}>
+            {[1, 2, 3].map((slot) => (
+              <span
+                key={slot}
+                className={`final-screen-star${slot <= stars ? ' is-on' : ''}`}
+                style={{ animationDelay: `${slot * 0.12}s` }}
+              >
+                <Icon name="star" size={32} />
+              </span>
+            ))}
+          </div>
+
+          <div className="final-screen-score-row">
+            <span className="final-screen-score">
+              <AnimatedNumber value={totalScore} duration={1200} />
+            </span>
+            <span className="final-screen-max">/ {maxTotal.toLocaleString()}</span>
+          </div>
+
+          {user && scoreSaved && (
+            <div className="score-saved-badge">
+              <Icon name="check" size={13} strokeWidth={3} />
+              <span>Score recorded to {user.name}&apos;s profile</span>
+            </div>
           )}
+
+          <div className="final-screen-summary">
+            {results.map((result, index) => (
+              <div className="summary-row" key={`${result.name}-${index}`}>
+                <span className="summary-index">{index + 1}</span>
+                <span className="summary-name">{result.name}</span>
+                <span className={`summary-points tier-${result.tier}`}>
+                  +{result.points.toLocaleString()}
+                </span>
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
-    </div>
+      </Modal>
+    </>
   )
 }
