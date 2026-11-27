@@ -6,6 +6,7 @@ import { Icon } from './Icons'
 export function Modal({
   isOpen,
   onClose,
+  onBack,
   title,
   subtitle,
   badge,
@@ -65,14 +66,27 @@ export function Modal({
       >
         {/* Fixed Modal Header */}
         <div className="modal-header">
-          <div className="modal-title-group">
-            {badge && (
-              <span className={badgeClass}>
-                {badge}
-              </span>
+          <div className="modal-header-left">
+            {onBack && (
+              <button
+                type="button"
+                className="modal-header-back-btn"
+                onClick={onBack}
+                aria-label="Go back to previous step"
+                title="Go back"
+              >
+                <Icon name="arrowLeft" size={17} strokeWidth={2.6} />
+              </button>
             )}
-            {title && <h2 className="modal-title">{title}</h2>}
-            {subtitle && <p className="modal-subtitle">{subtitle}</p>}
+            <div className="modal-title-group">
+              {badge && (
+                <span className={badgeClass}>
+                  {badge}
+                </span>
+              )}
+              {title && <h2 className="modal-title">{title}</h2>}
+              {subtitle && <p className="modal-subtitle">{subtitle}</p>}
+            </div>
           </div>
 
           <button

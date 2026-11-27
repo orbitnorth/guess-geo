@@ -45,6 +45,7 @@ const paths = {
     </>
   ),
   arrowRight: <path d="M4.5 12h15M13.5 6l6 6-6 6" />,
+  arrowLeft: <path d="M19.5 12h-15M10.5 18l-6-6 6-6" />,
   target: (
     <>
       <circle cx="12" cy="12" r="9" />

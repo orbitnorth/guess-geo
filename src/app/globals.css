@@ -2425,6 +2425,34 @@ kbd {
   box-sizing: border-box;
 }
 
+.modal-header-left {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.modal-header-back-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  background: var(--line);
+  color: var(--ink);
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.modal-header-back-btn:hover {
+  background: var(--line-strong);
+  color: var(--blue-dark);
+  transform: translateX(-2px);
+}
+
 .modal-body {
   flex: 1 1 auto;
   min-height: 0;
@@ -2702,10 +2730,18 @@ kbd {
   transition: all 0.15s ease;
   box-sizing: border-box;
   flex-shrink: 0;
+  cursor: pointer !important;
+  user-select: none;
 }
 
 .btn-step-back:hover {
   background: var(--line-strong);
+  cursor: pointer !important;
+  transform: translateX(-1px);
+}
+
+.btn-step-back:active {
+  transform: translateY(2px);
 }
 
 .btn-step-continue {

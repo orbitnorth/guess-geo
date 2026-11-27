@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Icon } from './Icons'
 import { Modal } from './Modal'
 import { AVATARS } from '@/lib/data/avatars'
@@ -19,6 +19,22 @@ export function RegisterModal({ isOpen, onClose, onAuthSuccess, onSwitchToLogin 
 
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+
+  // Support browser back button navigating from Step 2 to Step 1
+  useEffect(() => {
+    if (!isOpen || step !== 2) return
+
+    window.history.pushState({ modalStep: 2 }, '')
+
+    const handlePopState = () => {
+      setStep(1)
+    }
+
+    window.addEventListener('popstate', handlePopState)
+    return () => {
+      window.removeEventListener('popstate', handlePopState)
+    }
+  }, [isOpen, step])
 
   const handleNextStep = (e) => {
     e.preventDefault()
@@ -96,6 +112,14 @@ export function RegisterModal({ isOpen, onClose, onAuthSuccess, onSwitchToLogin 
         setError('')
         onClose()
       }}
+      onBack={
+        step === 2
+          ? () => {
+              setError('')
+              setStep(1)
+            }
+          : undefined
+      }
       title={step === 1 ? 'Create Account' : 'Pick your Avatar'}
       subtitle={
         step === 1
@@ -135,7 +159,9 @@ export function RegisterModal({ isOpen, onClose, onAuthSuccess, onSwitchToLogin 
             <button
               type="button"
               className="btn btn-ghost btn-step-back"
-              onClick={() => {
+              onClick={(e) => {
+                e.preventDefault()
+                e.stopPropagation()
                 setError('')
                 setStep(1)
               }}
@@ -159,10 +185,26 @@ export function RegisterModal({ isOpen, onClose, onAuthSuccess, onSwitchToLogin 
     >
       {/* Onboarding Step Indicator */}
       <div className="onboarding-stepper" aria-label={`Onboarding Step ${step} of 2`}>
-        <div className={`step-dot-wrap${step >= 1 ? ' is-active' : ''}`}>
+        <button
+          type="button"
+          className={`step-dot-wrap${step >= 1 ? ' is-active' : ''}`}
+          onClick={() => {
+            if (step === 2) {
+              setError('')
+              setStep(1)
+            }
+          }}
+          style={{
+            background: 'none',
+            border: 'none',
+            cursor: step === 2 ? 'pointer' : 'default',
+            padding: 0,
+          }}
+          title={step === 2 ? 'Return to Step 1: Credentials' : 'Step 1: Credentials'}
+        >
           <span className="step-num">1</span>
           <span className="step-label">Credentials</span>
-        </div>
+        </button>
         <div className={`step-line${step === 2 ? ' is-active' : ''}`} />
         <div className={`step-dot-wrap${step === 2 ? ' is-active' : ''}`}>
           <span className="step-num">2</span>
