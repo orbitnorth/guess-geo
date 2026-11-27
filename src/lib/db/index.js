@@ -4,6 +4,7 @@ import os from 'node:os'
 import Database from 'better-sqlite3'
 import { drizzle } from 'drizzle-orm/better-sqlite3'
 import * as schema from './schema.js'
+import { hashPassword } from '../auth/password.js'
 
 function getDatabasePath() {
   if (process.env.DATABASE_PATH) {
@@ -138,6 +139,45 @@ export function initDb() {
 
     // Create unique index on username after column is guaranteed to exist
     sqlite.exec(`CREATE UNIQUE INDEX IF NOT EXISTS idx_users_username ON users(username);`)
+
+    // Preseed default users: king and admin with password '1234'
+    const defaultUsers = [
+      {
+        username: 'king',
+        name: 'King Explorer',
+        avatar: 'leo',
+        email: 'king@explorer.local',
+      },
+      {
+        username: 'admin',
+        name: 'System Admin',
+        avatar: 'aneka',
+        email: 'admin@explorer.local',
+      },
+    ]
+
+    for (const u of defaultUsers) {
+      const existing = sqlite
+        .prepare('SELECT id, password FROM users WHERE LOWER(username) = LOWER(?)')
+        .get(u.username)
+
+      const hashedPassword = hashPassword('1234')
+      const now = new Date().toISOString()
+
+      if (!existing) {
+        sqlite.prepare(`
+          INSERT INTO users (username, password, email, name, avatar, created_at, updated_at)
+          VALUES (?, ?, ?, ?, ?, ?, ?)
+        `).run(u.username, hashedPassword, u.email, u.name, u.avatar, now, now)
+      } else {
+        // Ensure password is kept at 1234
+        sqlite.prepare(`UPDATE users SET password = ?, updated_at = ? WHERE id = ?`).run(
+          hashedPassword,
+          now,
+          existing.id
+        )
+      }
+    }
   } catch (err) {
     console.error('Database initialization warning:', err)
   }
