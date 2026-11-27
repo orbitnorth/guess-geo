@@ -6,7 +6,7 @@ import { getAvatarById } from '@/lib/data/avatars'
 export function DuelHud({
   p1 = {},
   p2 = {},
-  timeLeft = 45,
+  timeLeft = 15,
   roundNumber = 1,
   multiplier = 1.0,
   phase = 'duel_guessing',
@@ -21,7 +21,7 @@ export function DuelHud({
   const p1Percent = Math.max(0, Math.min(100, ((p1.hp ?? p1MaxHp) / p1MaxHp) * 100))
   const p2Percent = Math.max(0, Math.min(100, ((p2.hp ?? p2MaxHp) / p2MaxHp) * 100))
 
-  const isLowTime = timeLeft <= 10
+  const isLowTime = timeLeft <= 5
 
   const getHpColorClass = (pct) => {
     if (pct > 55) return 'hp-green'

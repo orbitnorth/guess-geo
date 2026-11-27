@@ -112,7 +112,7 @@ export default function InviteSubRoutePage({ params }) {
             <div className="invite-rule-item">
               <span className="rule-icon">⏱️</span>
               <div className="rule-copy">
-                <strong>45 Seconds Per Turn</strong>
+                <strong>15 Seconds Per Turn</strong>
                 <span>Fast-paced deduction — lock in your pin before the clock expires!</span>
               </div>
             </div>

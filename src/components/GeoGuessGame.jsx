@@ -68,7 +68,7 @@ export default function GeoGuessGame({ initialDuelRoom = '', autoStartDuel = fal
   const [duelRound, setDuelRound] = useState(1)
   const [p1Hp, setP1Hp] = useState(INITIAL_HP)
   const [p2Hp, setP2Hp] = useState(INITIAL_HP)
-  const [duelTimeLeft, setDuelTimeLeft] = useState(45)
+  const [duelTimeLeft, setDuelTimeLeft] = useState(15)
   const [p1LockedIn, setP1LockedIn] = useState(false)
   const [p2LockedIn, setP2LockedIn] = useState(false)
   const [duelRoundResult, setDuelRoundResult] = useState(null)
@@ -264,8 +264,8 @@ export default function GeoGuessGame({ initialDuelRoom = '', autoStartDuel = fal
         tagline: `1v1 Room ${shortCode}`,
         difficulty: 'Medium',
         badgeVariant: 'yellow',
-        minSec: 6,
-        maxSec: 16,
+        minSec: 3,
+        maxSec: 10,
         baseErrorKm: 450,
         varianceKm: 280,
       }
@@ -280,8 +280,8 @@ export default function GeoGuessGame({ initialDuelRoom = '', autoStartDuel = fal
         tagline: `1v1 Room ${shortCode}`,
         difficulty: 'Medium',
         badgeVariant: 'yellow',
-        minSec: 6,
-        maxSec: 16,
+        minSec: 3,
+        maxSec: 10,
         baseErrorKm: 450,
         varianceKm: 280,
       }
@@ -410,7 +410,7 @@ export default function GeoGuessGame({ initialDuelRoom = '', autoStartDuel = fal
   useEffect(() => {
     if (gameMode !== 'duel' || phase !== 'duel_guessing' || !location) return
 
-    setDuelTimeLeft(45)
+    setDuelTimeLeft(15)
     setP1LockedIn(false)
     setP2LockedIn(false)
 
@@ -426,7 +426,7 @@ export default function GeoGuessGame({ initialDuelRoom = '', autoStartDuel = fal
         if (prev <= 1) {
           return 0
         }
-        if (prev <= 6) {
+        if (prev <= 5) {
           sound.countdownTick?.()
         }
         return prev - 1
