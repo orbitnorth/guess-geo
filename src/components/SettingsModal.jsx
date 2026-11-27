@@ -8,23 +8,23 @@ const TEXTURE_OPTIONS = [
   {
     id: 'day',
     name: 'Day Satellite',
-    tag: 'Default',
-    description: 'Natural daylight satellite photography',
+    tag: 'Natural',
+    description: 'Natural daylight satellite photography & terrain',
     previewClass: 'preview-day',
   },
   {
-    id: 'night',
-    name: 'Night Lights',
-    tag: 'Illuminated',
-    description: 'Glowing cities & deep dark oceans',
-    previewClass: 'preview-night',
+    id: 'marble',
+    name: 'Blue Marble',
+    tag: 'Vibrant',
+    description: 'Vivid NASA azure oceans & crisp continents',
+    previewClass: 'preview-marble',
   },
   {
-    id: 'dark',
-    name: 'Dark Minimal',
-    tag: 'Midnight',
-    description: 'High-contrast sleek nocturnal style',
-    previewClass: 'preview-dark',
+    id: 'atlas',
+    name: 'Cartographic Atlas',
+    tag: 'Topographic',
+    description: 'Light geographic relief with visible graticule',
+    previewClass: 'preview-atlas',
   },
 ]
 
@@ -127,7 +127,9 @@ export function SettingsModal({
 
         <div className="texture-grid">
           {TEXTURE_OPTIONS.map((item) => {
-            const isSelected = (globeTexture || 'day') === item.id
+            const activeId =
+              globeTexture === 'night' ? 'marble' : globeTexture === 'dark' ? 'atlas' : (globeTexture || 'day')
+            const isSelected = activeId === item.id
             return (
               <button
                 key={item.id}
