@@ -61,7 +61,12 @@ export function ProfileModal({ user, token, isOpen, onClose, onAuthSuccess, onLo
         },
         body: JSON.stringify({ name: editName, avatar: editAvatar }),
       })
-      const data = await res.json()
+      let data = {}
+      try {
+        data = await res.json()
+      } catch {
+        throw new Error(`Server returned error (${res.status}).`)
+      }
 
       if (!res.ok) {
         throw new Error(data.error || 'Failed to update profile.')

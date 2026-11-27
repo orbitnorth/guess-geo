@@ -25,7 +25,13 @@ export function LoginModal({ isOpen, onClose, onAuthSuccess, onSwitchToRegister 
           password,
         }),
       })
-      const data = await res.json()
+
+      let data = {}
+      try {
+        data = await res.json()
+      } catch {
+        throw new Error(`Server returned error (${res.status}). Please try again.`)
+      }
 
       if (!res.ok) {
         throw new Error(data.error || 'Failed to sign in.')
