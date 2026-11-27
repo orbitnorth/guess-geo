@@ -121,9 +121,9 @@ export function RegisterModal({ isOpen, onClose, onAuthSuccess, onSwitchToLogin 
       onBack={
         step === 2
           ? () => {
-              setError('')
-              setStep(1)
-            }
+            setError('')
+            setStep(1)
+          }
           : undefined
       }
       title={step === 1 ? 'Create Account' : 'Pick your Avatar'}
