@@ -19,6 +19,7 @@ import { IntroScreen } from './IntroScreen'
 import { Lightbox } from './Lightbox'
 import { PhotoPanel } from './PhotoPanel'
 import { ResultCard } from './ResultCard'
+import { ReactionCallout } from './ReactionCallout'
 import { RegisterModal } from './RegisterModal'
 import { LoginModal } from './LoginModal'
 import { LeaderboardModal } from './LeaderboardModal'
@@ -793,28 +794,47 @@ export default function GeoGuessGame({ initialDuelRoom = '', autoStartDuel = fal
         </button>
       )}
 
-      {/* Solo Result Card */}
+      {/* Solo Result Card & Center Reaction Callout */}
       {gameMode === 'solo' && phase === 'result' && roundResult && (
-        <ResultCard result={roundResult} isLast={isLastRound} onNext={handleNext} />
+        <>
+          {roundResult.reaction && (
+            <ReactionCallout reaction={roundResult.reaction} tier={roundResult.tier} />
+          )}
+          <ResultCard result={roundResult} isLast={isLastRound} onNext={handleNext} />
+        </>
       )}
 
-      {/* 1v1 Duel Round Result */}
+      {/* 1v1 Duel Round Result & Center Reaction Callout */}
       {gameMode === 'duel' && phase === 'duel_result' && duelRoundResult && (
-        <DuelRoundResult
-          result={duelRoundResult}
-          p1={{
-            name: user?.name || 'You',
-            avatar: user?.avatar || 'felix',
-            hp: p1Hp,
-          }}
-          p2={{
-            name: duelBot?.name || 'Opponent',
-            avatar: duelBot?.avatar || 'aneka',
-            hp: p2Hp,
-          }}
-          isMatchOver={isDuelMatchOver}
-          onNext={handleNextDuelRound}
-        />
+        <>
+          {duelRoundResult.reaction && (
+            <ReactionCallout
+              reaction={duelRoundResult.reaction}
+              tier={
+                duelRoundResult.winner === 'p1'
+                  ? 'duel_win'
+                  : duelRoundResult.winner === 'p2'
+                  ? 'duel_loss'
+                  : 'okay'
+              }
+            />
+          )}
+          <DuelRoundResult
+            result={duelRoundResult}
+            p1={{
+              name: user?.name || 'You',
+              avatar: user?.avatar || 'felix',
+              hp: p1Hp,
+            }}
+            p2={{
+              name: duelBot?.name || 'Opponent',
+              avatar: duelBot?.avatar || 'aneka',
+              hp: p2Hp,
+            }}
+            isMatchOver={isDuelMatchOver}
+            onNext={handleNextDuelRound}
+          />
+        </>
       )}
 
       {/* 1v1 Match Over Modal */}
