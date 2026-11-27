@@ -82,8 +82,21 @@ export function initDb() {
         created_at TEXT NOT NULL
       );
 
+      CREATE TABLE IF NOT EXISTS duel_rooms (
+        code TEXT PRIMARY KEY,
+        host_name TEXT,
+        host_avatar TEXT,
+        host_ready INTEGER DEFAULT 0,
+        guest_name TEXT,
+        guest_avatar TEXT,
+        guest_ready INTEGER DEFAULT 0,
+        status TEXT DEFAULT 'waiting',
+        updated_at TEXT NOT NULL
+      );
+
       CREATE INDEX IF NOT EXISTS idx_scores_user_id ON scores(user_id);
       CREATE INDEX IF NOT EXISTS idx_scores_total_score ON scores(total_score DESC);
+      CREATE INDEX IF NOT EXISTS idx_duel_rooms_updated ON duel_rooms(updated_at);
     `)
 
     // Check for column migrations if users table was created previously without username/password

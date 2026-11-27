@@ -1,8 +1,10 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { Icon } from './Icons'
 import { Modal } from './Modal'
+import { getAvatarById } from '@/lib/data/avatars'
+import { sound } from '@/audio/SoundEngine'
 
 function generateRoomUuid() {
   if (typeof crypto !== 'undefined' && crypto.randomUUID) {
@@ -27,13 +29,222 @@ export function DuelLobbyModal({
   const [inputCode, setInputCode] = useState(initialRoomCode)
   const [inputError, setInputError] = useState('')
   const [hostRoomCode] = useState(() => generateRoomUuid())
+  
+  // Room synchronization state
+  const [roomState, setRoomState] = useState(null)
+  const [isReady, setIsReady] = useState(false)
+  const [countdown, setCountdown] = useState(null)
+  const [hasConnectedRoom, setHasConnectedRoom] = useState(false)
 
-  useEffect(() => {
-    if (initialRoomCode) {
-      setInputCode(initialRoomCode.trim())
-      setActiveTab('join')
+  const activeCode = activeTab === 'host' ? hostRoomCode : inputCode.trim()
+  const currentRole = activeTab === 'host' ? 'host' : 'guest'
+  const currentName = user?.name || (activeTab === 'host' ? 'King Explorer' : 'System Admin')
+  const currentAvatar = user?.avatar || (activeTab === 'host' ? 'felix' : 'aneka')
+
+  const channelRef = useRef(null)
+  const pollTimerRef = useRef(null)
+  const countdownTimerRef = useRef(null)
+  const hasStartedRef = useRef(false)
+
+  // Initialize or fetch room state from API
+  const syncRoom = useCallback(async (codeToSync) => {
+    if (!codeToSync || codeToSync.length < 3) return
+    try {
+      const res = await fetch(`/api/duels/${encodeURIComponent(codeToSync)}`)
+      if (res.ok) {
+        const data = await res.json()
+        if (data.room) {
+          setRoomState(data.room)
+        }
+      }
+    } catch {
+      // Ignore network hiccup during polling
     }
-  }, [initialRoomCode])
+  }, [])
+
+  // Send action to room API and broadcast to other tab
+  const sendRoomAction = useCallback(async (action, customCode) => {
+    const targetCode = customCode || activeCode
+    if (!targetCode || targetCode.length < 3) return
+
+    try {
+      const res = await fetch(`/api/duels/${encodeURIComponent(targetCode)}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action,
+          role: currentRole,
+          name: currentName,
+          avatar: currentAvatar,
+        }),
+      })
+
+      if (res.ok) {
+        const data = await res.json()
+        if (data.room) {
+          setRoomState(data.room)
+          channelRef.current?.postMessage({
+            type: 'ROOM_UPDATE',
+            room: data.room,
+            sender: currentRole,
+          })
+        }
+      }
+    } catch {
+      // Ignore network hiccup
+    }
+  }, [activeCode, currentRole, currentName, currentAvatar])
+
+  // Setup broadcast channel and polling for room sync
+  useEffect(() => {
+    if (!isOpen || !activeCode || activeCode.length < 3) return undefined
+
+    // 1. Setup local BroadcastChannel for instant cross-tab sync
+    const channelName = `guess_geo_duel_${activeCode}`
+    const channel = new BroadcastChannel(channelName)
+    channelRef.current = channel
+
+    channel.onmessage = (event) => {
+      if (event.data?.type === 'ROOM_UPDATE') {
+        setRoomState(event.data.room)
+      } else if (event.data?.type === 'START_MATCH') {
+        if (!hasStartedRef.current) {
+          hasStartedRef.current = true
+          onStartDuel(event.data.duelParams)
+        }
+      }
+    }
+
+    // 2. Register presence in room
+    sendRoomAction('join')
+
+    // 3. Poll API every 1.2s for cross-device support
+    pollTimerRef.current = setInterval(() => {
+      syncRoom(activeCode)
+    }, 1200)
+
+    return () => {
+      clearInterval(pollTimerRef.current)
+      channel.close()
+    }
+  }, [isOpen, activeCode, sendRoomAction, syncRoom, onStartDuel])
+
+  // Trigger match start when both players are ready
+  const triggerMatchStart = useCallback((finalRoom) => {
+    if (hasStartedRef.current) return
+    hasStartedRef.current = true
+
+    const opponentName = currentRole === 'host' ? finalRoom.guestName : finalRoom.hostName
+    const opponentAvatar = currentRole === 'host' ? finalRoom.guestAvatar : finalRoom.hostAvatar
+
+    const duelParams = {
+      opponentType: 'friend',
+      roomCode: activeCode,
+      isHost: currentRole === 'host',
+      opponentName,
+      opponentAvatar,
+    }
+
+    // Broadcast to other tab
+    channelRef.current?.postMessage({
+      type: 'START_MATCH',
+      duelParams,
+    })
+
+    // Start match for this player
+    sound.roundStart?.()
+    onStartDuel(duelParams)
+  }, [currentRole, activeCode, onStartDuel])
+
+  // Watch for both players becoming ready
+  useEffect(() => {
+    if (!roomState) return
+
+    const bothReady = Boolean(
+      roomState.hostName &&
+      roomState.guestName &&
+      roomState.hostReady &&
+      roomState.guestReady
+    )
+
+    if (bothReady && countdown === null && !hasStartedRef.current) {
+      setCountdown(3)
+      sound.countdownTick?.()
+
+      countdownTimerRef.current = setInterval(() => {
+        setCountdown((prev) => {
+          if (prev <= 1) {
+            clearInterval(countdownTimerRef.current)
+            triggerMatchStart(roomState)
+            return 0
+          }
+          sound.countdownTick?.()
+          return prev - 1
+        })
+      }, 1000)
+    }
+
+    return () => {
+      if (countdownTimerRef.current) clearInterval(countdownTimerRef.current)
+    }
+  }, [roomState, countdown, triggerMatchStart])
+
+  // Toggle ready status
+  const handleToggleReady = async () => {
+    const nextReady = !isReady
+    setIsReady(nextReady)
+    sound.click?.()
+    await sendRoomAction(nextReady ? 'ready' : 'unready')
+  }
+
+  // Handle URL code cleaning
+  const cleanAndSetCode = (val) => {
+    setInputError('')
+    let cleaned = val.trim()
+    if (cleaned.includes('/invite/')) {
+      const match = cleaned.match(/\/invite\/([a-zA-Z0-9_-]+)/)
+      if (match && match[1]) cleaned = match[1]
+    } else if (cleaned.includes('duel=')) {
+      const match = cleaned.match(/duel=([a-zA-Z0-9_-]+)/)
+      if (match && match[1]) cleaned = match[1]
+    }
+    cleaned = cleaned.replace(/[^a-zA-Z0-9_-]/g, '').slice(0, 48)
+    setInputCode(cleaned)
+  }
+
+  const handlePasteCode = async () => {
+    try {
+      if (typeof navigator !== 'undefined' && navigator.clipboard) {
+        const text = await navigator.clipboard.readText()
+        cleanAndSetCode(text)
+      }
+    } catch {
+      // ignore
+    }
+  }
+
+  const handleConnectRoom = async (e) => {
+    e?.preventDefault?.()
+    let code = inputCode.trim()
+    if (code.includes('/invite/')) {
+      const match = code.match(/\/invite\/([a-zA-Z0-9_-]+)/)
+      if (match && match[1]) code = match[1]
+    } else if (code.includes('duel=')) {
+      const match = code.match(/duel=([a-zA-Z0-9_-]+)/)
+      if (match && match[1]) code = match[1]
+    }
+    code = code.replace(/[^a-zA-Z0-9_-]/g, '').slice(0, 48)
+
+    if (!code || code.length < 3) {
+      setInputError('Please enter a valid room code or link.')
+      return
+    }
+
+    setInputCode(code)
+    setHasConnectedRoom(true)
+    await sendRoomAction('join', code)
+    sound.click?.()
+  }
 
   const getInviteUrl = () => {
     if (typeof window !== 'undefined') {
@@ -51,68 +262,25 @@ export function DuelLobbyModal({
     }
   }
 
-  const handlePasteCode = async () => {
-    try {
-      if (typeof navigator !== 'undefined' && navigator.clipboard) {
-        const text = await navigator.clipboard.readText()
-        cleanAndSetCode(text)
-      }
-    } catch {
-      // clipboard access denied, ignore
+  // Pre-fill if arrived with initial code
+  useEffect(() => {
+    if (initialRoomCode) {
+      const cleaned = initialRoomCode.trim()
+      setInputCode(cleaned)
+      setActiveTab('join')
+      setHasConnectedRoom(true)
     }
-  }
+  }, [initialRoomCode])
 
-  const cleanAndSetCode = (val) => {
-    setInputError('')
-    let cleaned = val.trim()
-    // If a subroute invite link is pasted: e.g. http://localhost:3000/invite/uuid
-    if (cleaned.includes('/invite/')) {
-      const match = cleaned.match(/\/invite\/([a-zA-Z0-9_-]+)/)
-      if (match && match[1]) {
-        cleaned = match[1]
-      }
-    } else if (cleaned.includes('duel=')) {
-      // Support legacy ?duel=CODE query params
-      const match = cleaned.match(/duel=([a-zA-Z0-9_-]+)/)
-      if (match && match[1]) {
-        cleaned = match[1]
-      }
-    }
-    // Allow alphanumeric and hyphens (standard UUID format)
-    cleaned = cleaned.replace(/[^a-zA-Z0-9_-]/g, '').slice(0, 48)
-    setInputCode(cleaned)
-  }
+  // Resolve avatars for display
+  const hostAvatarData = getAvatarById(roomState?.hostAvatar || (currentRole === 'host' ? currentAvatar : 'felix'))
+  const guestAvatarData = getAvatarById(roomState?.guestAvatar || (currentRole === 'guest' ? currentAvatar : 'aneka'))
 
-  const handleHostStart = () => {
-    onStartDuel({
-      opponentType: 'friend',
-      roomCode: hostRoomCode,
-      isHost: true,
-    })
-  }
-
-  const handleJoinStart = (e) => {
-    e?.preventDefault?.()
-    let code = inputCode.trim()
-    if (code.includes('/invite/')) {
-      const match = code.match(/\/invite\/([a-zA-Z0-9_-]+)/)
-      if (match && match[1]) code = match[1]
-    } else if (code.includes('duel=')) {
-      const match = code.match(/duel=([a-zA-Z0-9_-]+)/)
-      if (match && match[1]) code = match[1]
-    }
-    code = code.replace(/[^a-zA-Z0-9_-]/g, '').slice(0, 48)
-
-    if (!code || code.length < 2) {
-      setInputError('Please enter or paste a valid room code or link.')
-      return
-    }
-    onStartDuel({
-      opponentType: 'friend',
-      roomCode: code,
-      isHost: false,
-    })
-  }
+  const isHostReady = Boolean(roomState?.hostReady)
+  const isGuestReady = Boolean(roomState?.guestReady)
+  const hasGuest = Boolean(roomState?.guestName)
+  const otherPlayerName = currentRole === 'host' ? roomState?.guestName : roomState?.hostName
+  const isOtherPlayerReady = currentRole === 'host' ? isGuestReady : isHostReady
 
   return (
     <Modal
@@ -126,7 +294,7 @@ export function DuelLobbyModal({
       }
       badgeVariant="blue"
       title="1v1 Globe Duel"
-      subtitle="Face off in a 5,000 HP clash. Both players receive the exact same mystery photos!"
+      subtitle="Face off in a 5,000 HP clash. Both players must press Play to start!"
       maxWidth={520}
       className="duel-lobby-modal"
     >
@@ -139,6 +307,7 @@ export function DuelLobbyModal({
           className={`duel-tab-btn tab-host ${activeTab === 'host' ? 'active' : ''}`}
           onClick={() => {
             setActiveTab('host')
+            setIsReady(false)
             setInputError('')
           }}
         >
@@ -153,6 +322,7 @@ export function DuelLobbyModal({
           className={`duel-tab-btn tab-join ${activeTab === 'join' ? 'active' : ''}`}
           onClick={() => {
             setActiveTab('join')
+            setIsReady(false)
             setInputError('')
           }}
         >
@@ -161,14 +331,14 @@ export function DuelLobbyModal({
         </button>
       </div>
 
-      {/* Tab Panes */}
-      {activeTab === 'host' ? (
+      {/* Host Tab Pane */}
+      {activeTab === 'host' && (
         <div className="duel-tab-pane duel-action-card card-host" role="tabpanel" aria-label="Host Match">
           <div className="action-card-header">
-            <span className="card-badge badge-green">Host</span>
+            <span className="card-badge badge-green">Host Room</span>
             <h3 className="card-title">Invite a Friend</h3>
             <p className="card-subtitle">
-              Share your room invite link. Both of you will explore identical locations in real time.
+              Share your invite link. Both players must press Play for the duel to begin!
             </p>
           </div>
 
@@ -193,27 +363,84 @@ export function DuelLobbyModal({
               </button>
             </div>
 
+            {/* Players Status Strip */}
+            <div className="duel-players-strip">
+              <div className="duel-player-chip is-host">
+                <div className="player-avatar-circle">
+                  <img src={hostAvatarData.src} alt={roomState?.hostName || currentName} />
+                </div>
+                <div className="player-chip-info">
+                  <span className="player-chip-name">{roomState?.hostName || currentName} (You)</span>
+                  <span className={`player-chip-status ${isHostReady ? 'ready' : 'waiting'}`}>
+                    {isHostReady ? '✓ Ready' : '• Not Ready'}
+                  </span>
+                </div>
+              </div>
+
+              <span className="duel-vs-badge">VS</span>
+
+              <div className="duel-player-chip is-guest">
+                <div className="player-chip-info">
+                  <span className="player-chip-name">{roomState?.guestName || 'Waiting...'}</span>
+                  <span className={`player-chip-status ${isGuestReady ? 'ready' : 'waiting'}`}>
+                    {hasGuest ? (isGuestReady ? '✓ Ready' : '• Joined') : '• Waiting for friend'}
+                  </span>
+                </div>
+                <div className="player-avatar-circle">
+                  <img src={guestAvatarData.src} alt={roomState?.guestName || 'Guest'} />
+                </div>
+              </div>
+            </div>
+
+            {/* Status & Alert Banners */}
+            {countdown !== null ? (
+              <div className="duel-sync-alert alert-ready" role="status">
+                <Icon name="lightning" size={16} strokeWidth={2.4} />
+                <span>Both players ready! Match starting in {countdown}s...</span>
+              </div>
+            ) : isOtherPlayerReady && !isReady ? (
+              <div className="duel-sync-alert alert-call-action" role="alert">
+                <Icon name="sparkle" size={16} strokeWidth={2.4} />
+                <span><strong>{otherPlayerName}</strong> is READY! Click Play below to start!</span>
+              </div>
+            ) : isReady && !isOtherPlayerReady ? (
+              <div className="duel-sync-alert alert-waiting" role="status">
+                <Icon name="hourglass" size={16} strokeWidth={2.4} />
+                <span>Waiting for {otherPlayerName || 'your friend'} to click Play... (1/2 Ready)</span>
+              </div>
+            ) : null}
+
+            {/* Play / Ready Button */}
             <button
               type="button"
-              className="btn btn-green btn-full-action card-action-btn"
-              onClick={handleHostStart}
+              className={`btn btn-full-action card-action-btn ${isReady ? 'btn-ghost' : 'btn-green'}`}
+              onClick={handleToggleReady}
             >
-              <Icon name="lightning" size={17} strokeWidth={2.5} />
-              <span>Start Match as Host</span>
+              <Icon name={isReady ? 'check' : 'lightning'} size={18} strokeWidth={2.5} />
+              <span>
+                {isReady
+                  ? '✓ You are Ready! (Waiting for opponent...)'
+                  : isOtherPlayerReady
+                  ? 'Start Match with Ready Opponent!'
+                  : 'Play & Get Ready'}
+              </span>
             </button>
           </div>
         </div>
-      ) : (
+      )}
+
+      {/* Join Tab Pane */}
+      {activeTab === 'join' && (
         <div className="duel-tab-pane duel-action-card card-join" role="tabpanel" aria-label="Join Match">
           <div className="action-card-header">
-            <span className="card-badge badge-blue">Join</span>
+            <span className="card-badge badge-blue">Join Room</span>
             <h3 className="card-title">Join with Code</h3>
             <p className="card-subtitle">
-              Enter or paste a room UUID or invite link received from your friend.
+              Enter or paste a room code. Both players must press Play to start!
             </p>
           </div>
 
-          <form onSubmit={handleJoinStart} className="action-card-body">
+          <div className="action-card-body">
             <div className="card-input-row">
               <input
                 type="text"
@@ -243,14 +470,80 @@ export function DuelLobbyModal({
               </div>
             )}
 
-            <button
-              type="submit"
-              className="btn btn-blue btn-full-action card-action-btn"
-            >
-              <Icon name="arrowRight" size={17} strokeWidth={2.5} />
-              <span>Join Duel Match</span>
-            </button>
-          </form>
+            {/* Players Status Strip */}
+            <div className="duel-players-strip">
+              <div className="duel-player-chip is-host">
+                <div className="player-avatar-circle">
+                  <img src={hostAvatarData.src} alt={roomState?.hostName || 'Host'} />
+                </div>
+                <div className="player-chip-info">
+                  <span className="player-chip-name">{roomState?.hostName || 'Host'}</span>
+                  <span className={`player-chip-status ${isHostReady ? 'ready' : 'waiting'}`}>
+                    {isHostReady ? '✓ Ready' : '• In Room'}
+                  </span>
+                </div>
+              </div>
+
+              <span className="duel-vs-badge">VS</span>
+
+              <div className="duel-player-chip is-guest">
+                <div className="player-chip-info">
+                  <span className="player-chip-name">{roomState?.guestName || currentName} (You)</span>
+                  <span className={`player-chip-status ${isGuestReady ? 'ready' : 'waiting'}`}>
+                    {isGuestReady ? '✓ Ready' : '• Not Ready'}
+                  </span>
+                </div>
+                <div className="player-avatar-circle">
+                  <img src={guestAvatarData.src} alt={roomState?.guestName || currentName} />
+                </div>
+              </div>
+            </div>
+
+            {/* Status & Alert Banners */}
+            {countdown !== null ? (
+              <div className="duel-sync-alert alert-ready" role="status">
+                <Icon name="lightning" size={16} strokeWidth={2.4} />
+                <span>Both players ready! Match starting in {countdown}s...</span>
+              </div>
+            ) : isOtherPlayerReady && !isReady ? (
+              <div className="duel-sync-alert alert-call-action" role="alert">
+                <Icon name="sparkle" size={16} strokeWidth={2.4} />
+                <span><strong>{otherPlayerName || 'Host'}</strong> is READY! Click Play below to start!</span>
+              </div>
+            ) : isReady && !isOtherPlayerReady ? (
+              <div className="duel-sync-alert alert-waiting" role="status">
+                <Icon name="hourglass" size={16} strokeWidth={2.4} />
+                <span>Waiting for {otherPlayerName || 'Host'} to click Play... (1/2 Ready)</span>
+              </div>
+            ) : null}
+
+            {/* Connect / Ready Button */}
+            {!hasConnectedRoom && !roomState?.guestName ? (
+              <button
+                type="button"
+                className="btn btn-blue btn-full-action card-action-btn"
+                onClick={handleConnectRoom}
+              >
+                <Icon name="arrowRight" size={17} strokeWidth={2.5} />
+                <span>Connect to Room</span>
+              </button>
+            ) : (
+              <button
+                type="button"
+                className={`btn btn-full-action card-action-btn ${isReady ? 'btn-ghost' : 'btn-blue'}`}
+                onClick={handleToggleReady}
+              >
+                <Icon name={isReady ? 'check' : 'lightning'} size={18} strokeWidth={2.5} />
+                <span>
+                  {isReady
+                    ? '✓ You are Ready! (Waiting for Host...)'
+                    : isOtherPlayerReady
+                    ? 'Start Match with Ready Host!'
+                    : 'Play & Get Ready'}
+                </span>
+              </button>
+            )}
+          </div>
         </div>
       )}
     </Modal>
