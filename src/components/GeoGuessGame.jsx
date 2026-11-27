@@ -82,6 +82,7 @@ export default function GeoGuessGame({ initialDuelRoom = '', autoStartDuel = fal
   const duelTimerRef = useRef(null)
   const botTimerRef = useRef(null)
   const duelOutcomeRef = useRef(null)
+  const inviteHandledRef = useRef(false)
 
   const stageRef = useRef(null)
   const confirmRef = useRef(null)
@@ -320,16 +321,22 @@ export default function GeoGuessGame({ initialDuelRoom = '', autoStartDuel = fal
 
   // Automatically handle duel invitation via URL param (?duel=...) or initialDuelRoom prop
   useEffect(() => {
-    const duelCode =
-      initialDuelRoom ||
-      (typeof window !== 'undefined'
-        ? new URLSearchParams(window.location.search).get('duel')
-        : null)
+    if (inviteHandledRef.current) return
+
+    const urlParams =
+      typeof window !== 'undefined'
+        ? new URLSearchParams(window.location.search)
+        : null
+
+    const duelCode = initialDuelRoom || urlParams?.get('duel')
 
     if (duelCode) {
+      inviteHandledRef.current = true
       const cleaned = duelCode.trim()
       setInitialDuelCode(cleaned)
-      if (autoStartDuel) {
+      const shouldAuto = autoStartDuel || urlParams?.get('auto') === '1'
+
+      if (shouldAuto) {
         handleStartDuel({
           opponentType: 'friend',
           roomCode: cleaned,
