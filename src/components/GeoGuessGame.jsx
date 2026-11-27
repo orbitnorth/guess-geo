@@ -327,13 +327,7 @@ export default function GeoGuessGame() {
             </div>
           </div>
 
-          <div className="round-block">
-            <div className="round-copy">
-              <span className="meta">Round</span>
-              <span className="round-count">
-                {Math.min(roundIndex + 1, deck.length)} / {deck.length}
-              </span>
-            </div>
+          <div className="round-block" aria-label={`Round ${roundIndex + 1} of ${deck.length}`}>
             <div className="round-track" aria-hidden="true">
               {deck.map((item, index) => {
                 const done = index < roundIndex || phase === 'final'
