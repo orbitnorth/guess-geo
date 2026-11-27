@@ -821,8 +821,8 @@ export default function GeoGuessGame({ initialDuelRoom = '', autoStartDuel = fal
                 duelRoundResult.winner === 'p1'
                   ? 'duel_win'
                   : duelRoundResult.winner === 'p2'
-                  ? 'duel_loss'
-                  : 'okay'
+                    ? 'duel_loss'
+                    : 'okay'
               }
             />
           )}

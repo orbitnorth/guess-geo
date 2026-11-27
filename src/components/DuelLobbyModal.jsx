@@ -22,6 +22,7 @@ export function DuelLobbyModal({
   user,
   initialRoomCode = '',
 }) {
+  const [activeTab, setActiveTab] = useState(() => (initialRoomCode ? 'join' : 'host'))
   const [copied, setCopied] = useState(false)
   const [inputCode, setInputCode] = useState(initialRoomCode)
   const [inputError, setInputError] = useState('')
@@ -30,6 +31,7 @@ export function DuelLobbyModal({
   useEffect(() => {
     if (initialRoomCode) {
       setInputCode(initialRoomCode.trim())
+      setActiveTab('join')
     }
   }, [initialRoomCode])
 
@@ -116,17 +118,48 @@ export function DuelLobbyModal({
       badgeVariant="blue"
       title="1v1 Globe Duel"
       subtitle="Face off in a 5,000 HP clash. Both players receive the exact same mystery photos!"
-      maxWidth={640}
+      maxWidth={520}
       className="duel-lobby-modal"
     >
-      <div className="duel-lobby-split-grid">
-        {/* Left Card: Create / Invite Friend */}
-        <div className="duel-action-card card-host">
+      {/* Segmented Navigation Tabs */}
+      <div className="duel-lobby-tabs" role="tablist" aria-label="1v1 Duel Modes">
+        <button
+          type="button"
+          role="tab"
+          aria-selected={activeTab === 'host'}
+          className={`duel-tab-btn tab-host ${activeTab === 'host' ? 'active' : ''}`}
+          onClick={() => {
+            setActiveTab('host')
+            setInputError('')
+          }}
+        >
+          <Icon name="sparkle" size={15} strokeWidth={2.4} />
+          <span>Host & Invite</span>
+        </button>
+
+        <button
+          type="button"
+          role="tab"
+          aria-selected={activeTab === 'join'}
+          className={`duel-tab-btn tab-join ${activeTab === 'join' ? 'active' : ''}`}
+          onClick={() => {
+            setActiveTab('join')
+            setInputError('')
+          }}
+        >
+          <Icon name="arrowRight" size={15} strokeWidth={2.4} />
+          <span>Join with Code</span>
+        </button>
+      </div>
+
+      {/* Tab Panes */}
+      {activeTab === 'host' ? (
+        <div className="duel-tab-pane duel-action-card card-host" role="tabpanel" aria-label="Host Match">
           <div className="action-card-header">
             <span className="card-badge badge-green">Host</span>
             <h3 className="card-title">Invite a Friend</h3>
             <p className="card-subtitle">
-              Share your room invite link. Both of you will explore identical locations.
+              Share your room invite link. Both of you will explore identical locations in real time.
             </p>
           </div>
 
@@ -161,9 +194,8 @@ export function DuelLobbyModal({
             </button>
           </div>
         </div>
-
-        {/* Right Card: Join with Code */}
-        <div className="duel-action-card card-join">
+      ) : (
+        <div className="duel-tab-pane duel-action-card card-join" role="tabpanel" aria-label="Join Match">
           <div className="action-card-header">
             <span className="card-badge badge-blue">Join</span>
             <h3 className="card-title">Join with Code</h3>
@@ -182,6 +214,7 @@ export function DuelLobbyModal({
                 onChange={(e) => cleanAndSetCode(e.target.value)}
                 maxLength={80}
                 aria-label="Friend room code or link"
+                autoFocus
               />
               <button
                 type="button"
@@ -210,7 +243,7 @@ export function DuelLobbyModal({
             </button>
           </form>
         </div>
-      </div>
+      )}
     </Modal>
   )
 }
