@@ -4641,7 +4641,13 @@ kbd {
   color: var(--ink-soft);
 }
 
-/* Duel Lobby Split Grid (Host & Join side by side in equal height) */
+/* Duel Lobby Modal & Split Grid */
+.duel-lobby-modal .modal-body {
+  padding: 16px 24px 28px;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
 .duel-lobby-split-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -4652,14 +4658,14 @@ kbd {
 .duel-action-card {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   background: #f8fcfe;
   border: 2px solid var(--line);
   border-radius: 20px;
-  padding: 20px 18px;
+  padding: 22px 20px 20px;
   box-shadow: 0 4px 0 var(--line);
   box-sizing: border-box;
   transition: all 0.16s ease;
+  min-height: 250px;
 }
 
 .duel-action-card:hover {
@@ -4668,18 +4674,31 @@ kbd {
 }
 
 .duel-action-card.card-host {
-  border-color: rgba(88, 204, 2, 0.4);
+  border-color: rgba(88, 204, 2, 0.45);
+  box-shadow: 0 4px 0 rgba(88, 204, 2, 0.25);
+}
+
+.duel-action-card.card-host:hover {
+  border-color: var(--green);
+  box-shadow: 0 5px 0 rgba(88, 204, 2, 0.35);
 }
 
 .duel-action-card.card-join {
-  border-color: rgba(28, 176, 246, 0.4);
+  border-color: rgba(28, 176, 246, 0.45);
+  box-shadow: 0 4px 0 rgba(28, 176, 246, 0.25);
+}
+
+.duel-action-card.card-join:hover {
+  border-color: var(--blue);
+  box-shadow: 0 5px 0 rgba(28, 176, 246, 0.35);
 }
 
 .action-card-header {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  margin-bottom: 16px;
+  min-height: 82px;
+  margin-bottom: 14px;
 }
 
 .action-card-header .card-badge {
@@ -4687,14 +4706,14 @@ kbd {
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.6px;
-  padding: 3px 9px;
+  padding: 3px 10px;
   border-radius: 999px;
   margin-bottom: 8px;
 }
 
 .action-card-header .card-title {
   font-family: var(--font-display);
-  font-size: 16px;
+  font-size: 16.5px;
   font-weight: 800;
   color: var(--ink);
   margin: 0 0 4px;
@@ -4707,7 +4726,7 @@ kbd {
   margin: 0;
 }
 
-.card-form {
+.action-card-body {
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -4716,7 +4735,8 @@ kbd {
 
 .card-input-row {
   display: flex;
-  gap: 6px;
+  align-items: center;
+  gap: 8px;
   margin-bottom: 14px;
   width: 100%;
   box-sizing: border-box;
@@ -4726,35 +4746,100 @@ kbd {
 .card-input-row .friend-code-input {
   flex: 1;
   min-width: 0;
-  font-size: 12px;
-  padding: 10px 12px;
+  height: 42px;
+  font-size: 12.5px;
+  padding: 0 12px;
   border-radius: 12px;
   border: 2px solid var(--line);
   background: #ffffff;
   color: var(--ink);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  box-sizing: border-box;
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.card-input-row .friend-share-input:focus,
+.card-input-row .friend-code-input:focus {
+  border-color: var(--blue);
 }
 
 .card-input-row .friend-code-input {
   letter-spacing: 0.5px;
 }
 
-.card-input-row .btn-copy-code,
-.card-input-row .btn-paste-code {
-  padding: 0 14px;
+.btn-copy-code,
+.btn-paste-code {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 42px;
+  padding: 0 16px;
   border-radius: 12px;
-  font-size: 12px;
-  height: auto;
+  font-family: var(--font-display);
+  font-size: 12.5px;
+  font-weight: 700;
   white-space: nowrap;
   flex-shrink: 0;
+  box-sizing: border-box;
+  cursor: pointer;
+  transition: transform 0.1s ease, box-shadow 0.1s ease, background-color 0.15s ease;
+}
+
+.btn-copy-code {
+  background: var(--blue);
+  color: #ffffff;
+  border: 2px solid var(--blue);
+  box-shadow: 0 3px 0 var(--blue-dark);
+}
+
+.btn-copy-code:hover {
+  background: #25baff;
+  border-color: #25baff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 0 var(--blue-dark);
+}
+
+.btn-copy-code:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 var(--blue-dark);
+}
+
+.btn-paste-code {
+  background: #ffffff;
+  color: var(--ink);
+  border: 2px solid var(--line);
+  box-shadow: 0 3px 0 var(--line);
+}
+
+.btn-paste-code:hover {
+  background: #f0f8fc;
+  border-color: var(--blue);
+  color: var(--blue-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 0 var(--blue);
+}
+
+.btn-paste-code:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 var(--line);
 }
 
 .card-action-btn {
   width: 100%;
-  padding: 12px 16px;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   font-size: 14.5px;
   font-weight: 800;
   border-radius: 14px;
   margin-top: auto;
+  box-sizing: border-box;
 }
 
 .friend-code-error {
@@ -4764,13 +4849,14 @@ kbd {
   font-size: 12px;
   font-weight: 700;
   color: var(--red);
-  margin-bottom: 8px;
+  margin-top: -6px;
+  margin-bottom: 10px;
 }
 
 @media (max-width: 600px) {
   .duel-lobby-split-grid {
     grid-template-columns: 1fr;
-    gap: 12px;
+    gap: 14px;
   }
 }
 
@@ -4784,35 +4870,7 @@ kbd {
   user-select: all;
 }
 
-.friend-share-row {
-  display: flex;
-  gap: 8px;
-}
 
-.friend-share-input {
-  flex: 1;
-  border: 2px solid var(--line);
-  border-radius: 12px;
-  padding: 8px 12px;
-  font-size: 12px;
-  color: var(--ink);
-  background: #fafcfe;
-}
-
-.btn-copy-code {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: var(--blue);
-  color: #ffffff;
-  padding: 0 16px;
-  border-radius: 12px;
-  font-family: var(--font-display);
-  font-size: 13px;
-  font-weight: 700;
-  box-shadow: 0 3px 0 var(--blue-dark);
-  cursor: pointer;
-}
 
 /* Dark Mode Overrides for 1v1 Duel */
 [data-theme="dark"] .duel-hud-topbar {

@@ -116,7 +116,7 @@ export function DuelLobbyModal({
       badgeVariant="blue"
       title="1v1 Globe Duel"
       subtitle="Face off in a 5,000 HP clash. Both players receive the exact same mystery photos!"
-      maxWidth={620}
+      maxWidth={640}
       className="duel-lobby-modal"
     >
       <div className="duel-lobby-split-grid">
@@ -130,33 +130,36 @@ export function DuelLobbyModal({
             </p>
           </div>
 
-          <div className="card-input-row">
-            <input
-              type="text"
-              readOnly
-              value={getInviteUrl()}
-              className="friend-share-input"
-              aria-label="Your invite link"
-            />
+          <div className="action-card-body">
+            <div className="card-input-row">
+              <input
+                type="text"
+                readOnly
+                value={getInviteUrl()}
+                title={getInviteUrl()}
+                className="friend-share-input"
+                aria-label="Your invite link"
+              />
+              <button
+                type="button"
+                className="btn-copy-code"
+                onClick={handleCopy}
+                title="Copy share link"
+              >
+                <Icon name={copied ? 'check' : 'expand'} size={14} />
+                <span>{copied ? 'Copied!' : 'Copy'}</span>
+              </button>
+            </div>
+
             <button
               type="button"
-              className="btn-copy-code"
-              onClick={handleCopy}
-              title="Copy share link"
+              className="btn btn-green btn-full-action card-action-btn"
+              onClick={handleHostStart}
             >
-              <Icon name={copied ? 'check' : 'expand'} size={14} />
-              <span>{copied ? 'Copied!' : 'Copy'}</span>
+              <Icon name="lightning" size={17} strokeWidth={2.5} />
+              <span>Start Match as Host</span>
             </button>
           </div>
-
-          <button
-            type="button"
-            className="btn btn-green btn-full-action card-action-btn"
-            onClick={handleHostStart}
-          >
-            <Icon name="lightning" size={17} strokeWidth={2.5} />
-            <span>Start Match as Host</span>
-          </button>
         </div>
 
         {/* Right Card: Join with Code */}
@@ -169,7 +172,7 @@ export function DuelLobbyModal({
             </p>
           </div>
 
-          <form onSubmit={handleJoinStart} className="card-form">
+          <form onSubmit={handleJoinStart} className="action-card-body">
             <div className="card-input-row">
               <input
                 type="text"
